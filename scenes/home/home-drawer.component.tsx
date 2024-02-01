@@ -1,15 +1,14 @@
-import { Avatar, Divider, Drawer, DrawerElement, DrawerItem, Icon, IndexPath, Layout, Text } from "@ui-kitten/components";
+import { Avatar, Divider, Drawer, DrawerElement, DrawerItem, Icon, IconElement, IndexPath, Layout, Text } from "@ui-kitten/components";
 import { Fragment, ReactElement, useState } from "react";
 import { SafeAreaLayout } from "../../components/safe-area-layout.component";
 import { StyleSheet, View } from "react-native";
 import { AppInfoService } from "../../services/app-info.service";
 
-const TransaksiIcon = (props: any) => (
-    <Icon name='transaksi' {...props} />
-);
-
-const LaporanIcon = (props: any) => (
-    <Icon name='laporan' {...props} />
+const BrowserIcon = (props): IconElement => (
+  <Icon
+    {...props}
+    name='browser-outline'
+  />
 );
 
 export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement => {
@@ -18,7 +17,7 @@ export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement =>
     const DATA = [
         {
           title: 'Transaksi',
-          icon: TransaksiIcon,
+          icon: BrowserIcon,
           onPress: () => {
             navigation.toggleDrawer();
             navigation.navigate('Transaksi');
@@ -26,7 +25,7 @@ export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement =>
         },
         {
           title: 'Laporan',
-          icon: LaporanIcon,
+          icon: BrowserIcon,
           onPress: () => {
             navigation.toggleDrawer();
             navigation.navigate('Laporan');

@@ -1,16 +1,21 @@
 import React from 'react';
 import * as eva from '@eva-design/eva';
-import { default as theme } from '../theme.json';
 import { ApplicationProvider, Button, IconRegistry, Layout, Text } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { AppNavigator } from '../navigation/app.navigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { AppIconsPack } from './app-icons-pack';
+import { AssetIconsPack } from './app-icons-pack';
 
-export default () => (
+const HomeScreen = () => (
+  <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <Text category='h1'>HOME</Text>
+  </Layout>
+);
+
+export const App = (): React.ReactElement => (
   <>
-    <IconRegistry icons={[EvaIconsPack, AppIconsPack]} />
-    <ApplicationProvider {...eva} theme={{...eva.dark, ...theme}}>
+    <IconRegistry icons={[EvaIconsPack, AssetIconsPack]} />
+    <ApplicationProvider {...eva} theme={eva.light}>
       <SafeAreaProvider>
         <AppNavigator />
       </SafeAreaProvider>      

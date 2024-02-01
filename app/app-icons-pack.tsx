@@ -1,13 +1,13 @@
-import { Image, ImageRequireSource } from "react-native";
+import { Image } from "react-native";
 
-const IconProvider = (source: ImageRequireSource) => ({
-    toReactElement: ({ animation, ...style }: { [x: string]: any; animation: any;}) => (
-      <Image style={style} source={source}/>
+const IconProvider = (source) => ({
+    toReactElement: ({ animation, ...props }) => (
+      <Image {...props} source={source}/>
     ),
-});
+  });
 
-export const AppIconsPack = {
-    name: 'app',
+export const AssetIconsPack  = {
+    name: 'assets',
     icons: {
         'transaksi': IconProvider(require('../assets/images/icon-ecommerce.png')),
         'laporan': IconProvider(require('../assets/images/icon-modal.png')),
