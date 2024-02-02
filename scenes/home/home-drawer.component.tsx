@@ -4,11 +4,20 @@ import { SafeAreaLayout } from "../../components/safe-area-layout.component";
 import { StyleSheet, View } from "react-native";
 import { AppInfoService } from "../../services/app-info.service";
 
-const BrowserIcon = (props): IconElement => (
-  <Icon
-    {...props}
-    name='browser-outline'
-  />
+const BrowserIcon = (props: any): IconElement => (
+  <Icon name='browser-outline' {...props}/>
+);
+
+const KasirIcon = (props: any) => (
+  <Icon name='kasir' {...props} pack='assets'/>
+);
+
+const ReportIcon = (props: any) => (
+  <Icon name='laporan' {...props} pack='assets'/>
+);
+
+const PengaturanIcon = (props: any) => (
+  <Icon name='pengaturan' {...props} pack='assets'/>
 );
 
 export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement => {
@@ -17,7 +26,7 @@ export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement =>
     const DATA = [
         {
           title: 'Transaksi',
-          icon: BrowserIcon,
+          icon: KasirIcon,
           onPress: () => {
             navigation.toggleDrawer();
             navigation.navigate('Transaksi');
@@ -25,7 +34,15 @@ export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement =>
         },
         {
           title: 'Laporan',
-          icon: BrowserIcon,
+          icon: ReportIcon,
+          onPress: () => {
+            navigation.toggleDrawer();
+            navigation.navigate('Laporan');
+          },
+        },
+        {
+          title: 'Pengaturan',
+          icon: PengaturanIcon,
           onPress: () => {
             navigation.toggleDrawer();
             navigation.navigate('Laporan');
@@ -42,7 +59,7 @@ export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement =>
                 source={require('../../assets/images/image-app-icon.png')}
               />
               <Text style={styles.profileName} category='h6'>
-                Kitten Tricks
+                SIA
               </Text>
             </View>
           </Layout>
