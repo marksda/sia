@@ -1,7 +1,7 @@
 import { Image } from "react-native";
 
 const IconProvider = (source:any) => ({
-    toReactElement: ({ animation, ...props }) => (
+    toReactElement: ({ animation, ...props }: { [x: string]: any; animation: any; }) => (
       <Image {...props} source={source}/>
     ),
   });
