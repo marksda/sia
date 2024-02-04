@@ -4,10 +4,6 @@ import { SafeAreaLayout } from "../../components/safe-area-layout.component";
 import { StyleSheet, View } from "react-native";
 import { AppInfoService } from "../../services/app-info.service";
 
-const BrowserIcon = (props: any): IconElement => (
-  <Icon name='browser-outline' {...props}/>
-);
-
 const KasirIcon = (props: any) => (
   <Icon name='kasir' {...props} pack='assets'/>
 );
