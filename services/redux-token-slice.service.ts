@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppStorage } from "./app-storage.service";
 import { IToken } from "../features/entities/token";
 import * as _ from "lodash";
+import { ICredential } from "../features/entities/credential";
 
 
 function getInitialState(): IToken {
@@ -54,5 +55,18 @@ export const tokenSlice = createSlice({
 });
 
 export const { setToken, resetToken } = tokenSlice.actions;
+
+export const fetchToken = (credential: ICredential) => {
+    return async function fetchTokenThunk(dispatch: any, getState: any) {
+        const response = await fetch('https://dlhk.ddns.com/endpoint/', {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+          });
+        dispatch({ type: 'todos/todosLoaded', payload: response.json });
+    };
+}
 
 export default tokenSlice.reducer;
