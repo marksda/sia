@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppStorage } from "./app-storage.service";
 import { IToken } from "../features/entities/token";
+import * as _ from "lodash";
 
 
 function getInitialState(): IToken {
@@ -44,43 +45,14 @@ export const tokenSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action: PayloadAction<IToken>) => {
-            state.userId = action.payload.userId;
-            state.userName = action.payload.userName;
-            state.userEmail = action.payload.userEmail;
-            state.accessToken = action.payload.accessToken;
-            state.refreshToken = action.payload.refreshToken;
-            state.expireIn = action.payload.expireIn;
-            state.hakAkses = action.payload.hakAkses;
-            state.sessionId = action.payload.sessionId;
+            state = _.cloneDeep(action.payload);
         },
-        setUserId: (state, action: PayloadAction<string>) => {
-            state.userId = action.payload;
-        },
-        setUserNama: (state, action: PayloadAction<string>) => {
-            state.userName = action.payload;
-        },
-        setUserEmail: (state, action: PayloadAction<string>) => {
-            state.userEmail = action.payload;
-        },
-        setAccessToken: (state, action: PayloadAction<string>) => {
-            state.accessToken = action.payload;
-        },
-        setRefreshToken: (state, action: PayloadAction<string>) => {
-            state.refreshToken = action.payload;
-        },
-        resetToken: (state, action: PayloadAction<void>) => {
-            state.userId = null;
-            state.userName = null;
-            state.userEmail = null;
-            state.accessToken = null;
-            state.refreshToken = null;
-            state.expireIn = null;
-            state.hakAkses = null;
-            state.sessionId = null;
+        resetToken: (state, action: PayloadAction<IToken>) => {
+            state = _.cloneDeep(action.payload);
         },
     },
 });
 
-export const { setToken, setUserId, setUserNama, setUserEmail, setAccessToken, setRefreshToken, resetToken } = tokenSlice.actions;
+export const { setToken, resetToken } = tokenSlice.actions;
 
 export default tokenSlice.reducer;
