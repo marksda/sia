@@ -58,14 +58,20 @@ export const { setToken, resetToken } = tokenSlice.actions;
 
 export const fetchToken = (credential: ICredential) => {
     return async function fetchTokenThunk(dispatch: any, getState: any) {
-        const response = await fetch('https://dlhk.ddns.com/endpoint/', {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-          });
-        dispatch({ type: 'todos/todosLoaded', payload: response.json });
+        const response = await fetch(
+            `https://dlhk.ddns.net/siaAPI/token?credential=${JSON.stringify(credential)}`, 
+            {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        //simpan token ke storage
+
+        //update token state
+        // dispatch(setToken(response));
     };
 }
 
