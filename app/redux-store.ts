@@ -5,6 +5,11 @@ export const store = configureStore({
     reducer: {
         token: tokenReducer,
     },
+    // middleware: getDefaultMiddleware => getDefaultMiddleware({
+        //   thunk: {
+            // extraArgument: myCustomApiService
+        //   }
+        // })
 });
 
 export type AppDispatch = typeof store.dispatch
