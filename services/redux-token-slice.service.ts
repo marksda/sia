@@ -8,25 +8,8 @@ import { TokenAPI } from "./api-service";
 
 export const fetchToken = createAsyncThunk(
     'token/fetchToken',
-    async (credential: ICredential, thunkApi: any): Promise<IToken|null> => {
-        let data = null;
-        const response = await TokenAPI.getToken(credential);        
-        response.json()
-                .then((dataJson)=> {
-                    if(dataJson != null) {
-                        data = dataJson;
-                        AppStorageToken.setToken(data);
-                    }
-                    else {
-                        AppStorageToken.deleteToken();
-                    }
-                })
-                .catch((error) => {
-                    AppStorageToken.deleteToken();
-                    console.log(error);
-                });
-
-        return data;
+    async (credential: ICredential, thunkApi: any) => {        
+        return TokenAPI.getToken(credential);  
     }
 );
 
@@ -65,9 +48,9 @@ export const tokenSlice = createSlice({
         // setToken: (state, action: PayloadAction<IToken>) => {
         //     state.token = _.cloneDeep(action.payload);
         // },
-        resetToken: (state, action: PayloadAction<IToken>) => {
-            state.token = null;
-        },
+        // resetToken: (state, action: PayloadAction<IToken>) => {
+        //     state.token = null;
+        // },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchToken.fulfilled, (state, action) => {
@@ -76,6 +59,6 @@ export const tokenSlice = createSlice({
     }
 });
 
-export const { resetToken } = tokenSlice.actions;
+// export const { resetToken } = tokenSlice.actions;
 
 export default tokenSlice.reducer;
