@@ -21,14 +21,7 @@ export const App = (): React.ReactElement => {
         customMapping={mapping}
         theme={{ ...eva.light, ...theme }}>
         <SafeAreaProvider>
-          { 
-            token != null ? ( <SignInScreen /> ) : (
-              <>
-                <StatusBar />
-                <AppNavigator />
-              </>
-            )
-          }
+          <SignInScreen />
         </SafeAreaProvider>      
       </ApplicationProvider>
     </>

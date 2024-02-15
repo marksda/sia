@@ -1,5 +1,5 @@
+import EncryptedStorage from "react-native-encrypted-storage";
 import { IToken } from "../features/entities/token";
-import EncryptedStorage from "react-native-encrypted-storage/lib/typescript/EncryptedStorage";
 
 const TOKEN_KEY: string = 'token';
 
