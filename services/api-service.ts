@@ -1,8 +1,8 @@
 import { ICredential } from "../features/entities/credential";
 import { IToken } from "../features/entities/token";
 
-export const TokenAPI ={
-    getToken: (credential: ICredential): Promise<Response> => {
+export class TokenAPI {
+    static getToken = (credential: ICredential): Promise<Response> => {
         // let data = null;
         return fetch(
                 'https://dlhk.ddns.net/rest/api/token', 
@@ -16,7 +16,7 @@ export const TokenAPI ={
                 }
             );
             // .then((response) => {
-            //     return response.json().then((data) => {
+            //     response.json().then((data) => {
             //         return data as IToken;
             //     }).catch((error) => {
             //         console.log(error);

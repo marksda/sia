@@ -9,17 +9,28 @@ import { StatusBar } from '../components/status-bar.component';
 import { default as mapping } from './mapping.json';
 import { SignInScreen } from '../scenes/auth/sign-in.component';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { useAppSelector } from './redux-hooks';
 
-export const App = (): React.ReactElement => (
-  <>
-    <IconRegistry icons={[EvaIconsPack, AssetIconsPack]} />
-    <ApplicationProvider 
-      {...eva} 
-      customMapping={mapping}
-      theme={{ ...eva.light, ...theme }}>
-      <SafeAreaProvider>
-        <SignInScreen />
-      </SafeAreaProvider>      
-    </ApplicationProvider>
-  </>  
-);
+export const App = (): React.ReactElement => {
+  const token = useAppSelector(state => state.token); 
+  return (
+    <>
+      <IconRegistry icons={[EvaIconsPack, AssetIconsPack]} />
+      <ApplicationProvider 
+        {...eva} 
+        customMapping={mapping}
+        theme={{ ...eva.light, ...theme }}>
+        <SafeAreaProvider>
+          { 
+            token != null ? ( <SignInScreen /> ) : (
+              <>
+                <StatusBar />
+                <AppNavigator />
+              </>
+            )
+          }
+        </SafeAreaProvider>      
+      </ApplicationProvider>
+    </>
+  );  
+};

@@ -6,22 +6,7 @@ import { ICredential } from "../features/entities/credential";
 import { TokenAPI } from "./api-service";
 
 
-function getInitialTokenState(): IToken|null {
-    let initialTokenState = null;
-    AppStorageToken.getToken().then((hasil) => {
-        if(hasil !== null) {
-            initialTokenState = JSON.parse(hasil);
-        }
-    }).catch((error) => {
-        console.log(error);
-    });
-
-    return initialTokenState!;
-}
-
-const initialTokenState = getInitialTokenState();
-
-const fetchToken = createAsyncThunk(
+export const fetchToken = createAsyncThunk(
     'token/fetchToken',
     async (credential: ICredential, thunkApi: any): Promise<IToken|null> => {
         let data = null;
@@ -45,10 +30,25 @@ const fetchToken = createAsyncThunk(
     }
 );
 
+function getInitialTokenState(): IToken|null {
+    let initialTokenState = null;
+    AppStorageToken.getToken().then((hasil) => {
+        if(hasil !== null) {
+            initialTokenState = JSON.parse(hasil);
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+
+    return initialTokenState!;
+}
+
+// const initialTokenState = getInitialTokenState();
+
 export const tokenSlice = createSlice({
     name: 'token',
     initialState: {
-        token: initialTokenState
+        token: getInitialTokenState()
     },
     reducers: {
         // tokenLoading: (state, action: PayloadAction<null>) => {
@@ -75,7 +75,6 @@ export const tokenSlice = createSlice({
         });
     }
 });
-
 export const { resetToken } = tokenSlice.actions;
 
 export default tokenSlice.reducer;
