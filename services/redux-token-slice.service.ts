@@ -1,40 +1,19 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit/react";
-import { AppStorage } from "./app-storage.service";
+import { AppStorageToken } from "./app-storage.service";
 import { IToken } from "../features/entities/token";
 import * as _ from "lodash";
 import { ICredential } from "../features/entities/credential";
 import { TokenAPI } from "./api-service";
 
 
-function getInitialTokenState(): IToken {
+function getInitialTokenState(): IToken|null {
     let initialTokenState = null;
-    AppStorage.getToken().then((hasil) => {
+    AppStorageToken.getToken().then((hasil) => {
         if(hasil !== null) {
             initialTokenState = JSON.parse(hasil);
         }
-        else {
-            initialTokenState = {
-                userId: null,
-                userName: null,
-                userEmail: null,    
-                hakAkses: null,
-                accessToken: null,
-                refreshToken: null,
-                expireIn: null,
-                sessionId: null,
-            };
-        }
     }).catch((error) => {
-        initialTokenState = {
-            userId: null,
-            userName: null,
-            userEmail: null,    
-            hakAkses: null,
-            accessToken: null,
-            refreshToken: null,
-            expireIn: null,
-            sessionId: null,
-        };
+        console.log(error);
     });
 
     return initialTokenState!;
@@ -44,19 +23,24 @@ const initialTokenState = getInitialTokenState();
 
 const fetchToken = createAsyncThunk(
     'token/fetchToken',
-    async (credential: ICredential, thunkApi: any) => {
-        // thunkApi.dispatch()
-        let data: IToken = {
-            userId: null,
-            userName: null,
-            userEmail: null,    
-            hakAkses: null,
-            accessToken: null,
-            refreshToken: null,
-            expireIn: null,
-            sessionId: null,
-        };;
-        const response = await TokenAPI.getToken(credential);
+    async (credential: ICredential, thunkApi: any): Promise<IToken|null> => {
+        let data = null;
+        const response = await TokenAPI.getToken(credential);        
+        response.json()
+                .then((dataJson)=> {
+                    if(dataJson != null) {
+                        data = dataJson;
+                        AppStorageToken.setToken(data);
+                    }
+                    else {
+                        AppStorageToken.deleteToken();
+                    }
+                })
+                .catch((error) => {
+                    AppStorageToken.deleteToken();
+                    console.log(error);
+                });
+
         return data;
     }
 );
@@ -64,7 +48,6 @@ const fetchToken = createAsyncThunk(
 export const tokenSlice = createSlice({
     name: 'token',
     initialState: {
-        loading: 'idle',
         token: initialTokenState
     },
     reducers: {
@@ -79,21 +62,20 @@ export const tokenSlice = createSlice({
         //       state.token = _.cloneDeep(action.payload);
         //     }
         // },
-        setToken: (state, action: PayloadAction<IToken>) => {
-            state.token = _.cloneDeep(action.payload);
-        },
+        // setToken: (state, action: PayloadAction<IToken>) => {
+        //     state.token = _.cloneDeep(action.payload);
+        // },
         resetToken: (state, action: PayloadAction<IToken>) => {
-            state.token = _.cloneDeep(action.payload);
+            state.token = null;
         },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchToken.fulfilled, (state, action) => {
-            // Add user to the state array
-            state.token = _.cloneDeep(action.payload);
-        })
+            state.token = action.payload != null ? _.cloneDeep(action.payload):null;
+        });
     }
 });
 
-export const { setToken, resetToken } = tokenSlice.actions;
+export const { resetToken } = tokenSlice.actions;
 
 export default tokenSlice.reducer;

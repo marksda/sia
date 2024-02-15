@@ -1,9 +1,10 @@
 import { ICredential } from "../features/entities/credential";
+import { IToken } from "../features/entities/token";
 
 export const TokenAPI ={
-    getToken: (credential: ICredential) => {
-        return async function fetchTokenThunk(dispatch: any, getState: any) {
-            const response = await fetch(
+    getToken: (credential: ICredential): Promise<Response> => {
+        // let data = null;
+        return fetch(
                 'https://dlhk.ddns.net/rest/api/token', 
                 {
                     method: 'POST',
@@ -14,8 +15,17 @@ export const TokenAPI ={
                     body: JSON.stringify(credential)
                 }
             );
+            // .then((response) => {
+            //     return response.json().then((data) => {
+            //         return data as IToken;
+            //     }).catch((error) => {
+            //         console.log(error);
+            //     });
+            // })
+            // .catch((error) => {
+            //     console.log(error);
+            // });
 
-            return response;
-        };
+        // return data;
     }
 }

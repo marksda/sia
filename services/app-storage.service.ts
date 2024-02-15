@@ -3,7 +3,7 @@ import EncryptedStorage from "react-native-encrypted-storage/lib/typescript/Encr
 
 const TOKEN_KEY: string = 'token';
 
-export class AppStorage {
+export class AppStorageToken {
 
   static getToken = () => {
     return EncryptedStorage.getItem(TOKEN_KEY);
@@ -12,5 +12,9 @@ export class AppStorage {
   static setToken = (token: IToken): Promise<void> => {
     return EncryptedStorage.setItem(TOKEN_KEY, JSON.stringify(token));
   };
+
+  static deleteToken = () => {
+    EncryptedStorage.removeItem(TOKEN_KEY);
+  }
 
 }
