@@ -22,8 +22,8 @@ export default (): React.ReactElement => {
 
     const onSubmit: SubmitHandler<ICredential> = (data): void => {
       setDisableForm(true);
-      dispatch(fetchToken(data)).then((data) => {
-        console.log(data.payload);
+      dispatch(fetchToken(data)).then((dataHasil) => {
+        console.log(dataHasil.payload);
         setDisableForm(false);
       }).catch(() => {
         setDisableForm(false);
@@ -54,6 +54,7 @@ export default (): React.ReactElement => {
                     placeholder='isikan user name'
                     status='control'
                     value={userName}
+                    disabled={disableForm}
                     onChangeText={(newValue?: string) => {
                         field.onChange(newValue || '');
                         setUserName(newValue || '');
@@ -74,6 +75,7 @@ export default (): React.ReactElement => {
                       label='Password'
                       status='control'
                       value={password}
+                      disabled={disableForm}
                       onChangeText={(newValue?: string) => {
                         field.onChange(newValue || '');
                         setPassword(newValue || '');
@@ -86,6 +88,7 @@ export default (): React.ReactElement => {
             <Button
                 status='control'
                 size='large'
+                disabled={disableForm}
                 onPress={handleSubmit(onSubmit)}>
                 SIGN IN
             </Button>
