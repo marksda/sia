@@ -75,6 +75,7 @@ export const tokenSlice = createSlice({
         });
     }
 });
+
 export const { resetToken } = tokenSlice.actions;
 
 export default tokenSlice.reducer;
