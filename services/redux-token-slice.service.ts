@@ -8,8 +8,16 @@ import { TokenAPI } from "./api-service";
 
 export const fetchToken = createAsyncThunk(
     'token/fetchToken',
-    async (credential: ICredential, thunkApi: any) => {        
-        return TokenAPI.getToken(credential);  
+    async (credential: ICredential, thunkApi: any) => {    
+        let data: IToken|null = null;
+        const  response = await TokenAPI.getToken(credential); 
+        if(response.status != 500) {
+            response.json().then((dataJson) => {
+                data = dataJson;
+            });
+        }
+
+        return data;
     }
 );
 
