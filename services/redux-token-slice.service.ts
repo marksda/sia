@@ -9,11 +9,12 @@ import { TokenAPI } from "./api-service";
 export const fetchToken = createAsyncThunk(
     'token/fetchToken',
     async (credential: ICredential, thunkApi: any) => {    
+        const response = await TokenAPI.getToken(credential); 
+        // return response;
         let data: IToken|null = null;
-        const  response = await TokenAPI.getToken(credential); 
         if(response.status != 500) {
-            response.json().then((dataJson) => {
-                data = dataJson;
+            data = await response.json().then((dataJson) => {
+                return dataJson;
             });
         }
 
@@ -39,7 +40,7 @@ function getInitialTokenState(): IToken|null {
 export const tokenSlice = createSlice({
     name: 'token',
     initialState: {
-        token: getInitialTokenState()
+        authorized: getInitialTokenState()
     },
     reducers: {
         // tokenLoading: (state, action: PayloadAction<null>) => {
@@ -62,7 +63,7 @@ export const tokenSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchToken.fulfilled, (state, action) => {
-            state.token = action.payload != null ? _.cloneDeep(action.payload):null;
+            state.authorized = action.payload != null ? _.cloneDeep(action.payload):null;
         });
     }
 });

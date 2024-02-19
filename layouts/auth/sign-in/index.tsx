@@ -23,7 +23,6 @@ export default (): React.ReactElement => {
     const onSubmit: SubmitHandler<ICredential> = (data): void => {
       setDisableForm(true);
       dispatch(fetchToken(data)).then((dataHasil) => {
-        console.log(dataHasil.payload);
         setDisableForm(false);
       }).catch(() => {
         setDisableForm(false);
