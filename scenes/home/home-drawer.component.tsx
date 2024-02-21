@@ -1,4 +1,4 @@
-import { Avatar, Divider, Drawer, DrawerElement, DrawerItem, Icon, IconElement, IndexPath, Layout, Text } from "@ui-kitten/components";
+import { Avatar, Divider, Drawer, DrawerElement, DrawerItem, Icon, IndexPath, Layout, Text } from "@ui-kitten/components";
 import { Fragment, ReactElement, useState } from "react";
 import { SafeAreaLayout } from "../../components/safe-area-layout.component";
 import { StyleSheet, View } from "react-native";
