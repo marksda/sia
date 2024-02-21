@@ -10,7 +10,7 @@ export const TransaksiScreen = ({ navigation }: { navigation: any; }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation title='MyApp' alignment='center'/>
+      <TopNavigation title='Transaksi' alignment='center'/>
       <Divider/>
       <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Button onPress={navigateDetails}>OPEN Laporan</Button>
