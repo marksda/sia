@@ -8,21 +8,23 @@ export class AppStorageToken {
   static getToken = async () => {
 
     try {
-      const session = await EncryptedStorage.getItem(TOKEN_KEY);
-      return session;
-      
+      // const session = await EncryptedStorage.getItem(TOKEN_KEY);
+      // return session;
+      await EncryptedStorage.getItem(TOKEN_KEY);      
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
     
   };
 
-  static setToken = async (token: IToken): Promise<void> => {
+  static setToken = (token: IToken): boolean => {
 
     try {
-      await EncryptedStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+      EncryptedStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+      return true;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      return false;
     }
      
   };

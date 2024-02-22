@@ -11,8 +11,8 @@ export const fetchToken = createAsyncThunk(
     async (credential: ICredential, thunkApi: any) => {    
         const response = await TokenAPI.getToken(credential); 
         let data: IToken|null = null;
-        if(response.status != 500) {
-            data = await response.json().then((dataJson) => {
+        if(response.status == 200) {
+            data = await response.json().then((dataJson) => {     
                 AppStorageToken.setToken(dataJson);
                 return dataJson;
             });

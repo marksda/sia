@@ -7,12 +7,12 @@ import { AppNavigator } from "../navigation/app.navigator";
 
 export const Main = (): React.ReactElement => {
 
-    const authorized = useAppSelector(state => state.token.authorized); 
+    const token = useAppSelector(state => state.token); 
     
     return (
         <SafeAreaProvider>
             {
-                authorized == null ? 
+                token.authorized == null ? 
                 <SignInScreen /> : 
                 <>
                     <StatusBar />
