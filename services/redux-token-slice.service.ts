@@ -10,10 +10,10 @@ export const fetchToken = createAsyncThunk(
     'token/fetchToken',
     async (credential: ICredential, thunkApi: any) => {    
         const response = await TokenAPI.getToken(credential); 
-        // return response;
         let data: IToken|null = null;
         if(response.status != 500) {
             data = await response.json().then((dataJson) => {
+                AppStorageToken.setToken(dataJson);
                 return dataJson;
             });
         }
@@ -23,24 +23,22 @@ export const fetchToken = createAsyncThunk(
 );
 
 function getInitialTokenState(): IToken|null {
-    let initialTokenState = null;
-    AppStorageToken.getToken().then((hasil) => {
-        if(hasil !== null) {
-            initialTokenState = JSON.parse(hasil);
-        }
-    }).catch((error) => {
-        console.log(error);
-    });
+    const response = AppStorageToken.getToken();
+    let data: IToken|null = null;
 
-    return initialTokenState!;
+    if(response !== undefined) {
+        response.then((dataStr) => { return JSON.parse(dataStr!) as IToken });
+    }
+
+    return data;
 }
 
-// const initialTokenState = getInitialTokenState();
+const initialTokenState = getInitialTokenState();
 
 export const tokenSlice = createSlice({
     name: 'token',
     initialState: {
-        authorized: getInitialTokenState()
+        authorized: initialTokenState
     },
     reducers: {
         // tokenLoading: (state, action: PayloadAction<null>) => {
