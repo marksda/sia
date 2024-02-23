@@ -12,7 +12,7 @@ export const Main = (): React.ReactElement => {
     return (
         <SafeAreaProvider>
             {
-                token.authorized == null ? 
+                token == null ? 
                 <SignInScreen /> : 
                 <>
                     <StatusBar />

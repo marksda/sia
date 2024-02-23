@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit/react";
-import { AppStorageToken } from "./app-storage.service";
 import { IToken } from "../features/entities/token";
 import * as _ from "lodash";
 import { ICredential } from "../features/entities/credential";
@@ -10,10 +9,14 @@ export const fetchToken = createAsyncThunk(
     'token/fetchToken',
     async (credential: ICredential, thunkApi: any) => {    
         const response = await TokenAPI.getToken(credential); 
-        let data: IToken|null = null;
+        let data: IToken = {
+            id: null,
+            nama: null,
+            token: null
+        };
+        
         if(response.status == 200) {
-            data = await response.json().then((dataJson) => {     
-                AppStorageToken.setToken(dataJson);
+            data = await response.json().then((dataJson) => {    
                 return dataJson;
             });
         }
@@ -22,24 +25,15 @@ export const fetchToken = createAsyncThunk(
     }
 );
 
-function getInitialTokenState(): IToken|null {
-    const response = AppStorageToken.getToken();
-    let data: IToken|null = null;
-
-    if(response !== undefined) {
-        response.then((dataStr) => { return JSON.parse(dataStr!) as IToken });
-    }
-
-    return data;
-}
-
-const initialTokenState = getInitialTokenState();
+const initialState: IToken =  {
+    id: null,
+    nama: null,
+    token: null
+};
 
 export const tokenSlice = createSlice({
     name: 'token',
-    initialState: {
-        authorized: initialTokenState
-    },
+    initialState,
     reducers: {
         // tokenLoading: (state, action: PayloadAction<null>) => {
         //     if (state.loading === 'idle') {
@@ -61,7 +55,8 @@ export const tokenSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchToken.fulfilled, (state, action) => {
-            state.authorized = action.payload != null ? _.cloneDeep(action.payload):null;
+            state = _.cloneDeep(action.payload);
+
         });
     }
 });
