@@ -13,8 +13,8 @@ const persistedReducer = persistReducer(persistConfig, tokenReducer)
 
 export const store = configureStore({
     reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
     devTools: process.env.NODE_ENV !== 'production',
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false,})
 });
 
 export const persistor = persistStore(store)

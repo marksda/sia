@@ -14,7 +14,7 @@ export const fetchToken = createAsyncThunk(
             nama: null,
             token: null
         };
-        
+
         if(response.status == 200) {
             data = await response.json().then((dataJson) => {    
                 return dataJson;
@@ -55,7 +55,10 @@ export const tokenSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchToken.fulfilled, (state, action) => {
-            state = _.cloneDeep(action.payload);
+            // state = _.cloneDeep(action.payload);
+            state.id = action.payload.id;
+            state.nama = action.payload.nama;
+            state.token = action.payload.token;
 
         });
     }
