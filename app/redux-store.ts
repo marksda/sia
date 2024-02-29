@@ -12,7 +12,9 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, tokenReducer)
 
 export const store = configureStore({
-    reducer: persistedReducer,
+    reducer: {
+        persisted: persistedReducer,        
+    },
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false,})
 });

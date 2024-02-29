@@ -12,7 +12,8 @@ export const fetchToken = createAsyncThunk(
         let data: IToken = {
             id: null,
             nama: null,
-            token: null
+            token: null,
+            refreshToken: null
         };
 
         if(response.status == 200) {
@@ -28,7 +29,8 @@ export const fetchToken = createAsyncThunk(
 const initialState: IToken =  {
     id: null,
     nama: null,
-    token: null
+    token: null,
+    refreshToken: null
 };
 
 export const tokenSlice = createSlice({
@@ -59,7 +61,7 @@ export const tokenSlice = createSlice({
             state.id = action.payload.id;
             state.nama = action.payload.nama;
             state.token = action.payload.token;
-
+            state.refreshToken = action.payload.refreshToken;
         });
     }
 });

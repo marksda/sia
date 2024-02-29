@@ -7,7 +7,7 @@ import { AppNavigator } from "../navigation/app.navigator";
 
 export const Main = (): React.ReactElement => {
 
-    const token = useAppSelector(state => state.token); 
+    const token = useAppSelector(state => state.persisted.token); 
     
     return (
         <SafeAreaProvider>
