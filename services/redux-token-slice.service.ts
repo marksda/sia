@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit/r
 import { IToken } from "../features/entities/token";
 import * as _ from "lodash";
 import { ICredential } from "../features/entities/credential";
-import { TokenAPI } from "./api-service";
+import { TokenAPI } from "./api-rtkquery-service";
 
 
 export const fetchToken = createAsyncThunk(
@@ -37,27 +37,21 @@ export const tokenSlice = createSlice({
     name: 'token',
     initialState,
     reducers: {
-        // tokenLoading: (state, action: PayloadAction<null>) => {
-        //     if (state.loading === 'idle') {
-        //         state.loading = 'pending'
-        //     }
-        // },
-        // tokenReceived: (state, action: PayloadAction<IToken>) => {
-        //     if (state.loading === 'pending') {
-        //       state.loading = 'idle'
-        //       state.token = _.cloneDeep(action.payload);
-        //     }
-        // },
-        // setToken: (state, action: PayloadAction<IToken>) => {
-        //     state.token = _.cloneDeep(action.payload);
-        // },
-        // resetToken: (state, action: PayloadAction<IToken>) => {
-        //     state.token = null;
-        // },
+        setToken: (state, action: PayloadAction<IToken>) => {
+            state.id = action.payload.id;
+            state.nama = action.payload.nama;
+            state.token = action.payload.token;
+            state.refreshToken = action.payload.refreshToken;
+        },
+        resetToken: (state, action: PayloadAction<null>) => {
+            state.id = null;
+            state.nama = null;
+            state.token = null;
+            state.refreshToken = null;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchToken.fulfilled, (state, action) => {
-            // state = _.cloneDeep(action.payload);
             state.id = action.payload.id;
             state.nama = action.payload.nama;
             state.token = action.payload.token;
@@ -66,6 +60,6 @@ export const tokenSlice = createSlice({
     }
 });
 
-// export const { resetToken } = tokenSlice.actions;
+export const { setToken, resetToken } = tokenSlice.actions;
 
 export default tokenSlice.reducer;

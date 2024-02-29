@@ -2,9 +2,11 @@ import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery 
 import { ICredential } from "../features/entities/credential";
 import { Mutex } from "async-mutex";
 import { RootState } from "../app/redux-store";
+import { IToken } from "../features/entities/token";
+import { resetToken, setToken } from "./redux-token-slice.service";
+import { IBarang } from "../features/entities/barang";
 
-
-const urlApiSia:string = 'https://dlhk.ddns.net/api';
+const urlApiSia: string = 'https://dlhk.ddns.net/api';
 
 export class TokenAPI {
     static getToken = async (credential: ICredential) => {
@@ -59,6 +61,25 @@ export const baseQueryWithReauth: BaseQueryFn<string|FetchArgs, unknown, FetchBa
             const release = await mutex.acquire();
             try {
                 const refreshToken = (api.getState() as RootState).persisted.refreshToken;
+                const userId = (api.getState() as RootState).persisted.id;
+                const refreshResult = await baseQuery(
+                    {
+                        url: `/token/${userId}`,
+                        method: 'PUT',
+                        body: refreshToken
+                    },
+                    api,
+                    extraOptions,
+                );
+
+                if(refreshResult.data) {
+                    api.dispatch(setToken(refreshResult.data as IToken));
+                    result = await baseQuery(args, api, extraOptions);
+                } 
+                else {                    
+                    api.dispatch(resetToken(null));
+                }
+
             } catch (error) {
                 release();
             } finally {
@@ -77,9 +98,19 @@ export const baseQueryWithReauth: BaseQueryFn<string|FetchArgs, unknown, FetchBa
 export const siaApi = createApi({
     reducerPath: 'siaApi',
     baseQuery: baseQueryWithReauth,
+    tagTypes: ['Barang','Kosong'],
     endpoints: builder => {
         return {
-
+            saveBarang: builder.mutation<IBarang, Partial<IBarang>>({
+                query: (body) => ({
+                    url: '/barang',
+                    method: 'POST',
+                    body,
+                }),
+                invalidatesTags: (result) => result ? ['Barang']:['Kosong']
+            }),
         }
     }
 });
+
+export const {useSaveBarangMutation} = siaApi;
