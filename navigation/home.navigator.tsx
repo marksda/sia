@@ -11,7 +11,19 @@ export const HomeNavigator = (): React.ReactElement => {
         <Drawer.Navigator
             drawerContent={props => <HomeDrawer {...props} />}>
             <Drawer.Screen name='Transaksi'>
-                {(props) => <TransaksiScreen navigation={props.navigation}/>}
+                {
+                    (props) => <TransaksiScreen 
+                                    initSelectedFilters={
+                                        {
+                                            pageNumber: 1,
+                                            pageSize: 25,
+                                            filters: [],
+                                            sortOrders: [],
+                                        }
+                                    }
+                                    navigation={props.navigation}
+                                />
+                }
             </Drawer.Screen>
             <Drawer.Screen name='Laporan' component={LaporanScreen} />
         </Drawer.Navigator>

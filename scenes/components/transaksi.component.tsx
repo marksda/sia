@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
 import { useGetDaftarBarangQuery } from '../../services/api-rtkquery-service';
-import { IQueryParamFilters, qFilters } from '../../features/entities/query-param-filters';
+import { IQueryParamFilters } from '../../features/entities/query-param-filters';
 
 
 interface ITransaksiScreenProps {
