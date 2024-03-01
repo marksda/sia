@@ -17,8 +17,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
   const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
     ...initSelectedFilters!, pageNumber: currentPage, pageSize
   });
-  const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);
-  
+  const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);  
 
   const navigateDetails = () => {
     navigation.navigate('Laporan');
