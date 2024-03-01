@@ -4,6 +4,8 @@ import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
 
 export const TransaksiScreen = ({ navigation }: { navigation: any; }) => {
 
+  // const { data: postsCount, isLoading: isLoadingCount } = useGetJumlahDataRegisterDokumenQuery(queryFilters);
+
   const navigateDetails = () => {
     navigation.navigate('Laporan');
   };

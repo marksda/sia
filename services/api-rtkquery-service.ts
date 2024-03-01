@@ -5,6 +5,7 @@ import { RootState } from "../app/redux-store";
 import { IToken } from "../features/entities/token";
 import { resetToken, setToken } from "./redux-token-slice.service";
 import { IBarang } from "../features/entities/barang";
+import { IQueryParamFilters } from "../features/entities/query-param-filters";
 
 const urlApiSia: string = 'https://dlhk.ddns.net/api';
 
@@ -108,6 +109,13 @@ export const siaApi = createApi({
                     body,
                 }),
                 invalidatesTags: (result) => result ? ['Barang']:['Kosong']
+            }),
+            getDaftarBarang: builder.query<IBarang[], IQueryParamFilters>({
+                query: (queryParams) => ({
+                    url: `barang?filters=${JSON.stringify(queryParams)}`,
+                    method: 'GET',
+                }),
+                providesTags: ['Barang']
             }),
         }
     }
