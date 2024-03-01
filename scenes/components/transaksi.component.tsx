@@ -11,6 +11,10 @@ interface ITransaksiScreenProps {
   navigation: any;
 };
 
+const data = new Array(8).fill({
+  title: 'Item',
+});
+
 export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
   
   const [currentPage, setCurrentPage] = useState<number>(initSelectedFilters?.pageNumber!);
@@ -18,23 +22,22 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
   const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
     ...initSelectedFilters!, pageNumber: currentPage, pageSize
   });
-  const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);  
-  
+  const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);    
 
   const navigateDetails = () => {
     navigation.navigate('Laporan');
   };
 
-  const renderItem = ({item}: ListRenderItemInfo<IBarang>): React.ReactElement => (
-    <ListItem title={`${item.nama}`} />
-  );
+  const renderItem = ({item}: ListRenderItemInfo<IBarang>): React.ReactElement => {
+    return <ListItem title={`${item.id} - ${item.nama}`} />;
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>        
-        <List style={styles.container}
+      <List style={styles.container}
           data={daftarBarang}
           renderItem={renderItem} />    
+      <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>   
         <Button onPress={navigateDetails}>OPEN Laporan</Button>
       </Layout>
     </SafeAreaView>
