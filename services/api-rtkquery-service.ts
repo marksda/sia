@@ -121,4 +121,4 @@ export const siaApi = createApi({
     }
 });
 
-export const {useSaveBarangMutation} = siaApi;
+export const {useSaveBarangMutation, useGetDaftarBarangQuery} = siaApi;

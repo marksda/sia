@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { FC, useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
+import { useGetDaftarBarangQuery } from '../../services/api-rtkquery-service';
+import { IQueryParamFilters, qFilters } from '../../features/entities/query-param-filters';
 
-export const TransaksiScreen = ({ navigation }: { navigation: any; }) => {
 
-  // const { data: postsCount, isLoading: isLoadingCount } = useGetJumlahDataRegisterDokumenQuery(queryFilters);
+interface ITransaksiScreenProps {
+  initSelectedFilters?: IQueryParamFilters;
+  navigation: any;
+};
+
+export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
+
+  const [currentPage, setCurrentPage] = useState<number>(initSelectedFilters?.pageNumber!);
+  const [pageSize, setPageSize] = useState<number>(initSelectedFilters?.pageSize!);
+  const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
+    ...initSelectedFilters!, pageNumber: currentPage, pageSize
+  });
+  const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);
 
   const navigateDetails = () => {
     navigation.navigate('Laporan');
