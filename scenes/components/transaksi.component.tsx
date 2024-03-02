@@ -34,11 +34,11 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
 
   const Header = (item: IBarang): React.ReactElement => (
     <View>
-      <Text category='h6'>
-        {`${item.id}`}
-      </Text>
       <Text category='s1'>
-        {`${item.nama}`}
+        {`${item.id} - ${item.nama}`}
+      </Text>
+      <Text category='s2'>
+        Rp. 100,00
       </Text>
     </View>
   );
