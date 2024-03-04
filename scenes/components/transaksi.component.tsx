@@ -11,10 +11,6 @@ interface ITransaksiScreenProps {
   navigation: any;
 };
 
-const data = new Array(8).fill({
-  title: 'Item',
-});
-
 export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
   
   const [currentPage, setCurrentPage] = useState<number>(initSelectedFilters?.pageNumber!);
@@ -28,9 +24,9 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     navigation.navigate('Laporan');
   };
 
-  // const renderItem = ({item}: ListRenderItemInfo<IBarang>): React.ReactElement => {
-  //   return <ListItem title={`${item.id} - ${item.nama}`} />;
-  // };
+  const _onHandlePressItem = (id: string) => {
+    console.log(id);
+  };
 
   const Header = (item: IBarang): React.ReactElement => (
     <View>
@@ -45,9 +41,6 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {/* <List style={styles.container}
-          data={daftarBarang}
-          renderItem={renderItem} />     */}
       <Layout style={styles.containerTop} level='1'>   
         { daftarBarang ? (
             daftarBarang.map((item) => (
@@ -55,6 +48,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
                 key={item.id as string}
                 style={styles.card}
                 header={Header(item)}
+                onPress={(e) => {_onHandlePressItem(item.id!)}}
               >
                 <Text>
                   With Header
