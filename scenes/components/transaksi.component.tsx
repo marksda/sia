@@ -4,6 +4,9 @@ import { Button, Card, Layout, List, Text } from '@ui-kitten/components';
 import { useGetDaftarBarangQuery } from '../../services/api-rtkquery-service';
 import { IQueryParamFilters } from '../../features/entities/query-param-filters';
 import { IBarang } from '../../features/entities/barang';
+import { ITransaki } from '../../features/entities/transaksi';
+import * as _ from "lodash";
+import { IItemTransaki } from '../../features/entities/item-transaksi';
 
 interface ITransaksiScreenProps {
   initSelectedFilters?: IQueryParamFilters;
@@ -12,7 +15,7 @@ interface ITransaksiScreenProps {
 
 export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
   
-  // const [transaksi, seTransaksi] = useState(null);
+  const [transaksi, seTransaksi] = useState<ITransaki|null>(null);
   const [currentPage, setCurrentPage] = useState<number>(initSelectedFilters?.pageNumber!);
   const [pageSize, setPageSize] = useState<number>(initSelectedFilters?.pageSize!);
   const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
@@ -25,7 +28,30 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
   };
 
   const _onHandlePressItem = (id: string) => {
-    console.log(id);
+    if(transaksi === null) {  //belum ada transaksi
+      let transaksi: ITransaki = {
+        id: null,
+        tanggal: new Date(),
+        keterangan: null,
+        daftarItemTransaksi: []
+      };
+      let itemSelected = _.find(daftarBarang, (item) => (item.id === id));      
+
+      if(itemSelected !== undefined) {
+        let itemTransaksi: IItemTransaki = {
+          item: itemSelected,
+          harga: 123,
+          jumlah: 1,
+          total: 123
+        };
+
+        transaksi.daftarItemTransaksi.push(itemTransaksi);
+        seTransaksi(transaksi);
+      }     
+    }
+    else {  //sudah ada transaksi
+
+    }
   };
 
   const Header = (item: IBarang): React.ReactElement => (

@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit/react";
 import { IToken } from "../features/entities/token";
-import * as _ from "lodash";
 import { ICredential } from "../features/entities/credential";
 import { TokenAPI } from "./api-rtkquery-service";
 
