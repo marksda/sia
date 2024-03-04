@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Button, Card, Layout, Text } from '@ui-kitten/components';
+import { Button, Card, Layout, List, Text } from '@ui-kitten/components';
 import { useGetDaftarBarangQuery } from '../../services/api-rtkquery-service';
 import { IQueryParamFilters } from '../../features/entities/query-param-filters';
 import { IBarang } from '../../features/entities/barang';
-
 
 interface ITransaksiScreenProps {
   initSelectedFilters?: IQueryParamFilters;
@@ -13,6 +12,7 @@ interface ITransaksiScreenProps {
 
 export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
   
+  // const [transaksi, seTransaksi] = useState(null);
   const [currentPage, setCurrentPage] = useState<number>(initSelectedFilters?.pageNumber!);
   const [pageSize, setPageSize] = useState<number>(initSelectedFilters?.pageSize!);
   const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
