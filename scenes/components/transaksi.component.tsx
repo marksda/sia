@@ -15,7 +15,7 @@ interface ITransaksiScreenProps {
 
 export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
   
-  const [transaksi, seTransaksi] = useState<ITransaki|null>(null);
+  const [transaksi, setTransaksi] = useState<ITransaki|null>(null);
   const [currentPage, setCurrentPage] = useState<number>(initSelectedFilters?.pageNumber!);
   const [pageSize, setPageSize] = useState<number>(initSelectedFilters?.pageSize!);
   const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
@@ -28,14 +28,14 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
   };
 
   const _onHandlePressItem = (id: string) => {
-    if(transaksi === null) {  //belum ada transaksi
+    if(transaksi === null) {  //belum ada object transaksi
       let transaksi: ITransaki = {
         id: null,
         tanggal: new Date(),
         keterangan: null,
         daftarItemTransaksi: []
-      };
-      let itemSelected = _.find(daftarBarang, (item) => (item.id === id));      
+      };      
+      let itemSelected = _.find(daftarBarang, (item) => (item.id == id));      
 
       if(itemSelected !== undefined) {
         let itemTransaksi: IItemTransaki = {
@@ -46,11 +46,28 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         };
 
         transaksi.daftarItemTransaksi.push(itemTransaksi);
-        seTransaksi(transaksi);
+        setTransaksi(transaksi);
       }     
     }
-    else {  //sudah ada transaksi
+    else {  //sudah ada object transaksi
+      setTransaksi((prev) => {
+        let newTransaksi = _.cloneDeep(prev);
+        let itemSelected = _.find(daftarBarang, (item) => (item.id === id));
 
+        if(itemSelected !== undefined) {
+          let itemTransaksi: IItemTransaki = {
+            item: itemSelected,
+            harga: 123,
+            jumlah: 1,
+            total: 123
+          };
+  
+          newTransaksi!.daftarItemTransaksi.push(itemTransaksi);
+          setTransaksi(transaksi);
+        }  
+
+        return newTransaksi;
+      })
     }
   };
 
@@ -66,8 +83,8 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Layout style={styles.containerTop} level='1'>   
+    <SafeAreaView style={styles.mainContainer}>
+      <Layout style={styles.containerTop}>   
         { daftarBarang ? (
             daftarBarang.map((item) => (
               <Card
@@ -92,6 +109,12 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    // padding: 20,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   containerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -102,6 +125,7 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   containerBottom: {
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
+    paddingBottom: 8,
   }
 });
