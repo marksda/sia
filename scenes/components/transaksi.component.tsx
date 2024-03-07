@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Button, Card, Layout, List, Text } from '@ui-kitten/components';
+import { Button, Card, Divider, Layout, List, ListItem, Text } from '@ui-kitten/components';
 import { useGetDaftarBarangQuery } from '../../services/api-rtkquery-service';
 import { IQueryParamFilters } from '../../features/entities/query-param-filters';
 import { IBarang } from '../../features/entities/barang';
@@ -12,6 +12,10 @@ interface ITransaksiScreenProps {
   initSelectedFilters?: IQueryParamFilters;
   navigation: any;
 };
+
+const data = new Array(53).fill({
+  title: 'Item',
+});
 
 export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
   
@@ -71,7 +75,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     }
   };
 
-  const Header = (item: IBarang): React.ReactElement => (
+  const _renderCardHeader = (item: IBarang): React.ReactElement => (
     <View>
       <Text category='s1'>
         {`${item.id} - ${item.nama}`}
@@ -82,6 +86,10 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     </View>
   );
 
+  const _renderListItem = ({ item, index }: { item: { title: string }; index: number }): React.ReactElement => (
+    <ListItem title={`${item.title} ${index + 1}`} />
+  );
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Layout style={styles.containerTop}>   
@@ -90,7 +98,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
               <Card
                 key={item.id as string}
                 style={styles.card}
-                header={Header(item)}
+                header={_renderCardHeader(item)}
                 onPress={(e) => {_onHandlePressItem(item.id!)}}
               >
                 <Text>
@@ -99,7 +107,20 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
               </Card>
             ))            
           ) : null
-        }        
+        }          
+      </Layout>
+      <Layout style={styles.containerMiddle}>
+        <Text
+          style={styles.notaTitle}
+          category='h6'>
+            Nota transaksi
+        </Text>
+        <Divider />
+        <List
+          contentContainerStyle={styles.contentListContainer}
+          data={data}
+          renderItem={_renderListItem}
+        />        
       </Layout>
       <Layout style={styles.containerBottom}>
         <Button onPress={navigateDetails}>OPEN Laporan</Button>
@@ -116,8 +137,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   containerTop: {
+    flex: 3,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    padding: 8,
+  },
+  containerMiddle: {
+    flex: 9,
+    flexDirection: 'column',
     padding: 8,
   },
   card: {
@@ -125,7 +152,15 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   containerBottom: {
+    flex: 1,
     paddingHorizontal: 8,
     paddingBottom: 8,
-  }
+  },
+  notaTitle: {
+    margin: 8
+  },
+  contentListContainer: {
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+  },
 });
