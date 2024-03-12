@@ -26,8 +26,6 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     ...initSelectedFilters!, pageNumber: currentPage, pageSize
   });
   const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);   
-  
-  console.log(transaksi);
 
   const navigateDetails = () => {
     navigation.navigate('Laporan');
