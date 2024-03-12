@@ -25,7 +25,9 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
   const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
     ...initSelectedFilters!, pageNumber: currentPage, pageSize
   });
-  const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);    
+  const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);   
+  
+  console.log(transaksi);
 
   const navigateDetails = () => {
     navigation.navigate('Laporan');
@@ -86,8 +88,8 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     </View>
   );
 
-  const _renderListItem = ({ item, index }: { item: { title: string }; index: number }): React.ReactElement => (
-    <ListItem title={`${item.title} ${index + 1}`} />
+  const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (
+    <ListItem title={`${item.item?.nama} `} />
   );
 
   return (
@@ -118,7 +120,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         <Divider />
         <List
           contentContainerStyle={styles.contentListContainer}
-          data={data}
+          data={transaksi ? transaksi.daftarItemTransaksi: null}
           renderItem={_renderListItem}
         />        
       </Layout>
