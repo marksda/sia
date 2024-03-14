@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Button, Card, Divider, Layout, List, ListItem, Text } from '@ui-kitten/components';
+import { Button, Card, Divider, Icon, IconElement, Layout, List, ListItem, Text } from '@ui-kitten/components';
 import { useGetDaftarBarangQuery } from '../../services/api-rtkquery-service';
 import { IQueryParamFilters } from '../../features/entities/query-param-filters';
 import { IBarang } from '../../features/entities/barang';
@@ -44,9 +44,9 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
       if(itemSelected !== undefined) {
         let itemTransaksi: IItemTransaki = {
           item: itemSelected,
-          harga: 123,
+          harga: 100,
           jumlah: 1,
-          total: 123
+          total: 100
         };
 
         transaksi.daftarItemTransaksi.push(itemTransaksi);
@@ -54,21 +54,49 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
       }     
     }
     else {  //sudah ada object transaksi
+
       setTransaksi((prev) => {
         let newTransaksi = _.cloneDeep(prev);
-        let itemSelected = _.find(daftarBarang, (item) => (item.id === id));
 
-        if(itemSelected !== undefined) {
-          let itemTransaksi: IItemTransaki = {
-            item: itemSelected,
-            harga: 123,
-            jumlah: 1,
-            total: 123
-          };
-  
-          newTransaksi!.daftarItemTransaksi.push(itemTransaksi);
-          setTransaksi(transaksi);
-        }  
+        //cari apakah item sudah ada dalam transaksi        
+        let existItem = _.find(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
+        
+        if(existItem != undefined) {
+          let indexItem = _.findIndex(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
+
+          existItem.jumlah += 1;
+          existItem.total = existItem.jumlah * existItem.harga;
+
+          newTransaksi?.daftarItemTransaksi.splice(indexItem, 1, existItem);
+        }
+        else {
+          let itemSelected = _.find(daftarBarang, (item) => (item.id === id));
+
+          if(itemSelected !== undefined) {
+            let itemTransaksi: IItemTransaki = {
+              item: itemSelected,
+              harga: 100,
+              jumlah: 1,
+              total: 100
+            };
+    
+            newTransaksi!.daftarItemTransaksi.push(itemTransaksi);
+            setTransaksi(transaksi);
+          }  
+        }
+
+        return newTransaksi;
+      })
+    }
+  };
+
+  const _onHandlePressBtnHapus = (id: string) => {
+    if(transaksi != null) {  
+      setTransaksi((prev) => {
+        let newTransaksi = _.cloneDeep(prev);
+        _.remove(newTransaksi!.daftarItemTransaksi, (currentObject) => {
+          return currentObject.item?.id === id;
+        });
 
         return newTransaksi;
       })
@@ -86,8 +114,28 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     </View>
   );
 
+  const renderItemIcon = (props: any): IconElement => (
+    <Icon
+      {...props}
+      name='person'
+    />
+  );
+
+  const renderItemAccessory = (id: string): React.ReactElement => (
+    <Button 
+      size='tiny'
+      onPress={() => _onHandlePressBtnHapus(id)}>
+      Hapus
+    </Button>
+  );
+
   const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (
-    <ListItem title={`${item.item?.nama} `} />
+    <ListItem 
+      title={`${item.item?.nama} `} 
+      description={`Harga = Rp. ${item.harga}, jml = ${item.jumlah}, tot = ${item.total}`}
+      accessoryLeft={renderItemIcon}
+      accessoryRight={() => renderItemAccessory(item.item?.id!)}
+    />
   );
 
   return (
