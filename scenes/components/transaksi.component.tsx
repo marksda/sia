@@ -129,15 +129,13 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     </Button>
   );
 
-  const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (    
-    <Card>
-      <Text>
-      {`${item.item?.nama} `} 
-      </Text>
-      <Text>
-      {`Harga = Rp. ${item.harga}, jml = ${item.jumlah}, tot = ${item.total}`}
-      </Text>
-    </Card>
+  const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (
+    <ListItem 
+      title={`${item.item?.nama} `} 
+      description={`Harga = Rp. ${item.harga}, jml = ${item.jumlah}, tot = ${item.total}`}
+      accessoryLeft={renderItemIcon}
+      accessoryRight={() => renderItemAccessory(item.item?.id!)}
+    />
   );
 
   return (
@@ -169,6 +167,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         <List
           contentContainerStyle={styles.contentListContainer}
           data={transaksi ? transaksi.daftarItemTransaksi: null}
+          ItemSeparatorComponent={Divider}
           renderItem={_renderListItem}
         />        
       </Layout>
@@ -212,8 +211,5 @@ const styles = StyleSheet.create({
   contentListContainer: {
     paddingHorizontal: 0,
     paddingVertical: 0,
-  },
-  contentCardItemTransaksi: {
-
   }
 });
