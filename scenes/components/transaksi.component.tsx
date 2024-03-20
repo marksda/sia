@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
-import { Button, Card, Divider, Layout, Text } from '@ui-kitten/components';
+import { Button, Card, Divider, Layout, List, Text } from '@ui-kitten/components';
 import { useGetDaftarBarangQuery } from '../../services/api-rtkquery-service';
 import { IQueryParamFilters } from '../../features/entities/query-param-filters';
 import { IBarang } from '../../features/entities/barang';
@@ -97,9 +97,9 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     </View>
   );
 
-  const _renderItem = ({item}: IItemTransaki) => (
+  const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (
     <View style={styles.item}>
-      <Text style={styles.title}>{item?.nama!}</Text>
+      <Text style={styles.title}>{item.item?.nama!}</Text>
     </View>
   );
 
@@ -129,11 +129,12 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
             Nota transaksi
         </Text>
         <Divider />
-        <FlatList
-          data={transaksi ? transaksi.daftarItemTransaksi: null}
-          renderItem={({item}) => _renderItem(item)}
+        <List
           keyExtractor={item => item.item?.id!}
-        />
+          contentContainerStyle={styles.contentListContainer}
+          data={transaksi ? transaksi.daftarItemTransaksi: null}
+          renderItem={_renderListItem}
+        />       
       </Layout>
       <Layout style={styles.containerBottom}>
         <Button onPress={navigateDetails}>OPEN Laporan</Button>
