@@ -98,9 +98,12 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
   );
 
   const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{item.item?.nama!}</Text>
-    </View>
+    <Layout style={styles.layoutContentDetailItem}>
+      <View style={styles.item}>
+        <Text style={styles.title}>{item.item?.nama!}</Text>
+      </View>
+    </Layout>
+    
   );
 
   return (
@@ -176,6 +179,10 @@ const styles = StyleSheet.create({
   contentListContainer: {
     paddingHorizontal: 0,
     paddingVertical: 0,
+  },
+  layoutContentDetailItem: {
+    flex: 1,
+    flexDirection: 'row',
   },
   item: {
     backgroundColor: '#f9c2ff',
