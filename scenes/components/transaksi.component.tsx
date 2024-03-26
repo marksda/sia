@@ -98,17 +98,25 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
   );
 
   const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (
-    <Layout style={styles.layoutContentDetailItem}>
-      <View style={styles.item}>
-        <Text style={styles.title}>{item.item?.nama!}</Text>
+    <View style={styles.layoutContentDetailItem}>
+      <View style={styles.itemImage}>
+
       </View>
-    </Layout>
+      <View style={styles.itemDetail}>
+        <View style={styles.itemDetailTitle}>
+          <Text style={styles.title}>{`${item.item?.id} - ${item.item?.nama!}`}</Text>
+        </View>
+        <View style={styles.itemDetailCount}>
+          <Text style={styles.titleHarga}>{`Rp. ${item.harga}`}</Text>
+        </View>        
+      </View>
+    </View>
     
   );
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <Layout style={styles.containerTop}>   
+      <View style={styles.containerTop}>   
         { daftarBarang ? (
             daftarBarang.map((item) => (
               <Card
@@ -124,8 +132,8 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
             ))            
           ) : null
         }          
-      </Layout>
-      <Layout style={styles.containerMiddle}>
+      </View>
+      <View style={styles.containerMiddle}>
         <Text
           style={styles.notaTitle}
           category='h6'>
@@ -138,10 +146,10 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
           data={transaksi ? transaksi.daftarItemTransaksi: null}
           renderItem={_renderListItem}
         />       
-      </Layout>
-      <Layout style={styles.containerBottom}>
+      </View>
+      <View style={styles.containerBottom}>
         <Button onPress={navigateDetails}>OPEN Laporan</Button>
-      </Layout>
+      </View>
     </SafeAreaView>
   );
 };
@@ -183,14 +191,32 @@ const styles = StyleSheet.create({
   layoutContentDetailItem: {
     flex: 1,
     flexDirection: 'row',
+    paddingBottom: 4,
   },
-  item: {
+  itemImage: {
+    flex: 1,    
+    backgroundColor: 'grey',
+  },
+  itemDetail: {
+    flex: 4,
+    flexDirection: 'column',
+  },
+  itemDetailTitle: {    
     backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    padding: 8,
+    // marginVertical: 8,
+    // marginHorizontal: 16,
+  },
+  itemDetailCount: {    
+    backgroundColor: '#f9c2ff',
+    padding: 8,
+    // marginVertical: 8,
+    // marginHorizontal: 16,
   },
   title: {
-    fontSize: 32,
+    fontSize: 16,
+  }, 
+  titleHarga: {
+    fontSize: 14,
   },  
 });
