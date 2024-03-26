@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, TextInput, View } from 'react-native';
 import { Button, Card, Divider, Layout, List, Text } from '@ui-kitten/components';
 import { useGetDaftarBarangQuery } from '../../services/api-rtkquery-service';
 import { IQueryParamFilters } from '../../features/entities/query-param-filters';
@@ -16,6 +16,7 @@ interface ITransaksiScreenProps {
 export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
   
   const [transaksi, setTransaksi] = useState<ITransaki|null>(null);
+  const [number, onChangeNumber] = useState<any>('');
   const [currentPage, setCurrentPage] = useState<number>(initSelectedFilters?.pageNumber!);
   const [pageSize, setPageSize] = useState<number>(initSelectedFilters?.pageSize!);
   const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
@@ -102,16 +103,22 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
       <View style={styles.itemImage}>
 
       </View>
-      <View style={styles.itemDetail}>
+      <View style={styles.contentItemDetail}>
         <View style={styles.itemDetailTitle}>
           <Text style={styles.title}>{`${item.item?.id} - ${item.item?.nama!}`}</Text>
         </View>
         <View style={styles.itemDetailCount}>
           <Text style={styles.titleHarga}>{`Rp. ${item.harga}`}</Text>
+          <TextInput
+            style={styles.input}
+            caretHidden={true}
+            onChangeText={onChangeNumber}
+            value={number}
+            keyboardType="numeric"
+          />
         </View>        
       </View>
-    </View>
-    
+    </View>    
   );
 
   return (
@@ -197,7 +204,7 @@ const styles = StyleSheet.create({
     flex: 1,    
     backgroundColor: 'grey',
   },
-  itemDetail: {
+  contentItemDetail: {
     flex: 4,
     flexDirection: 'column',
   },
@@ -207,11 +214,11 @@ const styles = StyleSheet.create({
     // marginVertical: 8,
     // marginHorizontal: 16,
   },
-  itemDetailCount: {    
+  itemDetailCount: {   
+    flex: 1,
+    flexDirection: 'row', 
     backgroundColor: '#f9c2ff',
     padding: 8,
-    // marginVertical: 8,
-    // marginHorizontal: 16,
   },
   title: {
     fontSize: 16,
@@ -219,4 +226,14 @@ const styles = StyleSheet.create({
   titleHarga: {
     fontSize: 14,
   },  
+  input: {
+    height: 20,
+    width: 40,
+    // borderWidth: 1,
+    fontSize: 14,
+    textAlignVertical: 'top',
+    textAlign: 'center',
+    paddingVertical: 0,
+    paddingHorizontal: 2,
+  },
 });
