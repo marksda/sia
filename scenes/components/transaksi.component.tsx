@@ -98,7 +98,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
       </Text>
     </View>
   );
-
+  
   const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (
     <View style={styles.layoutContentDetailItem}>
       <View style={styles.itemImage}>
@@ -126,8 +126,8 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
             <TextInput
               style={styles.input}
               caretHidden={false}
-              onChangeText={onChangeNumber}
-              value={item.jumlah.toString()}
+              onChangeText={(val) => _onChangeInputNumber(item.item?.id!, val)}
+              value={item.jumlah == 0 ? '':item.jumlah.toString()}
               keyboardType="numeric"
             />
             <TouchableHighlight onPress={() => _onPressIconMinus(item.item?.id!)} underlayColor="#FCD4F2">
@@ -199,6 +199,41 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
       })
     }
   };
+
+  const _onChangeInputNumber = (id: string, val: string) => {
+    if(transaksi != null) {  
+      let count = 0;
+      if(val == '') {
+        count = 0;
+      }
+      else {
+        count = Number(val);
+      }      
+
+      setTransaksi((prev) => {
+        let newTransaksi = _.cloneDeep(prev);
+        let existItem = _.find(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
+        if(existItem != undefined) {
+          if(count < 0) {
+            _.remove(newTransaksi!.daftarItemTransaksi, (currentObject) => {
+              return currentObject.item?.id === id;
+            });
+          }
+          else {
+            let indexItem = _.findIndex(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
+
+            existItem.jumlah = count;
+            existItem.total = existItem.jumlah * existItem.harga;
+
+            newTransaksi?.daftarItemTransaksi.splice(indexItem, 1, existItem);
+          }          
+        }
+
+        return newTransaksi;
+      })
+    }
+  };
+
 
   return (
     <SafeAreaView style={styles.mainContainer}>
