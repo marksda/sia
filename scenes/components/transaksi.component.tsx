@@ -44,9 +44,9 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
       if(itemSelected !== undefined) {
         let itemTransaksi: IItemTransaki = {
           item: itemSelected,
-          harga: itemSelected.harga_satuan!,
+          harga: Number(itemSelected.harga_satuan!),
           jumlah: 1,
-          total: itemSelected.harga_satuan!
+          total: Number(itemSelected.harga_satuan!)
         };
 
         transaksi.total = itemTransaksi.total;
@@ -79,15 +79,14 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
           if(itemSelected !== undefined) {
             let itemTransaksi: IItemTransaki = {
               item: itemSelected,
-              harga: itemSelected.harga_satuan!,
+              harga: Number(itemSelected.harga_satuan!),
               jumlah: 1,
-              total: itemSelected.harga_satuan!
+              total: Number(itemSelected.harga_satuan!)
             };
     
             newTransaksi!.total! += itemTransaksi.total;
 
             newTransaksi!.daftarItemTransaksi.push(itemTransaksi);
-            setTransaksi(transaksi);
           }  
         }
 
@@ -100,6 +99,10 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     if(transaksi != null) {  
       setTransaksi((prev) => {
         let newTransaksi = _.cloneDeep(prev);
+
+        let existItem = _.find(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
+        newTransaksi!.total = newTransaksi?.total! - existItem!.total;
+
         _.remove(newTransaksi!.daftarItemTransaksi, (currentObject) => {
           return currentObject.item?.id === id;
         });
@@ -163,7 +166,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
   const _onChangeInputNumber = (id: string, val: string) => {
     if(transaksi != null) {  
       let count = 0;
-      if(val == '') {
+      if(val == '' || val == '-') {
         count = 0;
       }
       else {
