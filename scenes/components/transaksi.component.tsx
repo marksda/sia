@@ -17,7 +17,6 @@ interface ITransaksiScreenProps {
 export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
   
   const [transaksi, setTransaksi] = useState<ITransaki|null>(null);
-  const [number, onChangeNumber] = useState<any>('');
   const [currentPage, setCurrentPage] = useState<number>(initSelectedFilters?.pageNumber!);
   const [pageSize, setPageSize] = useState<number>(initSelectedFilters?.pageSize!);
   const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
@@ -73,7 +72,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
           if(itemSelected !== undefined) {
             let itemTransaksi: IItemTransaki = {
               item: itemSelected,
-              harga: 100,
+              harga: itemSelected.harga_satuan!,
               jumlah: 1,
               total: 100
             };
@@ -186,7 +185,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         {`${item.id} - ${item.nama}`}
       </Text>
       <Text category='s2'>
-        {`Rp. ${new Intl.NumberFormat("id").format(item.harga_satuan!)}`}
+        {`${new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 2 }).format(item.harga_satuan!)}`}
       </Text>
     </View>
   );
@@ -207,7 +206,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
           </TouchableHighlight>          
         </View>
         <View style={styles.itemDetailBottom}>
-          <Text style={styles.titleHarga}>{`Rp. ${item.harga}`}</Text>
+          <Text style={styles.titleHarga}>{`${new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 2 }).format(item.harga)}`}</Text>
           <View style={styles.itemDetailCount}>
             <TouchableHighlight onPress={() => _onPressIconPlus(item.item?.id!)} underlayColor="#FCD4F2">
               <Icon
