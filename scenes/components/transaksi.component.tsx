@@ -42,9 +42,9 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
       if(itemSelected !== undefined) {
         let itemTransaksi: IItemTransaki = {
           item: itemSelected,
-          harga: 100,
+          harga: itemSelected.harga_satuan!,
           jumlah: 1,
-          total: 100
+          total: itemSelected.harga_satuan!
         };
 
         transaksi.daftarItemTransaksi.push(itemTransaksi);
@@ -87,60 +87,6 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
       });
     }
   };
-
-  const _renderCardHeader = (item: IBarang): React.ReactElement => (
-    <View>
-      <Text category='s1'>
-        {`${item.id} - ${item.nama}`}
-      </Text>
-      <Text category='s2'>
-        Rp. 100,00
-      </Text>
-    </View>
-  );
-  
-  const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (
-    <View style={styles.layoutContentDetailItem}>
-      <View style={styles.itemImage}>
-
-      </View>
-      <View style={styles.contentItemDetail}>
-        <View style={styles.itemDetailTop}>
-          <Text style={styles.title}>{`${item.item?.id} - ${item.item?.nama!}`}</Text>
-          <TouchableHighlight onPress={() => _onPressIconDelete(item.item?.id!)} underlayColor="#FCD4F2">
-            <Icon
-              style={styles.iconDelete}
-              name='trash-2-outline'              
-            />
-          </TouchableHighlight>          
-        </View>
-        <View style={styles.itemDetailBottom}>
-          <Text style={styles.titleHarga}>{`Rp. ${item.harga}`}</Text>
-          <View style={styles.itemDetailCount}>
-            <TouchableHighlight onPress={() => _onPressIconPlus(item.item?.id!)} underlayColor="#FCD4F2">
-              <Icon
-                style={styles.icon}
-                name='plus-outline'
-              />
-            </TouchableHighlight>
-            <TextInput
-              style={styles.input}
-              caretHidden={false}
-              onChangeText={(val) => _onChangeInputNumber(item.item?.id!, val)}
-              value={item.jumlah == 0 ? '':item.jumlah.toString()}
-              keyboardType="numeric"
-            />
-            <TouchableHighlight onPress={() => _onPressIconMinus(item.item?.id!)} underlayColor="#FCD4F2">
-              <Icon
-                style={styles.icon}
-                name='minus-outline'
-              />
-            </TouchableHighlight>
-          </View>
-        </View>        
-      </View>
-    </View>    
-  );
 
   const _onPressIconDelete = (id: string) => {
     if(transaksi != null) {  
@@ -234,6 +180,59 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     }
   };
 
+  const _renderCardHeader = (item: IBarang): React.ReactElement => (
+    <View>
+      <Text category='s1'>
+        {`${item.id} - ${item.nama}`}
+      </Text>
+      <Text category='s2'>
+        {`Rp. ${new Intl.NumberFormat("id").format(item.harga_satuan!)}`}
+      </Text>
+    </View>
+  );
+  
+  const _renderListItem = ({ item, index }: { item: IItemTransaki ; index: number }): React.ReactElement => (
+    <View style={styles.layoutContentDetailItem}>
+      <View style={styles.itemImage}>
+
+      </View>
+      <View style={styles.contentItemDetail}>
+        <View style={styles.itemDetailTop}>
+          <Text style={styles.title}>{`${item.item?.id} - ${item.item?.nama!}`}</Text>
+          <TouchableHighlight onPress={() => _onPressIconDelete(item.item?.id!)} underlayColor="#FCD4F2">
+            <Icon
+              style={styles.iconDelete}
+              name='trash-2-outline'              
+            />
+          </TouchableHighlight>          
+        </View>
+        <View style={styles.itemDetailBottom}>
+          <Text style={styles.titleHarga}>{`Rp. ${item.harga}`}</Text>
+          <View style={styles.itemDetailCount}>
+            <TouchableHighlight onPress={() => _onPressIconPlus(item.item?.id!)} underlayColor="#FCD4F2">
+              <Icon
+                style={styles.icon}
+                name='plus-outline'
+              />
+            </TouchableHighlight>
+            <TextInput
+              style={styles.input}
+              caretHidden={false}
+              onChangeText={(val) => _onChangeInputNumber(item.item?.id!, val)}
+              value={item.jumlah == 0 ? '':item.jumlah.toString()}
+              keyboardType="numeric"
+            />
+            <TouchableHighlight onPress={() => _onPressIconMinus(item.item?.id!)} underlayColor="#FCD4F2">
+              <Icon
+                style={styles.icon}
+                name='minus-outline'
+              />
+            </TouchableHighlight>
+          </View>
+        </View>        
+      </View>
+    </View>    
+  );
 
   return (
     <SafeAreaView style={styles.mainContainer}>
