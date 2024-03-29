@@ -34,7 +34,10 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         id: null,
         tanggal: new Date(),
         keterangan: null,
-        daftarItemTransaksi: []
+        daftarItemTransaksi: [],
+        total: 0,
+        potongan: 0,
+        ppn: 0,
       };      
       let itemSelected = _.find(daftarBarang, (item) => (item.id == id));      
 
@@ -46,12 +49,13 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
           total: itemSelected.harga_satuan!
         };
 
+        transaksi.total = itemTransaksi.total;
         transaksi.daftarItemTransaksi.push(itemTransaksi);
+        
         setTransaksi(transaksi);
       }     
     }
     else {  //sudah ada object transaksi
-
       setTransaksi((prev) => {
         let newTransaksi = _.cloneDeep(prev);
 
@@ -59,10 +63,13 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         let existItem = _.find(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
         
         if(existItem != undefined) {
+          newTransaksi!.total = newTransaksi?.total! - existItem.total;
+
           let indexItem = _.findIndex(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
 
           existItem.jumlah += 1;
           existItem.total = existItem.jumlah * existItem.harga;
+          newTransaksi!.total += existItem.total;
 
           newTransaksi?.daftarItemTransaksi.splice(indexItem, 1, existItem);
         }
@@ -74,9 +81,11 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
               item: itemSelected,
               harga: itemSelected.harga_satuan!,
               jumlah: 1,
-              total: 100
+              total: itemSelected.harga_satuan!
             };
     
+            newTransaksi!.total! += itemTransaksi.total;
+
             newTransaksi!.daftarItemTransaksi.push(itemTransaksi);
             setTransaksi(transaksi);
           }  
@@ -107,15 +116,19 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         let existItem = _.find(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
         if(existItem != undefined) {
           if(existItem.jumlah == 1) {
+            newTransaksi!.total = newTransaksi?.total! - existItem.total;
             _.remove(newTransaksi!.daftarItemTransaksi, (currentObject) => {
               return currentObject.item?.id === id;
             });
           }
           else {
+            newTransaksi!.total = newTransaksi?.total! - existItem.total;
+
             let indexItem = _.findIndex(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
 
             existItem.jumlah -= 1;
             existItem.total = existItem.jumlah * existItem.harga;
+            newTransaksi!.total += existItem.total;
 
             newTransaksi?.daftarItemTransaksi.splice(indexItem, 1, existItem);
           }          
@@ -132,10 +145,12 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         let newTransaksi = _.cloneDeep(prev);
         let existItem = _.find(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
         if(existItem != undefined) {
+          newTransaksi!.total = newTransaksi?.total! - existItem.total;
           let indexItem = _.findIndex(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
 
           existItem.jumlah += 1;
           existItem.total = existItem.jumlah * existItem.harga;
+          newTransaksi!.total += existItem.total;
 
           newTransaksi?.daftarItemTransaksi.splice(indexItem, 1, existItem);
         }
@@ -160,15 +175,18 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         let existItem = _.find(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
         if(existItem != undefined) {
           if(count < 0) {
+            newTransaksi!.total = newTransaksi?.total! - existItem.total;
             _.remove(newTransaksi!.daftarItemTransaksi, (currentObject) => {
               return currentObject.item?.id === id;
             });
           }
           else {
+            newTransaksi!.total = newTransaksi?.total! - existItem.total;
             let indexItem = _.findIndex(newTransaksi!.daftarItemTransaksi, (currentObject) => (currentObject.item?.id === id));
 
             existItem.jumlah = count;
             existItem.total = existItem.jumlah * existItem.harga;
+            newTransaksi!.total += existItem.total;
 
             newTransaksi?.daftarItemTransaksi.splice(indexItem, 1, existItem);
           }          
@@ -233,6 +251,17 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     </View>    
   );
 
+  const _renderFooterKist = (): React.ReactElement => (
+    <View>
+      <Divider />
+      <Text>{`Total: ${transaksi == null || transaksi.total == 0 ? '':
+        new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 2 }).format(transaksi?.total!)}`
+        }</Text>
+      <Text>Potongan:</Text>
+      <Text>Ppn:</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.containerTop}>   
@@ -264,6 +293,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
           contentContainerStyle={styles.contentListContainer}
           data={transaksi ? transaksi.daftarItemTransaksi: null}
           renderItem={_renderListItem}
+          ListFooterComponent={_renderFooterKist}
         />       
       </View>
       <View style={styles.containerBottom}>

@@ -5,4 +5,7 @@ export interface ITransaki {
     tanggal: Date;
     keterangan: string|null;
     daftarItemTransaksi: IItemTransaki[];
+    total: number|null;
+    potongan: number|null;
+    ppn: number|null;
 }
