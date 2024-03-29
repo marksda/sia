@@ -168,6 +168,9 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
       }
       else {
         count = Number(val);
+        if(count < 0) {
+          count = 0;
+        }
       }      
 
       setTransaksi((prev) => {
