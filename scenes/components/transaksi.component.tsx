@@ -265,6 +265,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         }</Text>
       <Text>Potongan:</Text>
       <Text>Ppn:</Text>
+      <Button onPress={navigateDetails}>Simpan</Button>
     </View>
   );
 
