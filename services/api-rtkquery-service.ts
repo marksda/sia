@@ -6,7 +6,7 @@ import { IToken } from "../features/entities/token";
 import { resetToken, setToken } from "./redux-token-slice.service";
 import { IBarang } from "../features/entities/barang";
 import { IQueryParamFilters } from "../features/entities/query-param-filters";
-import { ITransaki } from "../features/entities/transaksi";
+import { ITransaksi } from "../features/entities/transaksi";
 
 const urlApiSia: string = 'https://dlhk.ddns.net/api';
 
@@ -118,7 +118,7 @@ export const siaApi = createApi({
                 }),
                 providesTags: ['Barang']
             }),
-            saveTransaksi: builder.mutation<ITransaki, Partial<ITransaki>>({
+            saveTransaksi: builder.mutation<ITransaksi, Partial<ITransaksi>>({
                 query: (body) => ({
                     url: '/transaksi',
                     method: 'POST',
