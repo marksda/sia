@@ -1,13 +1,16 @@
 import React, { FC, useState } from 'react';
 import { SafeAreaView, StyleSheet, TextInput, View } from 'react-native';
 import { Button, Card, Divider, Icon, List, Text } from '@ui-kitten/components';
-import { useGetDaftarBarangQuery } from '../../services/api-rtkquery-service';
+import { useGetDaftarBarangQuery, useSaveTransaksiMutation } from '../../services/api-rtkquery-service';
 import { IQueryParamFilters } from '../../features/entities/query-param-filters';
 import { IBarang } from '../../features/entities/barang';
-import { ITransaki } from '../../features/entities/transaksi';
+import { ITransaksi } from '../../features/entities/transaksi';
 import * as _ from "lodash";
 import { IItemTransaki } from '../../features/entities/item-transaksi';
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { TransaksiSchema } from '../../features/schema-resolver/zod-schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface ITransaksiScreenProps {
   initSelectedFilters?: IQueryParamFilters;
@@ -16,13 +19,18 @@ interface ITransaksiScreenProps {
 
 export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters, navigation}) => {
   
-  const [transaksi, setTransaksi] = useState<ITransaki|null>(null);
+  const [transaksi, setTransaksi] = useState<ITransaksi|null>(null);
   const [currentPage, setCurrentPage] = useState<number>(initSelectedFilters?.pageNumber!);
   const [pageSize, setPageSize] = useState<number>(initSelectedFilters?.pageSize!);
+  const {handleSubmit, control, setValue} = useForm<ITransaksi>({
+    resolver: zodResolver(TransaksiSchema),
+  });
+  const [disableForm, setDisableForm] = useState<boolean>(false);
   const [queryParams, setQueryParams] = useState<IQueryParamFilters>({
     ...initSelectedFilters!, pageNumber: currentPage, pageSize
   });
-  const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);   
+  const { data: daftarBarang, isLoading: isLoadingFetchDaftarBarang } = useGetDaftarBarangQuery(queryParams);  
+  const [ saveTransaksi, {isLoading: isLoadingSaveTransaksi}] = useSaveTransaksiMutation(); 
 
   const navigateDetails = () => {
     navigation.navigate('Laporan');
@@ -30,7 +38,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
 
   const _onHandlePressItem = (id: string) => {
     if(transaksi === null) {  //belum ada object transaksi
-      let transaksi: ITransaki = {
+      let transaksi: ITransaksi = {
         id: null,
         tanggal: new Date(),
         keterangan: null,
@@ -257,6 +265,23 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
     </View>    
   );
 
+  const onSubmit: SubmitHandler<ITransaksi> = async (data) => {
+    setDisableForm(true);
+    try {        
+      await saveTransaksi(data).unwrap().then((originalPromiseResult) => {
+        setDisableForm(false);
+      }).catch((rejectedValueOrSerializedError) => {
+        setDisableForm(false);
+      });            
+    } catch (error) {
+      setDisableForm(false);
+    }
+  };
+
+  const onError: SubmitErrorHandler<ITransaksi> = async (err) => {
+    console.log('error', err);
+  };
+
   const _renderFooterKist = (): React.ReactElement => (
     <View>
       <Divider />
@@ -265,9 +290,9 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         }</Text>
       <Text>Potongan:</Text>
       <Text>Ppn:</Text>
-      <Button onPress={navigateDetails}>Simpan</Button>
+      <Button onPress={handleSubmit(onSubmit, onError)}>Simpan</Button>
     </View>
-  );
+  );  
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -304,7 +329,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
         />       
       </View>
       <View style={styles.containerBottom}>
-        <Button onPress={navigateDetails}>OPEN Laporan</Button>
+        <Button onPress={navigateDetails} disabled={disableForm}>OPEN Laporan</Button>
       </View>
     </SafeAreaView>
   );

@@ -6,6 +6,7 @@ import { IToken } from "../features/entities/token";
 import { resetToken, setToken } from "./redux-token-slice.service";
 import { IBarang } from "../features/entities/barang";
 import { IQueryParamFilters } from "../features/entities/query-param-filters";
+import { ITransaki } from "../features/entities/transaksi";
 
 const urlApiSia: string = 'https://dlhk.ddns.net/api';
 
@@ -99,7 +100,7 @@ export const baseQueryWithReauth: BaseQueryFn<string|FetchArgs, unknown, FetchBa
 export const siaApi = createApi({
     reducerPath: 'siaApi',
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Barang','Kosong'],
+    tagTypes: ['Barang','Kosong', 'Transaksi'],
     endpoints: builder => {
         return {
             saveBarang: builder.mutation<IBarang, Partial<IBarang>>({
@@ -117,8 +118,16 @@ export const siaApi = createApi({
                 }),
                 providesTags: ['Barang']
             }),
+            saveTransaksi: builder.mutation<ITransaki, Partial<ITransaki>>({
+                query: (body) => ({
+                    url: '/transaksi',
+                    method: 'POST',
+                    body,
+                }),
+                invalidatesTags: (result) => result ? ['Transaksi']:['Kosong']
+            }),
         }
     }
 });
 
-export const {useSaveBarangMutation, useGetDaftarBarangQuery} = siaApi;
+export const {useSaveBarangMutation, useGetDaftarBarangQuery, useSaveTransaksiMutation} = siaApi;

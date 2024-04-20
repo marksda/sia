@@ -1,6 +1,6 @@
 import { IItemTransaki } from "./item-transaksi";
 
-export interface ITransaki {
+export interface ITransaksi {
     id: string|null;
     tanggal: Date;
     keterangan: string|null;
