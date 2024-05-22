@@ -8,12 +8,14 @@ export const fetchToken = createAsyncThunk(
     'token/fetchToken',
     async (credential: ICredential, thunkApi: any) => {    
         const response = await TokenAPI.getToken(credential); 
-        let data: IToken = {
-            id: null,
-            nama: null,
-            token: null,
-            refreshToken: null
-        };
+
+        // let data: IToken = {
+        //     id: null,
+        //     nama: null,
+        //     token: null,
+        //     refreshToken: null
+        // };
+        let data = null;
 
         if(response.status == 200) {
             data = await response.json().then((dataJson) => {    

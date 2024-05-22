@@ -14,7 +14,7 @@ export class TokenAPI {
     static getToken = async (credential: ICredential) => {
         // let data = null;
         return fetch(
-            `${urlApiSia}/tokens/new`, 
+            `${urlApiSia}/token/new`, 
             {
                 method: 'POST',
                 headers: {
