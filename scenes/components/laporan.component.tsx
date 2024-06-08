@@ -9,12 +9,12 @@ export const LaporanScreen = ({ navigation }: { navigation: any; }) => {
 
   const dispatch = useAppDispatch();
 
-  const navigateDetails = () => {
-    navigation.navigate('Transaksi');
-  };
+  // const navigateDetails = () => {
+  //   navigation.navigate('Transaksi');
+  // };
 
   const logOut = () => {
-    resetToken(null);
+    dispatch(resetToken(null));
   };
 
   return (
