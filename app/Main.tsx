@@ -4,6 +4,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SignInScreen } from "../scenes/auth/sign-in.component";
 import { StatusBar } from "../components/status-bar.component";
 import { AppNavigator } from "../navigation/app.navigator";
+import { IToken } from "../features/entities/token";
 
 export const Main = (): React.ReactElement => {
 
