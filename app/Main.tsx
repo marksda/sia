@@ -5,11 +5,9 @@ import { SignInScreen } from "../scenes/auth/sign-in.component";
 import { StatusBar } from "../components/status-bar.component";
 import { AppNavigator } from "../navigation/app.navigator";
 
-
 export const Main = (): React.ReactElement => {
-
     const token = useAppSelector(state => state.persisted.token); 
-    
+
     return (
         <SafeAreaProvider>
             {
