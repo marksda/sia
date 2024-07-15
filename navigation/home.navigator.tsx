@@ -3,7 +3,7 @@ import { HomeDrawer } from "../scenes/home/home-drawer.component";
 import { TransaksiScreen } from "../scenes/components/transaksi.component";
 import { LaporanScreen } from "../scenes/components/laporan.component";
 import { useWindowDimensions } from "react-native";
-import { Header, getHeaderTitle } from '@react-navigation/elements';
+// import { Header, getHeaderTitle } from '@react-navigation/elements';
 import React from "react";
 
 
