@@ -14,7 +14,7 @@ export const Main = (): React.ReactElement => {
                 token == null ? 
                 <SignInScreen /> : 
                 <>
-                    <StatusBar />
+                    <StatusBar hidden={true} backgroundColor="#61dafb"/>
                     <AppNavigator />
                 </>                
             }
