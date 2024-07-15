@@ -336,6 +336,7 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
 
 };
 
+
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
