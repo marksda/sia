@@ -37,6 +37,12 @@ export const HomeNavigator = (): React.ReactElement => {
             drawerContent={props => <HomeDrawer {...props} />}>
             <Drawer.Screen 
                 name='Transaksi'
+                options={{
+                    headerStyle: {
+                        backgroundColor: "red"
+                    }
+                }}
+
             >
                 {
                     (props) => <TransaksiScreen 
