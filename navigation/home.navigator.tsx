@@ -2,47 +2,40 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { HomeDrawer } from "../scenes/home/home-drawer.component";
 import { TransaksiScreen } from "../scenes/components/transaksi.component";
 import { LaporanScreen } from "../scenes/components/laporan.component";
-import { useWindowDimensions } from "react-native";
-// import { Header, getHeaderTitle } from '@react-navigation/elements';
-import React from "react";
+import { FC } from "react";
 
 
 const Drawer = createDrawerNavigator();
 
-export const HomeNavigator = (): React.ReactElement => {
-    const dimensions = useWindowDimensions();
+interface IHomeNavigatorProps {
+    screenOrientation: string;
+};
+
+
+export const HomeNavigator: FC<IHomeNavigatorProps> = ({screenOrientation}): React.ReactElement => {
 
     return (
         <Drawer.Navigator
             screenOptions={{
-                drawerType: dimensions.width >= 768 ? 'permanent' : 'front',
-                headerShadowVisible: dimensions.width >= 768 ? false : true,
+                drawerType: screenOrientation == "landscape" ? 'permanent' : 'front',
+                headerShadowVisible: screenOrientation == "landscape" ? false : true,
                 headerShown: true,
-                // header: ({ options, route }) => (
-                //     <Header {...options} title={getHeaderTitle(options, route.name)} headerTitleAlign="left"/>
-                // ),
                 headerStyle: {
-                    backgroundColor: '#f4511e',
-                    height: dimensions.width >= 768 ? 32:48
+                    backgroundColor: 'red',
+                    height: screenOrientation == "landscape" ? 32:48
                 },
                 headerTintColor: '#fff',
                 headerTitleStyle: {
                     fontWeight: '500',
-                    fontSize: dimensions.width >= 768 ? 16:20,
+                    fontSize: screenOrientation == "landscape" ? 16:20,
                 },
                 drawerStyle: {
-                    width: dimensions.width >= 768 ? 160 : 350,
+                    width: screenOrientation == "landscape" ? 160 : 350,
                 }
             }}   
             drawerContent={props => <HomeDrawer {...props} />}>
             <Drawer.Screen 
                 name='Transaksi'
-                options={{
-                    headerStyle: {
-                        backgroundColor: "red"
-                    }
-                }}
-
             >
                 {
                     (props) => <TransaksiScreen 
