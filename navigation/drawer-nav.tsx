@@ -1,50 +1,16 @@
 import { Avatar, Divider, Drawer, DrawerElement, DrawerItem, Icon, IndexPath, Layout, Text } from "@ui-kitten/components";
-import { Fragment, ReactElement, useState } from "react";
-import { SafeAreaLayout } from "../../components/safe-area-layout.component";
+import { FC, Fragment, ReactElement, useState } from "react";
+import { SafeAreaLayout } from "../components/safe-area-layout.component";
 import { StyleSheet, View } from "react-native";
-import { AppInfoService } from "../../services/app-info.service";
+import { AppInfoService } from "../services/app-info.service";
+import { IItemNav } from "../features/entities/item-nav";
 
-const KasirIcon = (props: any) => (
-  <Icon name='kasir' {...props} pack='assets'/>
-);
+interface IDrawerNavProps {
+  data: IItemNav[];
+};
 
-const ReportIcon = (props: any) => (
-  <Icon name='laporan' {...props} pack='assets'/>
-);
-
-const PengaturanIcon = (props: any) => (
-  <Icon name='pengaturan' {...props} pack='assets'/>
-);
-
-export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement => {
+const DrawerNav: FC<IDrawerNavProps> = ({ data}): DrawerElement => {
     const [selectedIndex, setSelectedIndex] = useState<IndexPath|null>(null);
-
-    const DATA = [
-        {
-          title: 'Transaksi',
-          icon: KasirIcon,
-          onPress: () => {
-            navigation.toggleDrawer();
-            navigation.navigate('Transaksi');
-          },
-        },
-        {
-          title: 'Laporan',
-          icon: ReportIcon,
-          onPress: () => {
-            navigation.toggleDrawer();
-            navigation.navigate('Laporan');
-          },
-        },
-        {
-          title: 'Pengaturan',
-          icon: PengaturanIcon,
-          onPress: () => {
-            navigation.toggleDrawer();
-            navigation.navigate('Laporan');
-          },
-        },
-    ];
 
     const renderHeader = (): ReactElement => (
         <SafeAreaLayout insets='top' level='2'>
@@ -52,7 +18,7 @@ export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement =>
             <View style={styles.profileContainer}>
               <Avatar
                 size='giant'
-                source={require('../../assets/images/image-app-icon.png')}
+                source={require('../assets/images/image-app-icon.png')}
               />
               <Text style={styles.profileName} category='h6'>
                 SIA
@@ -79,7 +45,7 @@ export const HomeDrawer = ({ navigation } : {navigation: any}): DrawerElement =>
             footer={renderFooter}
             selectedIndex={selectedIndex!}
             onSelect={(index) => setSelectedIndex(index)}>
-            {DATA.map((el, index) => (
+            {data.map((el, index) => (
                 <DrawerItem
                     key={index}
                     title={el.title}
@@ -114,3 +80,5 @@ const styles = StyleSheet.create({
       marginHorizontal: 16,
     },
 });
+
+export default DrawerNav;

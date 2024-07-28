@@ -7,7 +7,7 @@ import { default as mapping } from './mapping.json';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { Provider } from 'react-redux';
 import { persistor, store } from './redux-store';
-import MainAkutansiApp from './MainAkutansiApp';
+import MainAkutansiScreen from '../scenes/akutansi-app/MainAkutansiApp';
 import { PersistGate } from 'redux-persist/integration/react';
 
 export const App = (): React.ReactElement => {
@@ -20,7 +20,7 @@ export const App = (): React.ReactElement => {
           {...eva} 
           customMapping={mapping}
           theme={{ ...eva.light, ...theme }}>
-          <MainAkutansiApp />      
+          <MainAkutansiScreen />      
         </ApplicationProvider>
       </PersistGate>      
     </Provider>
