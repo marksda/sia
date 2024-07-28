@@ -7,7 +7,7 @@ import { default as mapping } from './mapping.json';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { Provider } from 'react-redux';
 import { persistor, store } from './redux-store';
-import MainAkutansiScreen from '../scenes/akutansi-app/MainAkutansiApp';
+import MainAkutansiScreen from '../scenes/akutansi-app/akutansi-main-page';
 import { PersistGate } from 'redux-persist/integration/react';
 
 export const App = (): React.ReactElement => {
