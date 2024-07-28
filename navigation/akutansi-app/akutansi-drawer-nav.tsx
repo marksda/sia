@@ -25,7 +25,15 @@ const AkutansiDrawerNav = ({ navigation } : {navigation: any}): DrawerElement =>
           icon: KasirIcon,
           onPress: () => {
             navigation.toggleDrawer();
-            navigation.navigate('Transaksi');
+            navigation.navigate('transaksi');
+          },
+        },
+        {
+          title: 'Pembukuan',
+          icon: KasirIcon,
+          onPress: () => {
+            navigation.toggleDrawer();
+            navigation.navigate('pembukuan');
           },
         },
         {
@@ -33,7 +41,7 @@ const AkutansiDrawerNav = ({ navigation } : {navigation: any}): DrawerElement =>
           icon: ReportIcon,
           onPress: () => {
             navigation.toggleDrawer();
-            navigation.navigate('Laporan');
+            navigation.navigate('laporan');
           },
         },
         {
@@ -41,7 +49,7 @@ const AkutansiDrawerNav = ({ navigation } : {navigation: any}): DrawerElement =>
           icon: PengaturanIcon,
           onPress: () => {
             navigation.toggleDrawer();
-            navigation.navigate('Laporan');
+            navigation.navigate('laporan');
           },
         },
     ];

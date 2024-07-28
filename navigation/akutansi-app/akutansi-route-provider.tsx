@@ -45,7 +45,7 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
                 }}   
                 drawerContent={(props) => <AkutansiDrawerNav {...props} />}>
                 <Drawer.Screen 
-                    name='Transaksi'
+                    name='transaksi'
                 >
                     {
                         (props) => <TransaksiScreen 
@@ -61,7 +61,8 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
                                     />
                     }
                 </Drawer.Screen>
-                <Drawer.Screen name='Laporan' component={LaporanScreen} />
+                <Drawer.Screen name='pembukuan' component={LaporanScreen} />
+                <Drawer.Screen name='laporan' component={LaporanScreen} />
             </Drawer.Navigator>
         </NavigationContainer>
     </SafeAreaProvider>
