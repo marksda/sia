@@ -8,8 +8,6 @@ import { StatusBar } from "../../components/status-bar.component";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AkutansiDrawerNav from "./akutansi-drawer-nav";
 
-
-
 const navigatorTheme = {
     ...DefaultTheme,
     colors: {
