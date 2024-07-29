@@ -82,11 +82,11 @@ const AkutansiDrawerNav = ({ navigation } : {navigation: any}): DrawerElement =>
     );
 
     return (
-        <Drawer
-            header={renderHeader}
-            footer={renderFooter}
-            selectedIndex={selectedIndex!}
-            onSelect={(index) => setSelectedIndex(index)}>
+        <Drawer          
+          header={renderHeader}
+          footer={renderFooter}
+          selectedIndex={selectedIndex!}
+          onSelect={(index) => setSelectedIndex(index)}>
             {DATA.map((el, index) => (
                 <DrawerItem
                     key={index}

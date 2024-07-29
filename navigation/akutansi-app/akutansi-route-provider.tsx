@@ -7,6 +7,8 @@ import useScreenOrientation from "../../features/utils/screen-orientation";
 import { StatusBar } from "../../components/status-bar.component";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AkutansiDrawerNav from "./akutansi-drawer-nav";
+import PembukuanPortraitLayout from "../../layouts/portrait/pembukuan-portrait";
+import PembukuanLandscapeLayout from "../../layouts/landscape/pembukuan-landscape";
 
 const navigatorTheme = {
     ...DefaultTheme,
@@ -29,7 +31,7 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
                 screenOptions={{
                     drawerType: screenOrientation == "landscape" ? 'permanent' : 'front',
                     headerShadowVisible: screenOrientation == "landscape" ? false : true,
-                    headerShown: true,
+                    headerShown: screenOrientation == "portrait" ? true : false,
                     headerStyle: {
                         backgroundColor: 'red',
                         height: screenOrientation == "landscape" ? 32:48
@@ -41,27 +43,40 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
                     },
                     drawerStyle: {
                         width: screenOrientation == "landscape" ? 160 : 350,
+                        elevation: 0,
                     }
                 }}   
                 drawerContent={(props) => <AkutansiDrawerNav {...props} />}>
                 <Drawer.Screen 
                     name='transaksi'
+                    options={{
+                        title: "Transaksi - Penjualan"
+                    }}
                 >
-                    {
-                        (props) => <TransaksiScreen 
-                                        initSelectedFilters={
-                                            {
-                                                pageNumber: 1,
-                                                pageSize: 25,
-                                                filters: [],
-                                                sortOrders: [],
-                                            }
+                {
+                    (props) => <TransaksiScreen 
+                                    initSelectedFilters={
+                                        {
+                                            pageNumber: 1,
+                                            pageSize: 25,
+                                            filters: [],
+                                            sortOrders: [],
                                         }
-                                        navigation={props.navigation}
-                                    />
-                    }
+                                    }
+                                    navigation={props.navigation}
+                                />
+                }
                 </Drawer.Screen>
-                <Drawer.Screen name='pembukuan' component={LaporanScreen} />
+                <Drawer.Screen 
+                    name='pembukuan'
+                    options={{
+                        title: "Pembukuan"
+                    }}
+                >
+                { 
+                    screenOrientation == "portrait" ? (props) => <PembukuanPortraitLayout navigation={props.navigation} /> : (props) => <PembukuanLandscapeLayout navigation={props.navigation} />
+                }   
+                </Drawer.Screen>
                 <Drawer.Screen name='laporan' component={LaporanScreen} />
             </Drawer.Navigator>
         </NavigationContainer>
