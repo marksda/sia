@@ -34,15 +34,16 @@ const PembukuanLandscapeLayout: FC<IPembukuanLandscapeLayoutProps> = ({navigatio
     ); 
 
     return (
-        <SafeAreaView>
+        <>
             <TopNavigation 
                 title={() => {
                     return <Text category='label' style={[styles.fontTitleStyle]}>Pembukuan</Text>
                 }}
                 alignment='start' 
-                style={[styles.containerTopNav]}/>
+                style={[styles.containerTopNav]}
+            />
             <Text style={styles.fontStyle}>pembukuan landscape</Text>
-        </SafeAreaView>
+        </>
     );
 };
 
