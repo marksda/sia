@@ -1,8 +1,7 @@
-import { Layout, Text, TopNavigation } from "@ui-kitten/components";
+import { Text, TopNavigation } from "@ui-kitten/components";
 import { FC, useMemo } from "react";
-import { normalizeDpToPx } from "../../features/utils/android-dp-px-converter";
+import { normalizeDpToPx, normalizePxToDp } from "../../features/utils/android-dp-px-converter";
 import { StyleSheet, useWindowDimensions } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 interface IPembukuanLandscapeLayoutProps {
     navigation: any;
@@ -11,16 +10,16 @@ interface IPembukuanLandscapeLayoutProps {
 function createStyle(skala: number) {
     return StyleSheet.create({
         containerTopNav: {
-            height: normalizeDpToPx(62, skala), 
-            minHeight: normalizeDpToPx(32, skala),
+            height: normalizePxToDp(16, skala), 
+            minHeight: normalizePxToDp(16, skala),
             elevation: 1,
-            backgroundColor: "red",
+            // backgroundColor: "red",
         },
         fontStyle: {
-            fontSize: normalizeDpToPx(24, skala), 
+            fontSize: normalizePxToDp(6, skala), 
         },
         fontTitleStyle: {
-            color: "white",
+            fontSize: normalizePxToDp(6, skala), 
         },
     }
     )
@@ -42,7 +41,7 @@ const PembukuanLandscapeLayout: FC<IPembukuanLandscapeLayoutProps> = ({navigatio
                 alignment='start' 
                 style={[styles.containerTopNav]}
             />
-            <Text style={styles.fontStyle}>pembukuan landscape</Text>
+            <Text>pembukuan landscape</Text>
         </>
     );
 };

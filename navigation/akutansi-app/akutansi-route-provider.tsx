@@ -9,6 +9,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import AkutansiDrawerNav from "./akutansi-drawer-nav";
 import PembukuanPortraitLayout from "../../layouts/portrait/pembukuan-portrait";
 import PembukuanLandscapeLayout from "../../layouts/landscape/pembukuan-landscape";
+import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
+import { useWindowDimensions } from "react-native";
 
 const navigatorTheme = {
     ...DefaultTheme,
@@ -22,6 +24,7 @@ const Drawer = createDrawerNavigator();
 
 const AkutansiRouteProvider: FC = (): React.ReactElement => {
     const screenOrientation = useScreenOrientation();
+    const dimensions = useWindowDimensions();
 
     return (
     <SafeAreaProvider>
@@ -29,21 +32,19 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
         <NavigationContainer theme={navigatorTheme}>    
             <Drawer.Navigator
                 screenOptions={{
-                    drawerType: screenOrientation == "landscape" ? 'permanent' : 'front',
+                    drawerType: screenOrientation == "landscape" ? 'front' : 'front',
                     headerShadowVisible: screenOrientation == "landscape" ? false : true,
-                    headerShown: screenOrientation == "portrait" ? true : false,
+                    headerShown: screenOrientation == "landscape" ? false : true,
                     headerStyle: {
-                        backgroundColor: 'red',
-                        height: screenOrientation == "landscape" ? 32:48
+                        height: screenOrientation == "landscape" ? normalizePxToDp(16, dimensions.scale):normalizePxToDp(24, dimensions.scale),
+                        elevation: 1,
                     },
-                    headerTintColor: '#fff',
+                    // headerTintColor: '#fff',
                     headerTitleStyle: {
-                        fontWeight: '500',
-                        fontSize: screenOrientation == "landscape" ? 16:20,
+                        fontSize: screenOrientation == "landscape" ? normalizePxToDp(8, dimensions.scale):normalizePxToDp(11, dimensions.scale),
                     },
                     drawerStyle: {
                         width: screenOrientation == "landscape" ? 160 : 350,
-                        elevation: 0,
                     }
                 }}   
                 drawerContent={(props) => <AkutansiDrawerNav {...props} />}>
@@ -74,7 +75,7 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
                     }}
                 >
                 { 
-                    screenOrientation == "portrait" ? (props) => <PembukuanPortraitLayout navigation={props.navigation} /> : (props) => <PembukuanLandscapeLayout navigation={props.navigation} />
+                    screenOrientation == "portrait" ? (props) => <PembukuanPortraitLayout/> : (props) => <PembukuanLandscapeLayout navigation={props.navigation} />
                 }   
                 </Drawer.Screen>
                 <Drawer.Screen name='laporan' component={LaporanScreen} />
