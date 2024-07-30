@@ -1,6 +1,6 @@
 import { Text, TopNavigation } from "@ui-kitten/components";
 import { FC, useMemo } from "react";
-import { normalizeDpToPx, normalizePxToDp } from "../../features/utils/android-dp-px-converter";
+import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
 import { StyleSheet, useWindowDimensions } from "react-native";
 
 interface IPembukuanLandscapeLayoutProps {
@@ -19,7 +19,7 @@ function createStyle(skala: number) {
             fontSize: normalizePxToDp(6, skala), 
         },
         fontTitleStyle: {
-            fontSize: normalizePxToDp(6, skala), 
+            fontSize: normalizePxToDp(7, skala), 
         },
     }
     )
