@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { SafeAreaView, StyleSheet, TextInput, View } from 'react-native';
-import { Button, Card, Divider, Icon, List, Text } from '@ui-kitten/components';
+import { Avatar, Button, Card, Divider, Icon, List, Text } from '@ui-kitten/components';
 import { useGetDaftarBarangQuery, useSaveTransaksiMutation } from '../../services/api-rtkquery-service';
 import { IQueryParamFilters } from '../../features/entities/query-param-filters';
 import { IBarang } from '../../features/entities/barang';
@@ -305,9 +305,10 @@ export const TransaksiScreen: FC<ITransaksiScreenProps> = ({initSelectedFilters,
                 header={_renderCardHeader(item)}
                 onPress={(e) => {_onHandlePressItem(item.id!)}}
               >
-                <Text>
-                  With Header
-                </Text>
+                <Avatar
+                  size='giant'
+                  source={require('../../assets/images/image-app-icon.png')}
+                />
               </Card>
             ))            
           ) : null
@@ -358,6 +359,10 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     margin: 2,
+    // backgroundColor: "green",
+    // borderColor: "red",
+    // elevation: 8,
+    // borderWidth: 4,
   },
   containerBottom: {
     flex: 1,
