@@ -28,7 +28,7 @@ const PembukuanAkunPortraitLayout: FC = () => {
         ],
         sortOrders: [
             {
-            fieldName: 'id',
+            fieldName: 'kode',
             value: 'ASC'
             },
         ],
