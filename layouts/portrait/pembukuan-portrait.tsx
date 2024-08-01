@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BottomNavigation, BottomNavigationTab, Icon, IconElement, Layout, Text } from "@ui-kitten/components";
 import { FC } from "react";
 import { StyleSheet } from "react-native";
+import PembukuanAkunPortraitLayout from "./pembukuan-akun-portrait";
 
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -25,12 +26,6 @@ const LedgerIcon = (props: any): IconElement => (
       {...props}
       name='book-outline'
     />
-);
-
-const UsersScreen = () => (
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text category='h1'>USERS</Text>
-    </Layout>
 );
   
 const OrdersScreen = () => (
@@ -61,13 +56,13 @@ const PembukuanPortraitLayout: FC = () => {
     return (        
         <Layout style={styles.container}>
             <Navigator tabBar={props => <BottomTabBar {...props}/>}>
-                <Screen name='akun' component={UsersScreen} options={{
+                <Screen name='akun' component={PembukuanAkunPortraitLayout} options={{
                     headerShown: false,
                 }}/>
                 <Screen name='jurnal' component={OrdersScreen} options={{
                     headerShown: false,
                 }}/>
-                <Screen name='buku_pembantu' component={UsersScreen} options={{
+                <Screen name='buku_pembantu' component={PembukuanAkunPortraitLayout} options={{
                     headerShown: false,
                 }}/>
                 <Screen name='buku_besar' component={OrdersScreen} options={{
