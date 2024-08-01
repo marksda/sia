@@ -1,4 +1,4 @@
-import { Layout, List, ListItem, Text } from "@ui-kitten/components";
+import { List, ListItem } from "@ui-kitten/components";
 import { FC, useState } from "react";
 import { IQueryParamFilters } from "../../features/entities/query-param-filters";
 import { useGetDaftarAkunQuery } from "../../services/api-rtkquery-service";
