@@ -43,8 +43,8 @@ const PembukuanAkunPortraitLayout: FC = () => {
         console.log(item);
         return (
             <Layout style={styles.item}>
-                <Text style={[styles.kodeText, {marginLeft: 16 * (item.level!-1)}]}>{item.kode!}</Text>
-                <Text style={styles.namaText}>{item.nama!}</Text>
+                <Text style={[ item.header ? styles.boldKodeText : styles.normalKodeText, {marginLeft: 16 * (item.level!-1)}]}>{item.kode!}</Text>
+                <Text style={item.header ? styles.boldNamaText : styles.normalNamaText}>{item.nama!}</Text>
             </Layout>
         );
     };
@@ -71,11 +71,20 @@ function createStyle(skala: number) {
             paddingHorizontal: 12,
             // marginVertical: 4,
         },
-        kodeText: {            
+        boldKodeText: {            
             fontSize: normalizePxToDp(7, skala),
             fontWeight: 'bold',
         },
-        namaText: {
+        normalKodeText: {            
+            fontSize: normalizePxToDp(7, skala),
+            fontFamily: 'Cochin',
+        },
+        boldNamaText: {
+            fontSize: normalizePxToDp(7, skala),
+            fontWeight: 'bold',
+            marginLeft: 16,
+        },
+        normalNamaText: {
             fontSize: normalizePxToDp(7, skala),
             fontFamily: 'Cochin',
             marginLeft: 16,
