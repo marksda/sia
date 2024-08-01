@@ -359,10 +359,10 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     margin: 2,
-    // backgroundColor: "green",
-    // borderColor: "red",
-    // elevation: 8,
-    // borderWidth: 4,
+    backgroundColor: "green",
+    borderColor: "red",
+    elevation: 8,
+    borderWidth: 4,
   },
   containerBottom: {
     flex: 1,
