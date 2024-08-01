@@ -6,9 +6,6 @@ import { IAkun } from "../../features/entities/akutansi-app/akun";
 import { ListRenderItemInfo, StyleSheet, Text, useWindowDimensions } from "react-native";
 import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
 
-
-
-
 const PembukuanAkunPortraitLayout: FC = () => {
     const dimensions = useWindowDimensions();
     const [filter] = useState<IQueryParamFilters>({
@@ -22,8 +19,16 @@ const PembukuanAkunPortraitLayout: FC = () => {
         ],
         sortOrders: [
             {
-            fieldName: 'kode',
-            value: 'ASC'
+                fieldName: 'kelompok_akun',
+                value: 'ASC'
+            },
+            {
+                fieldName: 'kode',
+                value: 'ASC'
+            },
+            {
+                fieldName: 'level',
+                value: 'ASC'
             },
         ],
     });
