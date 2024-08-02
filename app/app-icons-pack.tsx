@@ -13,5 +13,6 @@ export const AssetIconsPack  = {
         'laporan': IconProvider(require('../assets/images/icon-report.png')),
         'kasir': IconProvider(require('../assets/images/icon-card-machine.png')),
         'pengaturan': IconProvider(require('../assets/images/icon-setting-filter.png')),
+        'filter': IconProvider(require('../assets/images/filter.svg')),
     }
 };

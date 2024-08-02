@@ -1,11 +1,10 @@
-import { Divider, Icon, IconElement, Input, Layout, List, TopNavigation, TopNavigationAction, } from "@ui-kitten/components";
+import { Divider, Icon, IconElement, Input, Layout, List} from "@ui-kitten/components";
 import { FC, useMemo, useState } from "react";
 import { IQueryParamFilters } from "../../features/entities/query-param-filters";
 import { useGetDaftarAkunQuery } from "../../services/api-rtkquery-service";
 import { IAkun } from "../../features/entities/akutansi-app/akun";
 import { ListRenderItemInfo, StyleSheet, Text, useWindowDimensions } from "react-native";
 import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
-import { TouchableWebElement } from "@ui-kitten/components/devsupport";
 
 
 const MenuIcon = (props: any): IconElement => (
@@ -14,6 +13,18 @@ const MenuIcon = (props: any): IconElement => (
       name='menu-outline'
     />
 );
+
+const FilterIcon = (props: any): IconElement => (
+    <Icon
+      {...props}
+      name='funnel-outline'
+    />
+);
+
+const PengaturanIcon = (props: any) => (
+    <Icon name='filter' {...props} pack='assets'/>
+);
+
 
 interface IPembukuanAkunPortraitLayoutProps {
     navigation: any;
@@ -61,11 +72,12 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
     };
 
     return (
-        <Layout style={styles.root}>
+        <>
             <Layout style={styles.containerTopNav}>
                 <Input
-                    placeholder='Place your Text'
-                    accessoryLeft={<TopNavigationAction icon={MenuIcon} onPress={() => navigation.openDrawer()}/>}
+                    placeholder='Pencarian'
+                    accessoryLeft={<MenuIcon onPress={() => navigation.openDrawer()}/>}
+                    accessoryRight={<PengaturanIcon onPress={() => navigation.openDrawer()}/>}
                 />
             </Layout>
             <List
@@ -74,38 +86,24 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
                 ItemSeparatorComponent={Divider}
                 renderItem={renderItem}
             />
-        </Layout>
+        </>
     );
 };
 
 function createStyle(skala: number) {
     return StyleSheet.create({
-        root: {
-            // display: "flex",
-            // alignItems: "center",
-        },
         containerTopNav: {
             height: normalizePxToDp(28, skala), 
-            // minHeight: normalizePxToDp(16, skala),
             padding: 8,
-            // borderBottomWidth: 1, 
-            // borderBottomColor: "rgba(203, 202, 202, 0.89)",
-            // shadowColor: "rgba(203, 202, 202, 0.89)",
-            // shadowRadius: 4,
-            // elevation: 2,
-            backgroundColor: "red",
-            // alignContent: "center",
-            // alignItems: "center"
         },
         containerList: {
-            // margin: 16,
+            // marginBottom: 24,
         },
         item: {
             display: 'flex',
             flexDirection: 'row',
             paddingVertical: 8,
             paddingHorizontal: 12,
-            // marginVertical: 4,
         },
         boldKodeText: {            
             fontSize: normalizePxToDp(7, skala),
