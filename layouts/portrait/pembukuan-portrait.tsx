@@ -52,13 +52,21 @@ const BottomTabBar: FC<IBottomTabBarProps> = ({ navigation, state }) => (
     </BottomNavigation>
 );
 
-const PembukuanPortraitLayout: FC = () => {
+interface IPembukuanPortraitLayoutProps {
+    navigation: any;
+};
+
+const PembukuanPortraitLayout: FC<IPembukuanPortraitLayoutProps> = ({navigation}) => {
     return (        
         <Layout style={styles.container}>
             <Navigator tabBar={props => <BottomTabBar {...props}/>}>
-                <Screen name='akun' component={PembukuanAkunPortraitLayout} options={{
-                    headerShown: false,
-                }}/>
+                <Screen 
+                    name='akun' 
+                    options={{
+                    headerShown: false,                    
+                }}>{
+                    () => (<PembukuanAkunPortraitLayout navigation={navigation}/>)
+                }</Screen>
                 <Screen name='jurnal' component={OrdersScreen} options={{
                     headerShown: false,
                 }}/>

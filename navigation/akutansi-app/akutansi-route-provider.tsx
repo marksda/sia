@@ -34,7 +34,7 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
                 screenOptions={{
                     drawerType: screenOrientation == "landscape" ? 'front' : 'front',
                     headerShadowVisible: screenOrientation == "landscape" ? false : true,
-                    headerShown: screenOrientation == "landscape" ? false : true,
+                    headerShown: screenOrientation == "landscape" ? false : false,
                     headerStyle: {
                         height: screenOrientation == "landscape" ? normalizePxToDp(16, dimensions.scale):normalizePxToDp(24, dimensions.scale),
                         elevation: 1,
@@ -75,7 +75,7 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
                     }}
                 >
                 { 
-                    screenOrientation == "portrait" ? (props) => <PembukuanPortraitLayout/> : (props) => <PembukuanLandscapeLayout navigation={props.navigation} />
+                    screenOrientation == "portrait" ? (props) => <PembukuanPortraitLayout navigation={props.navigation}/> : (props) => <PembukuanLandscapeLayout navigation={props.navigation} />
                 }   
                 </Drawer.Screen>
                 <Drawer.Screen name='laporan' component={LaporanScreen} />
