@@ -3,7 +3,7 @@ import { FC, useMemo, useState } from "react";
 import { IQueryParamFilters } from "../../features/entities/query-param-filters";
 import { useGetDaftarAkunQuery } from "../../services/api-rtkquery-service";
 import { IAkun } from "../../features/entities/akutansi-app/akun";
-import { Alert, ListRenderItemInfo, StyleSheet, Text, TouchableWithoutFeedback, useWindowDimensions } from "react-native";
+import { ListRenderItemInfo, StyleSheet, Text, useWindowDimensions } from "react-native";
 import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
 
 
@@ -18,6 +18,9 @@ const FilterIcon = (props: any): IconElement => (
     <Icon name='filter-variant' {...props} pack='material'/>
 );
 
+const AddIcon = (props: any): IconElement => (
+    <Icon name='plus-circle' {...props} pack='material'/>
+);
 
 interface IPembukuanAkunPortraitLayoutProps {
     navigation: any;
@@ -64,6 +67,13 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
         );
     };
 
+    const renderAccessoryRight = (props: any): React.ReactElement => (
+        <>
+        <FilterIcon {...props} onPress={() => navigation.openDrawer()} />
+        <AddIcon {...props} />
+        </>
+    );
+
     return (
         <>
             <Layout style={styles.containerTopNav}>
@@ -71,7 +81,7 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
                     style={styles.inputSearch}
                     placeholder='Pencarian'
                     accessoryLeft={<MenuIcon onPress={() => navigation.openDrawer()}/>}
-                    accessoryRight={<FilterIcon onPress={() => navigation.openDrawer()} />}
+                    accessoryRight={renderAccessoryRight}
                 />
             </Layout>
             <List
