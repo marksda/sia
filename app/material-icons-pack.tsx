@@ -2,7 +2,6 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { IconPack } from "@ui-kitten/components";
 import { SvgProps } from "react-native-svg";
-// import { TouchableWithoutFeedback } from "@ui-kitten/components/devsupport";
 
 
 export const MaterialIconsPack: IconPack<SvgProps> = {
