@@ -3,7 +3,7 @@ import { FC, useMemo, useState } from "react";
 import { IQueryParamFilters } from "../../features/entities/query-param-filters";
 import { useGetDaftarAkunQuery } from "../../services/api-rtkquery-service";
 import { IAkun } from "../../features/entities/akutansi-app/akun";
-import { ListRenderItemInfo, StyleSheet, Text, useWindowDimensions } from "react-native";
+import { Alert, ListRenderItemInfo, StyleSheet, Text, TouchableWithoutFeedback, useWindowDimensions } from "react-native";
 import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
 
 
@@ -14,7 +14,7 @@ const MenuIcon = (props: any): IconElement => (
     />
 );
 
-const FilterIcon = (props: any) => (
+const FilterIcon = (props: any): IconElement => (
     <Icon name='filter-variant' {...props} pack='material'/>
 );
 
@@ -68,9 +68,10 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
         <>
             <Layout style={styles.containerTopNav}>
                 <Input
+                    style={styles.inputSearch}
                     placeholder='Pencarian'
                     accessoryLeft={<MenuIcon onPress={() => navigation.openDrawer()}/>}
-                    accessoryRight={<FilterIcon onPress={() => navigation.openDrawer()}/>}
+                    accessoryRight={<FilterIcon onPress={() => navigation.openDrawer()} />}
                 />
             </Layout>
             <List
@@ -88,6 +89,9 @@ function createStyle(skala: number) {
         containerTopNav: {
             height: normalizePxToDp(28, skala), 
             padding: 8,
+            // borderBottomWidth: 2, 
+            // borderBottomColor: "rgba(203, 202, 202, 0.89)",
+            // marginBottom: 8,
         },
         containerList: {
             // marginBottom: 24,
@@ -95,8 +99,9 @@ function createStyle(skala: number) {
         item: {
             display: 'flex',
             flexDirection: 'row',
-            paddingVertical: 8,
+            paddingVertical: 12,
             paddingHorizontal: 12,
+            // marginVertical: 2,
         },
         boldKodeText: {            
             fontSize: normalizePxToDp(7, skala),
@@ -116,6 +121,9 @@ function createStyle(skala: number) {
             fontFamily: 'Cochin',
             marginLeft: 16,
         },
+        inputSearch: {
+            // borderRadius: 32,
+        }
     }
     )
 };

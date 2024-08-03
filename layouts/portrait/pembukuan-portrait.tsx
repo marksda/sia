@@ -38,6 +38,7 @@ interface IBottomTabBarProps {
     navigation: any;
     state: any;
 };
+
 const BottomTabBar: FC<IBottomTabBarProps> = ({ navigation, state }) => (
     <BottomNavigation
       selectedIndex={state.index}
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
       display: "flex",
       flex: 1,
       flexDirection: 'column',
+    //   backgroundColor: 'grey',
     }
 });
 

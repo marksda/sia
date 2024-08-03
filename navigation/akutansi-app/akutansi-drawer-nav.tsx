@@ -5,15 +5,19 @@ import { StyleSheet, View } from "react-native";
 import { AppInfoService } from "../../services/app-info.service";
 
 const KasirIcon = (props: any) => (
-  <Icon name='kasir' {...props} pack='assets'/>
+  <Icon name='cart-outline' {...props} pack='material'/>
+);
+
+const PembukuanIcon = (props: any) => (
+  <Icon name='book-open-outline' {...props} pack='material'/>
 );
 
 const ReportIcon = (props: any) => (
-  <Icon name='laporan' {...props} pack='assets'/>
+  <Icon name='finance' {...props} pack='material'/>
 );
 
 const PengaturanIcon = (props: any) => (
-  <Icon name='pengaturan' {...props} pack='assets'/>
+  <Icon name='cog-outline' {...props} pack='material'/>
 );
 
 const AkutansiDrawerNav = ({ navigation } : {navigation: any}): DrawerElement => {
@@ -30,7 +34,7 @@ const AkutansiDrawerNav = ({ navigation } : {navigation: any}): DrawerElement =>
         },
         {
           title: 'Pembukuan',
-          icon: KasirIcon,
+          icon: PembukuanIcon,
           onPress: () => {
             navigation.toggleDrawer();
             navigation.navigate('pembukuan');

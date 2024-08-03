@@ -1,7 +1,11 @@
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { IconPack } from "@ui-kitten/components";
+import { SvgProps } from "react-native-svg";
+// import { TouchableWithoutFeedback } from "@ui-kitten/components/devsupport";
 
-export const MaterialIconsPack = {
+
+export const MaterialIconsPack: IconPack<SvgProps> = {
     name: 'material',
     icons: createIconsMap(),
   };
@@ -18,9 +22,9 @@ export const MaterialIconsPack = {
     toReactElement: (props: any) => MaterialIcon({ name, ...props }),
   });
   
-  function MaterialIcon({ name, style } : {name: any; style: any;}) {
+  function MaterialIcon({ name, style , onPress} : {name: any; style: any; onPress: any}) {
     const { height, tintColor, ...iconStyle } = StyleSheet.flatten(style);
     return (
-      <Icon name={name} size={height} color={tintColor} style={iconStyle} />
+      <TouchableWithoutFeedback onPress={onPress}><Icon name={name} size={height} color={tintColor} style={iconStyle} /></TouchableWithoutFeedback>        
     );
   }
