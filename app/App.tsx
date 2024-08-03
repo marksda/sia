@@ -9,13 +9,14 @@ import { Provider } from 'react-redux';
 import { persistor, store } from './redux-store';
 import MainAkutansiScreen from '../scenes/akutansi-app/akutansi-main-page';
 import { PersistGate } from 'redux-persist/integration/react';
+import { MaterialIconsPack } from './material-icons-pack';
 
 export const App = (): React.ReactElement => {
   
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <IconRegistry icons={[EvaIconsPack, AssetIconsPack]} />
+        <IconRegistry icons={[EvaIconsPack, AssetIconsPack, MaterialIconsPack]} />
         <ApplicationProvider 
           {...eva} 
           customMapping={mapping}

@@ -14,15 +14,8 @@ const MenuIcon = (props: any): IconElement => (
     />
 );
 
-const FilterIcon = (props: any): IconElement => (
-    <Icon
-      {...props}
-      name='funnel-outline'
-    />
-);
-
-const PengaturanIcon = (props: any) => (
-    <Icon name='filter' {...props} pack='assets'/>
+const FilterIcon = (props: any) => (
+    <Icon name='filter-variant' {...props} pack='material'/>
 );
 
 
@@ -77,7 +70,7 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
                 <Input
                     placeholder='Pencarian'
                     accessoryLeft={<MenuIcon onPress={() => navigation.openDrawer()}/>}
-                    accessoryRight={<PengaturanIcon onPress={() => navigation.openDrawer()}/>}
+                    accessoryRight={<FilterIcon onPress={() => navigation.openDrawer()}/>}
                 />
             </Layout>
             <List
