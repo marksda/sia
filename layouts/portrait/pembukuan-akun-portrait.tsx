@@ -161,7 +161,7 @@ function createStyle(skala: number) {
             // paddingBottom: 8,
         },
         containerList: {
-            // marginBottom: 24,
+            marginBottom: 24,
         },
         item: {
             display: 'flex',
