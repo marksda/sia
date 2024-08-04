@@ -1,17 +1,15 @@
-import { Divider, Icon, IconElement, Input, Layout, List} from "@ui-kitten/components";
+import { Button, Card, Divider, Icon, IconElement, Input, Layout, List, Popover} from "@ui-kitten/components";
 import { FC, useMemo, useState } from "react";
 import { IQueryParamFilters } from "../../features/entities/query-param-filters";
 import { useGetDaftarAkunQuery } from "../../services/api-rtkquery-service";
 import { IAkun } from "../../features/entities/akutansi-app/akun";
 import { ListRenderItemInfo, StyleSheet, Text, useWindowDimensions } from "react-native";
 import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
+import { color } from "@rneui/base";
 
 
 const MenuIcon = (props: any): IconElement => (
-    <Icon
-      {...props}
-      name='menu-outline'
-    />
+    <Icon name='menu' {...props} pack='material'/>
 );
 
 const FilterIcon = (props: any): IconElement => (
@@ -20,6 +18,10 @@ const FilterIcon = (props: any): IconElement => (
 
 const AddIcon = (props: any): IconElement => (
     <Icon name='plus-circle' {...props} pack='material'/>
+);
+
+const CloseIcon = (props: any): IconElement => (
+    <Icon name='close' {...props} pack='material'/>
 );
 
 interface IPembukuanAkunPortraitLayoutProps {
@@ -51,6 +53,8 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
             },
         ],
     });
+    const [visibleFilter, setVisibleFilter] = useState<boolean>(false);
+    const [visiblePopOverFilter, setVisiblePopOverFilter] = useState<boolean>(false);
     const { data: items, isLoading } = useGetDaftarAkunQuery(filter);
 
     const styles = useMemo(
@@ -69,27 +73,61 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
 
     const renderAccessoryRight = (props: any): React.ReactElement => (
         <>
-        <FilterIcon {...props} onPress={() => navigation.openDrawer()} />
-        <AddIcon {...props} />
+        { visibleFilter == false ? <FilterIcon {...props} style={{height: 24, color: "#FA8105", marginRight: 8}} onPress={() => setVisibleFilter(true)}/> : null}
+        { visiblePopOverFilter == false ? <AddIcon {...props} style={{height: 24, color: "#039D3D"}} onPress={() => setVisiblePopOverFilter(true)} /> : null}
         </>
     );
 
+    const renderAccessoryLeft = (props: any): React.ReactElement => (
+        <MenuIcon {...props} onPress={() => navigation.openDrawer(true)} />
+    );
+
+    const renderListAkun = (): React.ReactElement => (
+        <List
+            style={styles.containerList}
+            data={items == undefined ? [] : items}
+            ItemSeparatorComponent={Divider}
+            renderItem={renderItem}
+        />
+    );
+
     return (
-        <>
+        <>      
             <Layout style={styles.containerTopNav}>
                 <Input
                     style={styles.inputSearch}
                     placeholder='Pencarian'
-                    accessoryLeft={<MenuIcon onPress={() => navigation.openDrawer()}/>}
+                    accessoryLeft={renderAccessoryLeft}
                     accessoryRight={renderAccessoryRight}
                 />
-            </Layout>
-            <List
-                style={styles.containerList}
-                data={items == undefined ? [] : items}
-                ItemSeparatorComponent={Divider}
-                renderItem={renderItem}
-            />
+                {
+                visibleFilter == true ?
+                <Layout style={styles.containerFilter}>
+                    <Layout style={styles.containerGroupFilter}>
+                        <Button style={styles.button} size="small">Semua</Button>
+                        <Button style={styles.button} size="small">Semua</Button>
+                    </Layout>
+                    <CloseIcon style={{height: 18}} onPress={() => setVisibleFilter(false)}/>
+                </Layout> : null  
+                }  
+            </Layout> 
+            <Popover 
+                visible={visiblePopOverFilter} 
+                onBackdropPress={() => setVisiblePopOverFilter(false)}
+                anchor={renderListAkun}
+                fullWidth={true}
+                placement="inner bottom"
+                style={{marginRight: 8}}
+            >
+                <Card disabled={true}>
+                <Text>
+                    Welcome to UI Kitten 😻
+                </Text>
+                <Button onPress={() => setVisiblePopOverFilter(false)}>
+                    DISMISS
+                </Button>
+                </Card>
+            </Popover>            
         </>
     );
 };
@@ -97,11 +135,30 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
 function createStyle(skala: number) {
     return StyleSheet.create({
         containerTopNav: {
-            height: normalizePxToDp(28, skala), 
+            // height: normalizePxToDp(28, skala), 
             padding: 8,
-            // borderBottomWidth: 2, 
-            // borderBottomColor: "rgba(203, 202, 202, 0.89)",
-            // marginBottom: 8,
+            borderBottomWidth: 1, 
+            borderBottomColor: "#EBE9EA",
+        },
+        containerFilter: {
+            display: "flex",
+            flexDirection: "row",
+            columnGap: 8,
+            alignItems: "center",
+            paddingHorizontal: 8,
+            paddingTop: 8,
+            // padding: 8,
+        },
+        containerGroupFilter: {
+            display: "flex",
+            flex: 1,
+            flexDirection: "row",
+            columnGap: 8,
+            alignContent: "center",
+            alignItems: "center",
+            // height: normalizePxToDp(24, skala), 
+            // paddingHorizontal: 8,
+            // paddingBottom: 8,
         },
         containerList: {
             // marginBottom: 24,
@@ -133,6 +190,10 @@ function createStyle(skala: number) {
         },
         inputSearch: {
             // borderRadius: 32,
+        },
+        button: {
+            // maxWidth: 80,
+            borderRadius: 16,
         }
     }
     )

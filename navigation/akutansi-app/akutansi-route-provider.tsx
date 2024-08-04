@@ -28,7 +28,7 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
 
     return (
     <SafeAreaProvider>
-        <StatusBar hidden={true} backgroundColor="#61dafb"/>
+        <StatusBar hidden={false} backgroundColor="#61dafb"/>
         <NavigationContainer theme={navigatorTheme}>    
             <Drawer.Navigator
                 screenOptions={{

@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BottomNavigation, BottomNavigationTab, Icon, IconElement, Layout, Text } from "@ui-kitten/components";
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { StyleSheet } from "react-native";
 import PembukuanAkunPortraitLayout from "./pembukuan-akun-portrait";
 
@@ -44,7 +44,7 @@ const BottomTabBar: FC<IBottomTabBarProps> = ({ navigation, state }) => (
       selectedIndex={state.index}
       onSelect={index => navigation.navigate(state.routeNames[index])}
       appearance="default"
-      style={{borderTopWidth: 1, borderTopColor: "rgba(203, 202, 202, 0.89)"}}
+      style={{borderTopWidth: 1, borderTopColor: "#EBE9EA"}}
     >
       <BottomNavigationTab title='Akun' icon={AkunIcon}/>
       <BottomNavigationTab title='Jurnal' icon={JurnalIcon}/>
@@ -57,7 +57,7 @@ interface IPembukuanPortraitLayoutProps {
     navigation: any;
 };
 
-const PembukuanPortraitLayout: FC<IPembukuanPortraitLayoutProps> = ({navigation}) => {
+const PembukuanPortraitLayout: FC<IPembukuanPortraitLayoutProps> = ({navigation}) => {    
     return (        
         <Layout style={styles.container}>
             <Navigator tabBar={props => <BottomTabBar {...props}/>}>
@@ -71,7 +71,7 @@ const PembukuanPortraitLayout: FC<IPembukuanPortraitLayoutProps> = ({navigation}
                 <Screen name='jurnal' component={OrdersScreen} options={{
                     headerShown: false,
                 }}/>
-                <Screen name='buku_pembantu' component={PembukuanAkunPortraitLayout} options={{
+                <Screen name='buku_pembantu' component={OrdersScreen} options={{
                     headerShown: false,
                 }}/>
                 <Screen name='buku_besar' component={OrdersScreen} options={{
