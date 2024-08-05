@@ -1,6 +1,6 @@
 import { Text, TopNavigation } from "@ui-kitten/components";
 import { FC, useMemo } from "react";
-import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
+import { normalizePxToDp } from "../../../features/utils/android-dp-px-converter";
 import { StyleSheet, useWindowDimensions } from "react-native";
 
 interface IPembukuanLandscapeLayoutProps {

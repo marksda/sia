@@ -1,11 +1,11 @@
-import { Button, Card, Divider, Icon, IconElement, Input, Layout, List, Popover} from "@ui-kitten/components";
+import { Button, Divider, Icon, IconElement, Input, Layout, List} from "@ui-kitten/components";
 import { FC, useMemo, useState } from "react";
-import { IQueryParamFilters } from "../../features/entities/query-param-filters";
-import { useGetDaftarAkunQuery } from "../../services/api-rtkquery-service";
-import { IAkun } from "../../features/entities/akutansi-app/akun";
+import { IQueryParamFilters } from "../../../features/entities/query-param-filters";
+import { useGetDaftarAkunQuery } from "../../../services/api-rtkquery-service";
+import { IAkun } from "../../../features/entities/akutansi-app/akun";
 import { ListRenderItemInfo, StyleSheet, Text, useWindowDimensions } from "react-native";
-import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
-import { color } from "@rneui/base";
+import { normalizePxToDp } from "../../../features/utils/android-dp-px-converter";
+import FormulirAkunLayout from "../formulir-akun";
 
 
 const MenuIcon = (props: any): IconElement => (
@@ -54,6 +54,7 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
         ],
     });
     const [visibleFilter, setVisibleFilter] = useState<boolean>(false);
+    const [visibleFormAkun,  setVisibleFormAkun] = useState<boolean>(false);
     const [visiblePopOverFilter, setVisiblePopOverFilter] = useState<boolean>(false);
     const { data: items, isLoading } = useGetDaftarAkunQuery(filter);
 
@@ -74,21 +75,12 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
     const renderAccessoryRight = (props: any): React.ReactElement => (
         <>
         { visibleFilter == false ? <FilterIcon {...props} style={{height: 24, color: "#FA8105", marginRight: 8}} onPress={() => setVisibleFilter(true)}/> : null}
-        { visiblePopOverFilter == false ? <AddIcon {...props} style={{height: 24, color: "#039D3D"}} onPress={() => setVisiblePopOverFilter(true)} /> : null}
+        { visibleFormAkun == false ? <AddIcon {...props} style={{height: 24, color: "#039D3D"}} onPress={() => setVisibleFormAkun(true)} /> : null}
         </>
     );
 
     const renderAccessoryLeft = (props: any): React.ReactElement => (
         <MenuIcon {...props} onPress={() => navigation.openDrawer(true)} />
-    );
-
-    const renderListAkun = (): React.ReactElement => (
-        <List
-            style={styles.containerList}
-            data={items == undefined ? [] : items}
-            ItemSeparatorComponent={Divider}
-            renderItem={renderItem}
-        />
     );
 
     return (
@@ -110,24 +102,21 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
                     <CloseIcon style={{height: 18}} onPress={() => setVisibleFilter(false)}/>
                 </Layout> : null  
                 }  
+                {
+                visibleFormAkun == true ? 
+                <Layout style={{marginTop: 8}}>
+                    <FormulirAkunLayout /> 
+                </Layout>
+                : 
+                null  
+                }  
             </Layout> 
-            <Popover 
-                visible={visiblePopOverFilter} 
-                onBackdropPress={() => setVisiblePopOverFilter(false)}
-                anchor={renderListAkun}
-                fullWidth={true}
-                placement="inner bottom"
-                style={{marginRight: 8}}
-            >
-                <Card disabled={true}>
-                <Text>
-                    Welcome to UI Kitten 😻
-                </Text>
-                <Button onPress={() => setVisiblePopOverFilter(false)}>
-                    DISMISS
-                </Button>
-                </Card>
-            </Popover>            
+            <List
+                style={styles.containerList}
+                data={items == undefined ? [] : items}
+                ItemSeparatorComponent={Divider}
+                renderItem={renderItem}
+            />       
         </>
     );
 };

@@ -7,8 +7,8 @@ import useScreenOrientation from "../../features/utils/screen-orientation";
 import { StatusBar } from "../../components/status-bar.component";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AkutansiDrawerNav from "./akutansi-drawer-nav";
-import PembukuanPortraitLayout from "../../layouts/portrait/pembukuan-portrait";
-import PembukuanLandscapeLayout from "../../layouts/landscape/pembukuan-landscape";
+import PembukuanPortraitLayout from "../../layouts/akutansi-app/portrait/pembukuan-portrait";
+import PembukuanLandscapeLayout from "../../layouts/akutansi-app/landscape/pembukuan-landscape";
 import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
 import { useWindowDimensions } from "react-native";
 
