@@ -27,6 +27,17 @@
                   }
                 }
             }
+        },
+        "Card": {
+          "meta": {},
+          "appearances": {
+            "outline": {
+              "mapping": {
+                "bodyPaddingHorizontal": 8,
+                "bodyPaddingVertical": 8
+              }
+            }
+          }
         }
     }
 }

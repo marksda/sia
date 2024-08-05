@@ -27,6 +27,7 @@ const CloseIcon = (props: any): IconElement => (
 interface IPembukuanAkunPortraitLayoutProps {
     navigation: any;
 };
+
 const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({navigation}) => {
     const dimensions = useWindowDimensions();
     const [filter] = useState<IQueryParamFilters>({
@@ -55,7 +56,6 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
     });
     const [visibleFilter, setVisibleFilter] = useState<boolean>(false);
     const [visibleFormAkun,  setVisibleFormAkun] = useState<boolean>(false);
-    const [visiblePopOverFilter, setVisiblePopOverFilter] = useState<boolean>(false);
     const { data: items, isLoading } = useGetDaftarAkunQuery(filter);
 
     const styles = useMemo(
@@ -74,8 +74,8 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
 
     const renderAccessoryRight = (props: any): React.ReactElement => (
         <>
-        { visibleFilter == false ? <FilterIcon {...props} style={{height: 24, color: "#FA8105", marginRight: 8}} onPress={() => setVisibleFilter(true)}/> : null}
-        { visibleFormAkun == false ? <AddIcon {...props} style={{height: 24, color: "#039D3D"}} onPress={() => setVisibleFormAkun(true)} /> : null}
+        { visibleFilter == false ? <FilterIcon {...props} style={{height: 24, color: "#FA8105", marginRight: 8}} onPress={() => setVisibleFilter(true)}/> : null }
+        { visibleFormAkun == false ? <AddIcon {...props} style={{height: 24, color: "#039D3D"}} onPress={() => setVisibleFormAkun(true)} /> : null }
         </>
     );
 
@@ -105,7 +105,7 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
                 {
                 visibleFormAkun == true ? 
                 <Layout style={{marginTop: 8}}>
-                    <FormulirAkunLayout /> 
+                    <FormulirAkunLayout setVisibleFormAkun={setVisibleFormAkun}/> 
                 </Layout>
                 : 
                 null  
@@ -124,7 +124,6 @@ const PembukuanAkunPortraitLayout: FC<IPembukuanAkunPortraitLayoutProps> = ({nav
 function createStyle(skala: number) {
     return StyleSheet.create({
         containerTopNav: {
-            // height: normalizePxToDp(28, skala), 
             padding: 8,
             borderBottomWidth: 1, 
             borderBottomColor: "#EBE9EA",
@@ -136,7 +135,6 @@ function createStyle(skala: number) {
             alignItems: "center",
             paddingHorizontal: 8,
             paddingTop: 8,
-            // padding: 8,
         },
         containerGroupFilter: {
             display: "flex",
@@ -145,12 +143,9 @@ function createStyle(skala: number) {
             columnGap: 8,
             alignContent: "center",
             alignItems: "center",
-            // height: normalizePxToDp(24, skala), 
-            // paddingHorizontal: 8,
-            // paddingBottom: 8,
         },
         containerList: {
-            marginBottom: 24,
+            marginBottom: 16,
         },
         item: {
             display: 'flex',
@@ -179,6 +174,7 @@ function createStyle(skala: number) {
         },
         inputSearch: {
             // borderRadius: 32,
+            // backgroundColor: "orange"
         },
         button: {
             // maxWidth: 80,

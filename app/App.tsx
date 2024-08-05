@@ -18,7 +18,7 @@ export const App = (): React.ReactElement => {
         <IconRegistry icons={[EvaIconsPack, MaterialIconsPack]} />
         <ApplicationProvider 
           {...eva} 
-          customMapping={mapping}
+          customMapping={{ ...eva.mapping, ...mapping }}
           theme={{ ...eva.light, ...theme }}>
           <MainAkutansiScreen />      
         </ApplicationProvider>
