@@ -15,6 +15,7 @@ interface IFormulirAkunLayoutProps {
 
 const FormulirAkunLayout: FC<IFormulirAkunLayoutProps> = ({setVisibleFormAkun}) => {
     const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(new IndexPath(0));
+    const [kelompokAkunName, setKelompokAkunName] = useState<string>("Aktiva");
     const [filter] = useState<IQueryParamFilters>({
         pageNumber: 1,
         pageSize: 25,
@@ -48,6 +49,11 @@ const FormulirAkunLayout: FC<IFormulirAkunLayoutProps> = ({setVisibleFormAkun}) 
         </Layout>
     );
 
+    const _onSelectedKelompokAkun = (index: IndexPath | IndexPath[]) => {
+        setSelectedIndex(index)
+        setKelompokAkunName(items![(index as IndexPath).row].nama!);
+    }
+
     return (
         <Card 
             appearance="outline"
@@ -55,14 +61,15 @@ const FormulirAkunLayout: FC<IFormulirAkunLayoutProps> = ({setVisibleFormAkun}) 
             style={styles.cardContainer}
         >
             <Select
+                value={kelompokAkunName}
                 selectedIndex={selectedIndex}
-                onSelect={index => setSelectedIndex(index)}
+                onSelect={_onSelectedKelompokAkun}
                 label='Kelompok akun'
             >
-                <SelectItem title='Semua' />
-                <SelectItem title='Option 1' />
-                <SelectItem title='Option 2' />
-                <SelectItem title='Option 3' />
+            {
+                items != undefined ?
+                items.map((item) => <SelectItem key={item.id} title={item.nama!} />) : []
+            }   
             </Select>
         </Card>
     );
