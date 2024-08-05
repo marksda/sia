@@ -1,6 +1,8 @@
 import { Card, Icon, IconElement, IndexPath, Layout, Select, SelectItem, Text } from "@ui-kitten/components";
 import { FC, ReactElement, useState } from "react";
 import { StyleSheet } from "react-native";
+import { useGetDaftarKelompokAkunQuery } from "../../services/api-rtkquery-service";
+import { IQueryParamFilters } from "../../features/entities/query-param-filters";
 
 
 const CloseIcon = (props: any): IconElement => (
@@ -13,6 +15,31 @@ interface IFormulirAkunLayoutProps {
 
 const FormulirAkunLayout: FC<IFormulirAkunLayoutProps> = ({setVisibleFormAkun}) => {
     const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(new IndexPath(0));
+    const [filter] = useState<IQueryParamFilters>({
+        pageNumber: 1,
+        pageSize: 25,
+        filters: [
+            {
+            fieldName: 'kelompok_akun',
+            value: '0'
+            },
+        ],
+        sortOrders: [
+            {
+                fieldName: 'kelompok_akun',
+                value: 'ASC'
+            },
+            {
+                fieldName: 'kode',
+                value: 'ASC'
+            },
+            {
+                fieldName: 'level',
+                value: 'ASC'
+            },
+        ],
+    });
+    const { data: items, isLoading } = useGetDaftarKelompokAkunQuery(filter);
 
     const renderHeader = (): ReactElement => (
         <Layout style={styles.topContainer}>
@@ -32,6 +59,7 @@ const FormulirAkunLayout: FC<IFormulirAkunLayoutProps> = ({setVisibleFormAkun}) 
                 onSelect={index => setSelectedIndex(index)}
                 label='Kelompok akun'
             >
+                <SelectItem title='Semua' />
                 <SelectItem title='Option 1' />
                 <SelectItem title='Option 2' />
                 <SelectItem title='Option 3' />
