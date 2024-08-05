@@ -1,4 +1,4 @@
-import { Card, Icon, IconElement, IndexPath, Layout, Select, SelectItem, Text } from "@ui-kitten/components";
+import { Card, CheckBox, Icon, IconElement, IndexPath, Layout, Select, SelectItem, Text } from "@ui-kitten/components";
 import { FC, ReactElement, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useGetDaftarKelompokAkunQuery } from "../../services/api-rtkquery-service";
@@ -16,6 +16,8 @@ interface IFormulirAkunLayoutProps {
 const FormulirAkunLayout: FC<IFormulirAkunLayoutProps> = ({setVisibleFormAkun}) => {
     const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(new IndexPath(0));
     const [kelompokAkunName, setKelompokAkunName] = useState<string>("Aktiva");
+    const [headerChecked, setHeaderChecked] = useState<boolean>(false);
+    const [subAkunChecked, setSubAkunChecked] = useState<boolean>(true);
     const [filter] = useState<IQueryParamFilters>({
         pageNumber: 1,
         pageSize: 25,
@@ -60,17 +62,34 @@ const FormulirAkunLayout: FC<IFormulirAkunLayoutProps> = ({setVisibleFormAkun}) 
             header={renderHeader} 
             style={styles.cardContainer}
         >
-            <Select
-                value={kelompokAkunName}
-                selectedIndex={selectedIndex}
-                onSelect={_onSelectedKelompokAkun}
-                label='Kelompok akun'
-            >
-            {
-                items != undefined ?
-                items.map((item) => <SelectItem key={item.id} title={item.nama!} />) : []
-            }   
-            </Select>
+            <Layout style={styles.containerRowFlex}>
+                <Select
+                    value={kelompokAkunName}
+                    selectedIndex={selectedIndex}
+                    onSelect={_onSelectedKelompokAkun}
+                    label='Kelompok akun'
+                    style={{flex: 1}}
+                >
+                {
+                    isLoading == false ?
+                    items!.map((item) => <SelectItem key={item.id} title={item.nama!} />) : []
+                }   
+                </Select>
+                <CheckBox
+                    style={[styles.checkbox, {width: 80}]}
+                    checked={subAkunChecked}
+                    onChange={nextChecked => setSubAkunChecked(nextChecked)}
+                >
+                    Sub. akun
+                </CheckBox>
+                <CheckBox
+                    style={styles.checkbox}
+                    checked={headerChecked}
+                    onChange={nextChecked => setHeaderChecked(nextChecked)}
+                >
+                    Header
+                </CheckBox>
+            </Layout>
         </Card>
     );
 };
@@ -92,6 +111,17 @@ const styles = StyleSheet.create({
         // fontFamily: 'Cochin',
         borderColor: "none",
         color: "#FFFF",
+    },
+    containerRowFlex: {
+        display: "flex",
+        flexDirection: "row",
+        backgroundColor: "transparent"
+    },
+    checkbox: {
+        marginTop: 18,
+        marginHorizontal: 8,    
+        // verticalAlign: "middle",    
+        width: 70,
     },
 });
 

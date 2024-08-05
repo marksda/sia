@@ -145,7 +145,7 @@ function createStyle(skala: number) {
             alignItems: "center",
         },
         containerList: {
-            marginBottom: 16,
+            marginBottom: 4,
         },
         item: {
             display: 'flex',
