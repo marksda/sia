@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit/react";
 import { IToken } from "../features/entities/token";
 import { ICredential } from "../features/entities/credential";
-import { TokenAPI } from "./api-rtkquery-service";
+import { TokenAPI } from "./akutansi-app-api-rtkquery-service";
 
 
 export const fetchToken = createAsyncThunk(

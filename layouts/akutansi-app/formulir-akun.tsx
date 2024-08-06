@@ -1,7 +1,7 @@
 import { Card, CheckBox, Icon, IconElement, IndexPath, Layout, Select, SelectItem, Text } from "@ui-kitten/components";
 import { FC, ReactElement, useState } from "react";
 import { StyleSheet } from "react-native";
-import { useGetDaftarKelompokAkunQuery } from "../../services/api-rtkquery-service";
+import { useGetDaftarKelompokAkunQuery } from "../../services/akutansi-app-api-rtkquery-service";
 import { IQueryParamFilters } from "../../features/entities/query-param-filters";
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppSelector } from "../../app/redux-hooks";
+import { useAppSelector } from "../../app/akutansi-app-redux-hooks";
 import { SignInScreen } from "../auth/sign-in.component";
 import AkutansiRouteProvider from "../../navigation/akutansi-app/akutansi-route-provider";
 

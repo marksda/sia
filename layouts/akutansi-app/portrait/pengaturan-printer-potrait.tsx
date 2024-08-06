@@ -1,7 +1,7 @@
 import { Divider, Icon, IconElement, Input, Layout, List, Popover} from "@ui-kitten/components";
 import { FC, useMemo, useState } from "react";
 import { IQueryParamFilters } from "../../../features/entities/query-param-filters";
-import { useGetDaftarAkunQuery } from "../../../services/api-rtkquery-service";
+import { useGetDaftarAkunQuery } from "../../../services/akutansi-app-api-rtkquery-service";
 import { IAkun } from "../../../features/entities/akutansi-app/akun";
 import { ListRenderItemInfo, StyleSheet, Text, useWindowDimensions } from "react-native";
 import { normalizePxToDp } from "../../../features/utils/android-dp-px-converter";

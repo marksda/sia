@@ -5,7 +5,7 @@ import { default as theme } from './theme.json';
 import { default as mapping } from './mapping.json';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { Provider } from 'react-redux';
-import { persistor, store } from './redux-store';
+import { persistor, store } from './akutansi-app-redux-store';
 import MainAkutansiScreen from '../scenes/akutansi-app/akutansi-main-page';
 import { PersistGate } from 'redux-persist/integration/react';
 import { MaterialIconsPack } from './material-icons-pack';

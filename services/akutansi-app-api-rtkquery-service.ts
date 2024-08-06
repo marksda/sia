@@ -1,7 +1,7 @@
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ICredential } from "../features/entities/credential";
 import { Mutex } from "async-mutex";
-import { RootState } from "../app/redux-store";
+import { RootState } from "../app/akutansi-app-redux-store";
 import { IToken } from "../features/entities/token";
 import { resetToken, setToken } from "./redux-token-slice.service";
 import { IBarang } from "../features/entities/barang";

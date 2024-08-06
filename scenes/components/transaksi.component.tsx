@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { SafeAreaView, StyleSheet, TextInput, View } from 'react-native';
 import { Avatar, Button, Card, Divider, Icon, List, Text } from '@ui-kitten/components';
-import { useGetDaftarBarangQuery, useSaveTransaksiMutation } from '../../services/api-rtkquery-service';
+import { useGetDaftarBarangQuery, useSaveTransaksiMutation } from '../../services/akutansi-app-api-rtkquery-service';
 import { IQueryParamFilters } from '../../features/entities/query-param-filters';
 import { IBarang } from '../../features/entities/barang';
 import { ITransaksi } from '../../features/entities/transaksi';

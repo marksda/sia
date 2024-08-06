@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
-import { useAppDispatch } from '../../app/redux-hooks';
+import { useAppDispatch } from '../../app/akutansi-app-redux-hooks';
 import { resetToken } from '../../services/redux-token-slice.service';
 
 

@@ -4,7 +4,7 @@ import { ImageOverlay } from "./extra/image-overlay.component";
 import { StyleSheet, View } from "react-native";
 import { Button, Input, Text } from "@ui-kitten/components";
 import { FacebookIcon, GoogleIcon, TwitterIcon } from "./extra/icons";
-import { useAppDispatch } from "../../../app/redux-hooks";
+import { useAppDispatch } from "../../../app/akutansi-app-redux-hooks";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ICredential } from "../../../features/entities/credential";
 import { zodResolver } from "@hookform/resolvers/zod";
