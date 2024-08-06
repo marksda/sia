@@ -16,10 +16,6 @@ const FilterIcon = (props: any): IconElement => (
     <Icon name='line-scan' {...props} pack='material'/>
 );
 
-const CloseIcon = (props: any): IconElement => (
-    <Icon name='close' {...props} pack='material'/>
-);
-
 interface IPengaturanPrinterPortraitLayoutProps {
     navigation: any;
 };
