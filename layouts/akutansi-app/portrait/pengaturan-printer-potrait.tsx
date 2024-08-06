@@ -5,7 +5,7 @@ import { useGetDaftarAkunQuery } from "../../../services/api-rtkquery-service";
 import { IAkun } from "../../../features/entities/akutansi-app/akun";
 import { ListRenderItemInfo, StyleSheet, Text, useWindowDimensions } from "react-native";
 import { normalizePxToDp } from "../../../features/utils/android-dp-px-converter";
-import FormulirAkunLayout from "../formulir-akun";
+import FormulirScanPrinterLayout from "../formulir-scan-printer";
 
 
 const MenuIcon = (props: any): IconElement => (
@@ -96,10 +96,10 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
                 visible={visibleScan}
                 anchor={renderListPrinter}
                 placement="inner"
-                // onBackdropPress={() => setVisibleScan(false)}
+                onBackdropPress={() => setVisibleScan(false)}
                 backdropStyle={styles.backdrop}
             >
-                <FormulirAkunLayout setVisibleFormAkun={setVisibleScan}/> 
+                <FormulirScanPrinterLayout />
             </Popover>              
         </>
     );
