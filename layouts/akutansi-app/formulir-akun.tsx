@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     },
     normalNamaText: {
         // fontFamily: 'Cochin',
-        borderColor: "none",
+        // borderColor: "none",
         color: "#FFFF",
     },
     containerRowFlex: {
