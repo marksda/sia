@@ -1,4 +1,4 @@
-import { Button, Divider, Icon, IconElement, Input, Layout, List} from "@ui-kitten/components";
+import { Button, Divider, Icon, IconElement, Input, Layout, List, Popover} from "@ui-kitten/components";
 import { FC, useMemo, useState } from "react";
 import { IQueryParamFilters } from "../../../features/entities/query-param-filters";
 import { useGetDaftarAkunQuery } from "../../../services/api-rtkquery-service";
@@ -77,6 +77,15 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
         <MenuIcon {...props} onPress={() => navigation.openDrawer(true)} />
     );
 
+    const renderListPrinter = (): React.ReactElement => (
+        <List
+            style={styles.containerList}
+            data={items == undefined ? [] : items}
+            ItemSeparatorComponent={Divider}
+            renderItem={renderItem}
+        />     
+    );
+
     return (
         <>      
             <Layout style={styles.containerTopNav}>
@@ -86,23 +95,16 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
                     accessoryLeft={renderAccessoryLeft}
                     accessoryRight={renderAccessoryRight}
                 />
-                {
-                visibleScan == true ?
-                <Layout style={styles.containerFilter}>
-                    <Layout style={styles.containerGroupFilter}>
-                        <Button style={styles.button} size="small">Semua</Button>
-                        <Button style={styles.button} size="small">Semua</Button>
-                    </Layout>
-                    <CloseIcon style={{height: 18}} onPress={() => setVisibleScan(false)}/>
-                </Layout> : null  
-                } 
             </Layout> 
-            <List
-                style={styles.containerList}
-                data={items == undefined ? [] : items}
-                ItemSeparatorComponent={Divider}
-                renderItem={renderItem}
-            />       
+            <Popover
+                visible={visibleScan}
+                anchor={renderListPrinter}
+                placement="inner"
+                // onBackdropPress={() => setVisibleScan(false)}
+                backdropStyle={styles.backdrop}
+            >
+                <FormulirAkunLayout setVisibleFormAkun={setVisibleScan}/> 
+            </Popover>              
         </>
     );
 };
@@ -165,7 +167,10 @@ function createStyle(skala: number) {
         button: {
             // maxWidth: 80,
             borderRadius: 16,
-        }
+        },
+        backdrop: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        },
     }
     )
 };
