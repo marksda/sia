@@ -53,7 +53,7 @@ const AkutansiDrawerNav = ({ navigation } : {navigation: any}): DrawerElement =>
           icon: PengaturanIcon,
           onPress: () => {
             navigation.toggleDrawer();
-            navigation.navigate('laporan');
+            navigation.navigate('pengaturan');
           },
         },
     ];

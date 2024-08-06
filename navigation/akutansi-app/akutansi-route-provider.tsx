@@ -11,6 +11,7 @@ import PembukuanPortraitLayout from "../../layouts/akutansi-app/portrait/pembuku
 import PembukuanLandscapeLayout from "../../layouts/akutansi-app/landscape/pembukuan-landscape";
 import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
 import { useWindowDimensions } from "react-native";
+import PengaturanPortraitLayout from "../../layouts/akutansi-app/portrait/pengaturan-portrait";
 
 const navigatorTheme = {
     ...DefaultTheme,
@@ -79,6 +80,16 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
                 }   
                 </Drawer.Screen>
                 <Drawer.Screen name='laporan' component={LaporanScreen} />
+                <Drawer.Screen 
+                    name='pengaturan' 
+                    options={{
+                        title: "Pengaturan"
+                    }} 
+                >
+                { 
+                    screenOrientation == "portrait" ? (props) => <PengaturanPortraitLayout navigation={props.navigation}/> : (props) => <PembukuanLandscapeLayout navigation={props.navigation} />
+                }     
+                </Drawer.Screen>
             </Drawer.Navigator>
         </NavigationContainer>
     </SafeAreaProvider>

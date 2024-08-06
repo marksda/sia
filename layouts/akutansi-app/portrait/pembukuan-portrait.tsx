@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BottomNavigation, BottomNavigationTab, Icon, IconElement, Layout, Text } from "@ui-kitten/components";
-import { FC, useRef } from "react";
+import { FC } from "react";
 import { StyleSheet } from "react-native";
 import PembukuanAkunPortraitLayout from "./pembukuan-akun-portrait";
 
