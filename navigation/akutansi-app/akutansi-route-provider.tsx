@@ -12,6 +12,7 @@ import PembukuanLandscapeLayout from "../../layouts/akutansi-app/landscape/pembu
 import { normalizePxToDp } from "../../features/utils/android-dp-px-converter";
 import { useWindowDimensions } from "react-native";
 import PengaturanPortraitLayout from "../../layouts/akutansi-app/portrait/pengaturan-portrait";
+import PengaturanLandscapeLayout from "../../layouts/akutansi-app/landscape/pengaturan-landscape";
 
 const navigatorTheme = {
     ...DefaultTheme,
@@ -87,7 +88,7 @@ const AkutansiRouteProvider: FC = (): React.ReactElement => {
                     }} 
                 >
                 { 
-                    screenOrientation == "portrait" ? (props) => <PengaturanPortraitLayout navigation={props.navigation}/> : (props) => <PembukuanLandscapeLayout navigation={props.navigation} />
+                    screenOrientation == "portrait" ? (props) => <PengaturanPortraitLayout navigation={props.navigation}/> : (props) => <PengaturanLandscapeLayout navigation={props.navigation} />
                 }     
                 </Drawer.Screen>
             </Drawer.Navigator>

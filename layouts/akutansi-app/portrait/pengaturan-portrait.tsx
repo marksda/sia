@@ -3,6 +3,7 @@ import { BottomNavigation, BottomNavigationTab, Icon, IconElement, Layout, Text 
 import { FC, useState } from "react";
 import { StyleSheet } from "react-native";
 import PembukuanAkunPortraitLayout from "./pembukuan-akun-portrait";
+import PengaturanPrinterPortraitLayout from "./pengaturan-printer-potrait";
 
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -60,14 +61,19 @@ const PengaturanPortraitLayout: FC<IPengaturanPortraitLayoutProps> = ({navigatio
                     name='hak_akses' 
                     options={{
                     headerShown: false,                    
-                }}>{
+                }}>
+                {
                     () => (<PembukuanAkunPortraitLayout navigation={navigation}/>)
-                }</Screen>
+                }
+                </Screen>
                 <Screen 
                     name='printer' 
-                    component={OrdersScreen} 
                     options={{headerShown: false,}}
-                />
+                >
+                {
+                    () => (<PengaturanPrinterPortraitLayout navigation={navigation}/>)
+                }    
+                </Screen>
             </Navigator>
         </Layout>               
     );
