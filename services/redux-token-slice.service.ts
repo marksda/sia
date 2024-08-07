@@ -2,19 +2,13 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit/r
 import { IToken } from "../features/entities/token";
 import { ICredential } from "../features/entities/credential";
 import { TokenAPI } from "./akutansi-app-api-rtkquery-service";
+import * as _ from "lodash";
 
 
 export const fetchToken = createAsyncThunk(
     'token/fetchToken',
     async (credential: ICredential, thunkApi: any) => {    
         const response = await TokenAPI.getToken(credential); 
-
-        // let data: IToken = {
-        //     id: null,
-        //     nama: null,
-        //     token: null,
-        //     refreshToken: null
-        // };
         let data = null;
 
         if(response.status == 200) {
@@ -30,8 +24,9 @@ export const fetchToken = createAsyncThunk(
 const initialState: IToken =  {
     id: null,
     nama: null,
+    office: null,
     token: null,
-    refreshToken: null
+    refresh_token: null
 };
 
 export const tokenSlice = createSlice({
@@ -39,16 +34,18 @@ export const tokenSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action: PayloadAction<IToken>) => {
-            state.id = action.payload.id;
-            state.nama = action.payload.nama;
-            state.token = action.payload.token;
-            state.refreshToken = action.payload.refreshToken;
+            state = _.cloneDeep(action.payload);
+            // state.id = action.payload.id;
+            // state.nama = action.payload.nama;
+            // state.office = action.payload.office;
+            // state.token = action.payload.token;
+            // state.refresh_token = action.payload.refresh_token;
         },
         resetToken: (state, action: PayloadAction<null>) => {
             state.id = null;
             state.nama = null;
             state.token = null;
-            state.refreshToken = null;
+            state.refresh_token = null;
         },
     },
     extraReducers: (builder) => {
@@ -56,7 +53,7 @@ export const tokenSlice = createSlice({
             state.id = action.payload.id;
             state.nama = action.payload.nama;
             state.token = action.payload.token;
-            state.refreshToken = action.payload.refreshToken;
+            state.refresh_token = action.payload.refreshToken;
         });
     }
 });

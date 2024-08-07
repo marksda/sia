@@ -6,9 +6,11 @@ import { useProgress } from "../../components/progress.hook";
 const FormulirScanPrinterLayout: FC = () => {
     const {start, printerError, isDiscovering, printers} = usePrintersDiscovery();
     const progress = useProgress();
+    console.log(isDiscovering);
 
     return (
         <View style={[styles.container, styles.horizontal]}>
+
             <ProgressBar
                 progress={progress}
                 style={{width: '100%'}}
