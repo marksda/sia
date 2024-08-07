@@ -102,6 +102,8 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
                 placement="inner"
                 onBackdropPress={() => setVisibleScan(false)}
                 backdropStyle={styles.backdrop}
+                fullWidth={true}
+                style={{marginHorizontal: 8}}
             >
                 <FormulirScanPrinterLayout />
             </Popover>              

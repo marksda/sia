@@ -1,9 +1,8 @@
-import { Card, CheckBox, Icon, IconElement, IndexPath, Layout, Select, SelectItem, Text } from "@ui-kitten/components";
+import { Card, CheckBox, CircularProgressBar, Icon, IconElement, IndexPath, Layout, Select, SelectItem, Text } from "@ui-kitten/components";
 import { FC, ReactElement, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useGetDaftarKelompokAkunQuery } from "../../services/akutansi-app-api-rtkquery-service";
 import { IQueryParamFilters } from "../../features/entities/query-param-filters";
-
 
 const CloseIcon = (props: any): IconElement => (
     <Icon name='close' {...props} pack='material'/>
@@ -43,6 +42,7 @@ const FormulirAkunLayout: FC<IFormulirAkunLayoutProps> = ({setVisibleFormAkun}) 
         ],
     });
     const { data: items, isLoading } = useGetDaftarKelompokAkunQuery(filter);
+
 
     const renderHeader = (): ReactElement => (
         <Layout style={styles.topContainer}>

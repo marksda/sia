@@ -1,39 +1,32 @@
-import { Button, Spinner, Text } from "@ui-kitten/components";
+import { ProgressBar} from "@ui-kitten/components";
 import { FC } from "react";
-import { ImageProps, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { usePrintersDiscovery } from "react-native-esc-pos-printer";
-
+import { useProgress } from "../../components/progress.hook";
 const FormulirScanPrinterLayout: FC = () => {
     const {start, printerError, isDiscovering, printers} = usePrintersDiscovery();
+    const progress = useProgress();
 
-    const LoadingIndicator = (props: Partial<ImageProps> | undefined): React.ReactElement => (
-        <View style={[props!.style, styles.indicator]}>
-          <Spinner size='small' />
-        </View>
-      );
     return (
-        <Button
-            style={styles.button}
-            appearance='outline'
-            accessoryLeft={LoadingIndicator}
-        >
-            Loading
-        </Button>
+        <View style={[styles.container, styles.horizontal]}>
+            <ProgressBar
+                progress={progress}
+                style={{width: '100%'}}
+            />
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-    },
-    button: {
-      margin: 2,
-    },
-    indicator: {
+      flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
     },
-  });
+    horizontal: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      padding: 10,
+    },
+});
 
 export default FormulirScanPrinterLayout;
