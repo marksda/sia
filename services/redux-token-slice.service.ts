@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit/r
 import { IToken } from "../features/entities/token";
 import { ICredential } from "../features/entities/credential";
 import { TokenAPI } from "./akutansi-app-api-rtkquery-service";
-import * as _ from "lodash";
 
 
 export const fetchToken = createAsyncThunk(
@@ -34,12 +33,11 @@ export const tokenSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action: PayloadAction<IToken>) => {
-            state = _.cloneDeep(action.payload);
-            // state.id = action.payload.id;
-            // state.nama = action.payload.nama;
-            // state.office = action.payload.office;
-            // state.token = action.payload.token;
-            // state.refresh_token = action.payload.refresh_token;
+            state.id = action.payload.id;
+            state.nama = action.payload.nama;
+            state.office = action.payload.office;
+            state.token = action.payload.token;
+            state.refresh_token = action.payload.refresh_token;
         },
         resetToken: (state, action: PayloadAction<null>) => {
             state.id = null;
@@ -51,10 +49,9 @@ export const tokenSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchToken.fulfilled, (state, action) => {
-            // state = _.cloneDeep(action.payload);
             state.id = action.payload.id;
             state.nama = action.payload.nama;
-            state.office = _.cloneDeep(action.payload.office);
+            state.office = action.payload.office;
             state.token = action.payload.token;
             state.refresh_token = action.payload.refreshToken;
         });
