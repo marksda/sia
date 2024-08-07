@@ -12,15 +12,13 @@ const FormulirScanPrinterLayout: FC = () => {
         </View>
       );
     return (
-        <>
-            <Button
-                style={styles.button}
-                appearance='outline'
-                accessoryLeft={LoadingIndicator}
-            >
-                Loading
-            </Button>
-        </>
+        <Button
+            style={styles.button}
+            appearance='outline'
+            accessoryLeft={LoadingIndicator}
+        >
+            Loading
+        </Button>
     );
 };
 

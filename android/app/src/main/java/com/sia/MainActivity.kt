@@ -19,4 +19,14 @@ class MainActivity : ReactActivity() {
    */
   override fun createReactActivityDelegate(): ReactActivityDelegate =
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
+
+  @ReactMethod
+  public void addListener(String eventName) {
+
+  }
+
+  @ReactMethod
+  public void removeListeners(Integer count) {
+
+  }
 }

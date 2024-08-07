@@ -63,9 +63,13 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
         );
     };
 
+    const _handleOnPress = () => {
+        setVisibleScan(true);
+    };
+
     const renderAccessoryRight = (props: any): React.ReactElement => (
         <>
-        { visibleScan == false ? <FilterIcon {...props} style={{height: 24, color: "#FA8105", marginRight: 8}} onPress={() => setVisibleScan(true)}/> : null }
+        { visibleScan == false ? <FilterIcon {...props} style={{height: 24, color: "#FA8105", marginRight: 8}} onPress={_handleOnPress}/> : null }
         </>
     );
 
