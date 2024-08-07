@@ -1,17 +1,21 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import tokenReducer from "../services/redux-token-slice.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { siaApi } from "../services/akutansi-app-api-rtkquery-service";
-// import PrinterScannerReducer from "../services/redux-printer-slice";
-
+import PrinterScannerReducer from "../services/redux-printer-slice.service";
 
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage
 };
 
-const persistedReducer = persistReducer(persistConfig, tokenReducer)
+const rootReducer = combineReducers({ 
+    token: tokenReducer,
+    printer: PrinterScannerReducer
+})
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({
     reducer: {

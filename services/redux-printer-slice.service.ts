@@ -8,7 +8,7 @@ const initialState: IPrinterScanner =  {
 };
 
 export const PrinterScannerSlice = createSlice({
-    name: 'printer_scanner',
+    name: 'printer',
     initialState,
     reducers: {
         setPrinterScanner: (state, action: PayloadAction<IPrinterScanner>) => {

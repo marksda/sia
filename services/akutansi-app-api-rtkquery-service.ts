@@ -64,8 +64,8 @@ export const baseQueryWithReauth: BaseQueryFn<string|FetchArgs, unknown, FetchBa
         if (!mutex.isLocked()) {
             const release = await mutex.acquire();
             try {
-                const refreshToken = (api.getState() as RootState).persisted.refreshToken;
-                const userId = (api.getState() as RootState).persisted.id;
+                const refreshToken = (api.getState() as RootState).persisted.token.refreshToken;
+                const userId = (api.getState() as RootState).persisted.token.id;
                 const refreshResult = await baseQuery(
                     {
                         url: `/token/${userId}`,
