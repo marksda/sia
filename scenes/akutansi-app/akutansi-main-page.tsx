@@ -7,7 +7,7 @@ const MainAkutansiScreen = (): React.ReactElement => {
     const token = useAppSelector(state => state.persisted.token); 
     console.log(token);
 
-    return token == null ? <SignInScreen /> :  <AkutansiRouteProvider />;
+    return token.token == null ? <SignInScreen /> :  <AkutansiRouteProvider />;
 };
 
 export default MainAkutansiScreen;

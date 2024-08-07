@@ -44,14 +44,17 @@ export const tokenSlice = createSlice({
         resetToken: (state, action: PayloadAction<null>) => {
             state.id = null;
             state.nama = null;
+            state.office = null;
             state.token = null;
             state.refresh_token = null;
         },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchToken.fulfilled, (state, action) => {
+            // state = _.cloneDeep(action.payload);
             state.id = action.payload.id;
             state.nama = action.payload.nama;
+            state.office = _.cloneDeep(action.payload.office);
             state.token = action.payload.token;
             state.refresh_token = action.payload.refreshToken;
         });
