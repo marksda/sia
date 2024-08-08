@@ -41,44 +41,13 @@ const enableBluetooth =  () => {
     return dataPrinter;
 };
 
-// const _disableBluetooth = () => {
-//     (BluetoothManager.disableBluetooth() as PromiseLike<boolean>).then(
-//         (status: boolean)=>{
-//             // do something.
-//         },
-//         (err)=>{
-//             // console.log(err);
-//         }
-//     );
-// };
-
-// const _connectBluetooth = (deviceAddress: string) => {
-    //     (BluetoothManager.connect(deviceAddress) as PromiseLike<void>)
-    //     .then(
-    //         (s)=>{
-    //             BluetoothManager.setState({
-    //                 loading:false,
-    //                 boundAddress:rowData.address
-    //             })
-    //         },
-    //         (err)=>{
-    //             BluetoothManager.setState({
-    //                 loading:false
-    //             })
-    //               alert(e);
-    //            }
-    //         }
-    //     );
-    // };
-
-
 const FormulirScanPrinterLayout: FC = () => {
     const [listPrinterBt, setListPrinterBt] = useState<BluetoothDevice[]>([]);
     console.log(listPrinterBt);
 
     const _getBtPrinter = async () => {
-        let hasil = await enableBluetooth();
-        setListPrinterBt(hasil);
+        // let hasil = await enableBluetooth();
+        setListPrinterBt(await enableBluetooth());
     }
 
     return (
