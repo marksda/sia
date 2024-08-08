@@ -1,20 +1,17 @@
-import { ProgressBar} from "@ui-kitten/components";
-import { FC } from "react";
-import { StyleSheet, View } from "react-native";
-import { usePrintersDiscovery } from "react-native-esc-pos-printer";
-import { useProgress } from "../../components/progress.hook";
+import { Button} from "@ui-kitten/components";
+import { FC} from "react";
+import { StyleSheet, View } from "react-native";    
+
 const FormulirScanPrinterLayout: FC = () => {
-    const {start, printerError, isDiscovering, printers} = usePrintersDiscovery();
-    const progress = useProgress();
-    console.log(isDiscovering);
+    
+    const _cekBluetooth = async () => {
+        // const isEnabled = await BluetoothManager.checkBluetoothEnabled();
+        // console.log(isEnabled); // true/false
+    }
 
     return (
         <View style={[styles.container, styles.horizontal]}>
-
-            <ProgressBar
-                progress={progress}
-                style={{width: '100%'}}
-            />
+            <Button style={styles.buttonText} onPress={_cekBluetooth}>Cek Bluetooth</Button>
         </View>
     );
 };
@@ -28,6 +25,14 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-around',
       padding: 10,
+    },
+    buttonText: {
+        marginHorizontal: 8,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 16,
+        marginTop: 20,
     },
 });
 
