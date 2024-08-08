@@ -1,12 +1,17 @@
 import { Button} from "@ui-kitten/components";
 import { FC} from "react";
-import { StyleSheet, View } from "react-native";    
+import { StyleSheet, View } from "react-native"; 
+import { BluetoothManager } from "tp-react-native-bluetooth-printer";
+
 
 const FormulirScanPrinterLayout: FC = () => {
     
-    const _cekBluetooth = async () => {
-        // const isEnabled = await BluetoothManager.checkBluetoothEnabled();
-        // console.log(isEnabled); // true/false
+    const _cekBluetooth = () => {
+        BluetoothManager.isBluetoothEnabled().then((enabled: Boolean)=> {
+            console.log(enabled); // enabled ==> true /false
+        }, (err: any)=> {
+            console.log(err);
+        });
     }
 
     return (
