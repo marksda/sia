@@ -1,9 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPrinterScanner } from "../features/entities/printer-scanner";
 import * as _ from "lodash";
-import { DeviceInfo } from "react-native-esc-pos-printer";
 
-const initialState: IPrinterScanner =  {
+type ListPrinter = {
+    printers: IPrinterScanner[];
+};
+
+const initialState: ListPrinter =  {
     printers: [],
 };
 
@@ -11,13 +14,13 @@ export const PrinterScannerSlice = createSlice({
     name: 'printer',
     initialState,
     reducers: {
-        setPrinterScanner: (state, action: PayloadAction<IPrinterScanner>) => {
-            state.printers = _.cloneDeep(action.payload.printers);
+        setPrinterScanner: (state, action: PayloadAction<IPrinterScanner[]>) => {
+            state.printers = _.cloneDeep(action.payload);
         },
-        removePrinterScanner: (state, action: PayloadAction<DeviceInfo>) => {
-            state.printers = _.remove(state.printers, (item) => item.deviceName == action.payload.deviceName)
+        removePrinterScanner: (state, action: PayloadAction<IPrinterScanner>) => {
+            state.printers = _.remove(state.printers, (item) => _.isEqual(item, action.payload));
         },
-        addPrinterScanner: (state, action: PayloadAction<DeviceInfo>) => {
+        addPrinterScanner: (state, action: PayloadAction<IPrinterScanner>) => {
             state.printers = _.concat(state.printers, action.payload)
         },
         resetPrinterScanner: (state, action: PayloadAction<null>) => {

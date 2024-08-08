@@ -1,21 +1,23 @@
 import { Button} from "@ui-kitten/components";
 import { FC} from "react";
 import { StyleSheet, View } from "react-native"; 
-import { BluetoothDevice, BluetoothManager } from "tp-react-native-bluetooth-printer";
+import { BluetoothDevice, BluetoothManager, ScannedBluetoothDevices } from "tp-react-native-bluetooth-printer";
 
 
 const FormulirScanPrinterLayout: FC = () => {
     
     const _cekBluetooth = () => {
-        // (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
-        //     (enabled: boolean) => {
-        //         console.log(enabled); // enabled ==> true /false
-        //     }, 
-        //     (err: any)=> {
-        //         console.log(err);
-        //     }
-        // );
+        (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
+            (enabled: boolean) => {
+                // console.log(enabled); 
+            }, 
+            (err: any) => {
+                // console.log(err);
+            }
+        );        
+    };
 
+    const _enableBluetooth = () => {
         (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
             (item) => {
                 let paired: BluetoothDevice[] = [];
@@ -34,11 +36,41 @@ const FormulirScanPrinterLayout: FC = () => {
             //   console.log(err);
             }
         );
-    }
+    };
+
+    const _disableBluetooth = () => {
+        (BluetoothManager.disableBluetooth() as PromiseLike<boolean>).then(
+            (status: boolean)=>{
+                // do something.
+            },
+            (err)=>{
+                // console.log(err);
+            }
+        );
+    };
+
+    // const _connectBluetooth = (deviceAddress: string) => {
+    //     (BluetoothManager.connect(deviceAddress) as PromiseLike<void>)
+    //     .then(
+    //         (s)=>{
+    //             BluetoothManager.setState({
+    //                 loading:false,
+    //                 boundAddress:rowData.address
+    //             })
+    //         },
+    //         (err)=>{
+    //             BluetoothManager.setState({
+    //                 loading:false
+    //             })
+    //               alert(e);
+    //            }
+    //         }
+    //     );
+    // };
 
     return (
         <View style={[styles.container, styles.horizontal]}>
-            <Button style={styles.buttonText} onPress={_cekBluetooth}>Cek Bluetooth</Button>
+            <Button style={styles.buttonText} onPress={_enableBluetooth}>Cek Bluetooth</Button>
         </View>
     );
 };
