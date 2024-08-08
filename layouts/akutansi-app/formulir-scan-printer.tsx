@@ -1,55 +1,66 @@
 import { Button} from "@ui-kitten/components";
-import { FC} from "react";
+import { FC, useState} from "react";
 import { StyleSheet, View } from "react-native"; 
-import { BluetoothDevice, BluetoothManager, ScannedBluetoothDevices } from "tp-react-native-bluetooth-printer";
+import { BluetoothDevice, BluetoothManager } from "tp-react-native-bluetooth-printer";
+import { IPrinterScanner } from "../../features/entities/printer-scanner";
 
+// const _cekBluetooth = () => {
+//     (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
+//         (enabled: boolean) => {
+//             // console.log(enabled); 
+//         }, 
+//         (err: any) => {
+//             // console.log(err);
+//         }
+//     );        
+// };
 
-const FormulirScanPrinterLayout: FC = () => {
-    
-    const _cekBluetooth = () => {
-        (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
-            (enabled: boolean) => {
-                // console.log(enabled); 
-            }, 
-            (err: any) => {
-                // console.log(err);
-            }
-        );        
-    };
-
-    const _enableBluetooth = () => {
-        (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
-            (item) => {
-                let paired: BluetoothDevice[] = [];
-                if (item && item.length > 0) {
-                    for (var i = 0; i < item.length; i++) {
-                        try {
-                            paired.push(JSON.parse(item[i]));
-                        } catch (e) {
-                            // console.log(e);
-                        }
+const enableBluetooth =  () => {
+    let dataPrinter =
+    (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
+        (item) => {
+            // let paired: BluetoothDevice[] = [];
+            let paired: IPrinterScanner[] = [];
+            if (item && item.length > 0) {
+                for (var i = 0; i < item.length; i++) {
+                    try {
+                        let bld: BluetoothDevice = JSON.parse(item[i]);
+                        let printer: IPrinterScanner = {
+                            type: "bluetooth",
+                            name: bld.name,
+                            address: bld.address
+                        };
+                        // paired.push(JSON.parse(item[i]));
+                        paired.push(printer);
+                    } catch (e) {
+                        return [];
                     }
                 }
-                // console.log(paired[0].name);
-            },
-            (err) => {
-            //   console.log(err);
             }
-        );
-    };
+            return paired;
+        },
+        (err) => {
+            return [];
+        }
+    ).then((data: IPrinterScanner[]) => {
+        return data;
+    });
 
-    const _disableBluetooth = () => {
-        (BluetoothManager.disableBluetooth() as PromiseLike<boolean>).then(
-            (status: boolean)=>{
-                // do something.
-            },
-            (err)=>{
-                // console.log(err);
-            }
-        );
-    };
+    return dataPrinter;
+};
 
-    // const _connectBluetooth = (deviceAddress: string) => {
+// const _disableBluetooth = () => {
+//     (BluetoothManager.disableBluetooth() as PromiseLike<boolean>).then(
+//         (status: boolean)=>{
+//             // do something.
+//         },
+//         (err)=>{
+//             // console.log(err);
+//         }
+//     );
+// };
+
+// const _connectBluetooth = (deviceAddress: string) => {
     //     (BluetoothManager.connect(deviceAddress) as PromiseLike<void>)
     //     .then(
     //         (s)=>{
@@ -68,9 +79,19 @@ const FormulirScanPrinterLayout: FC = () => {
     //     );
     // };
 
+
+const FormulirScanPrinterLayout: FC = () => {
+    const [listPrinterBt, setListPrinterBt] = useState<IPrinterScanner[]>([]);
+    console.log(listPrinterBt);
+
+    const _getBtPrinter = async () => {
+        let hasil = await enableBluetooth();
+        setListPrinterBt(hasil);
+    }
+
     return (
         <View style={[styles.container, styles.horizontal]}>
-            <Button style={styles.buttonText} onPress={_enableBluetooth}>Cek Bluetooth</Button>
+            <Button style={styles.buttonText} onPress={_getBtPrinter}>Cek Bluetooth</Button>
         </View>
     );
 };

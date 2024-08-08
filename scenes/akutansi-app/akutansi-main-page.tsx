@@ -5,7 +5,6 @@ import AkutansiRouteProvider from "../../navigation/akutansi-app/akutansi-route-
 
 const MainAkutansiScreen = (): React.ReactElement => {
     const token = useAppSelector(state => state.persisted.token); 
-    // console.log(token);
 
     return token.token == null ? <SignInScreen /> :  <AkutansiRouteProvider />;
 };
