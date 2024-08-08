@@ -19,19 +19,11 @@ const enableBluetooth =  () => {
     let dataPrinter =
     (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
         (item) => {
-            // let paired: BluetoothDevice[] = [];
-            let paired: IPrinterScanner[] = [];
+            let paired: BluetoothDevice[] = [];
             if (item && item.length > 0) {
                 for (var i = 0; i < item.length; i++) {
                     try {
-                        let bld: BluetoothDevice = JSON.parse(item[i]);
-                        let printer: IPrinterScanner = {
-                            type: "bluetooth",
-                            name: bld.name,
-                            address: bld.address
-                        };
-                        // paired.push(JSON.parse(item[i]));
-                        paired.push(printer);
+                        paired.push(JSON.parse(item[i]));
                     } catch (e) {
                         return [];
                     }
@@ -42,7 +34,7 @@ const enableBluetooth =  () => {
         (err) => {
             return [];
         }
-    ).then((data: IPrinterScanner[]) => {
+    ).then((data) => {
         return data;
     });
 
@@ -81,7 +73,7 @@ const enableBluetooth =  () => {
 
 
 const FormulirScanPrinterLayout: FC = () => {
-    const [listPrinterBt, setListPrinterBt] = useState<IPrinterScanner[]>([]);
+    const [listPrinterBt, setListPrinterBt] = useState<BluetoothDevice[]>([]);
     console.log(listPrinterBt);
 
     const _getBtPrinter = async () => {

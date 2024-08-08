@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IPrinterScanner } from "../features/entities/printer-scanner";
+import { IPrinterScanner, typeKoneksiPrinter } from "../features/entities/printer-scanner";
 import * as _ from "lodash";
 
 type ListPrinter = {
