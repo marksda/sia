@@ -7,6 +7,15 @@ import { BluetoothDevice, BluetoothManager } from "tp-react-native-bluetooth-pri
 const FormulirScanPrinterLayout: FC = () => {
     
     const _cekBluetooth = () => {
+        // (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
+        //     (enabled: boolean) => {
+        //         console.log(enabled); // enabled ==> true /false
+        //     }, 
+        //     (err: any)=> {
+        //         console.log(err);
+        //     }
+        // );
+
         (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
             (item) => {
                 let paired: BluetoothDevice[] = [];
@@ -19,10 +28,10 @@ const FormulirScanPrinterLayout: FC = () => {
                         }
                     }
                 }
-                console.log(paired);
+                // console.log(paired[0].name);
             },
             (err) => {
-                // console.log(err);
+            //   console.log(err);
             }
         );
     }
