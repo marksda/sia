@@ -2,18 +2,6 @@ import { Button} from "@ui-kitten/components";
 import { FC, useState} from "react";
 import { StyleSheet, View } from "react-native"; 
 import { BluetoothDevice, BluetoothManager } from "tp-react-native-bluetooth-printer";
-import { IPrinterScanner } from "../../features/entities/printer-scanner";
-
-// const _cekBluetooth = () => {
-//     (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
-//         (enabled: boolean) => {
-//             // console.log(enabled); 
-//         }, 
-//         (err: any) => {
-//             // console.log(err);
-//         }
-//     );        
-// };
 
 const enableBluetooth =  () => {
     let dataPrinter =
@@ -43,10 +31,8 @@ const enableBluetooth =  () => {
 
 const FormulirScanPrinterLayout: FC = () => {
     const [listPrinterBt, setListPrinterBt] = useState<BluetoothDevice[]>([]);
-    console.log(listPrinterBt);
 
     const _getBtPrinter = async () => {
-        // let hasil = await enableBluetooth();
         setListPrinterBt(await enableBluetooth());
     }
 
