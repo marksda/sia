@@ -1,6 +1,6 @@
 import { Button, IndexPath, Select, SelectItem, Toggle} from "@ui-kitten/components";
 import { FC, useEffect, useState} from "react";
-import { StyleSheet, useWindowDimensions, View } from "react-native"; 
+import { DeviceEventEmitter, StyleSheet, useWindowDimensions, View } from "react-native"; 
 import { BluetoothDevice, BluetoothManager } from "tp-react-native-bluetooth-printer";
 import { JenisKoneksiPrinter } from "../../features/entities/printer-scanner";
 
@@ -21,58 +21,38 @@ const CekBluetooth = () => {
 };
 
 const EnableBluetooth =  () => {
-    let dataPrinter =
-    (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
-        (item) => {
-            let paired: BluetoothDevice[] = [];
-            if (item && item.length > 0) {
-                for (var i = 0; i < item.length; i++) {
-                    try {
-                        paired.push(JSON.parse(item[i]));
-                    } catch (e) {
-                        return [];
-                    }
-                }
-            }
-            return paired;
-        },
-        (err) => {
-            return [];
-        }
-    ).then((data) => {
-        return data;
-    });
+    // let dataPrinter =
+    // (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
+    //     (item) => {
+    //         let paired: BluetoothDevice[] = [];
+    //         if (item && item.length > 0) {
+    //             for (var i = 0; i < item.length; i++) {
+    //                 try {
+    //                     paired.push(JSON.parse(item[i]));
+    //                 } catch (e) {
+    //                     return [];
+    //                 }
+    //             }
+    //         }
+    //         return paired;
+    //     },
+    //     (err) => {
+    //         return [];
+    //     }
+    // ).then((data) => {
+    //     return data;
+    // });
 
-    return dataPrinter;
+    // return dataPrinter;
 };
 
 const DaftarKoneksiPrinter = Object.keys(JenisKoneksiPrinter).filter((v) => isNaN(Number(v)));
 
 const FormulirScanPrinterLayout: FC = () => {
     const {width} = useWindowDimensions();
-    const [listPrinterBt, setListPrinterBt] = useState<BluetoothDevice[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<IndexPath>(new IndexPath(0));
-    const [btStatus, setBtStatus] = useState<boolean>(false);
 
-    const onCheckedBTChange = (isChecked: boolean): void => {
-        setBtStatus(isChecked);
-    };
     
-
-    const _getBtPrinter = async () => {
-        setListPrinterBt(await EnableBluetooth());
-    }
-
-    useEffect(        
-        () => {
-            async function status() {
-                setBtStatus(await CekBluetooth());
-            }            
-            status();
-        }, 
-        []
-    );
-
     return (
         <View style={[styles.container, {width: width-16}]}>
             <Select
@@ -87,13 +67,10 @@ const FormulirScanPrinterLayout: FC = () => {
                 )
             }
             </Select>
-            <Toggle
-                checked={btStatus}
-                onChange={onCheckedBTChange}
-            >
-            {`bluetooth ${btStatus? 'on':'off'}`}
-            </Toggle>
-            <Button style={styles.buttonText} onPress={_getBtPrinter}>Cek Bluetooth</Button>
+            {
+                (selectedIndex.row == JenisKoneksiPrinter.BLUETOOTH) && (<FormulirScanPrinterBtLayout />)
+            }            
+            
         </View>
     );
 };
@@ -119,6 +96,91 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 16,
         marginTop: 20,
+    },
+});
+
+const FormulirScanPrinterBtLayout: FC = () => {    
+    const [btStatus, setBtStatus] = useState<boolean>(false);    
+    const [listPrinterBt, setListPrinterBt] = useState<BluetoothDevice[]>([]);
+
+    const onCheckedBTChange = async (isChecked: boolean) => {
+        if(isChecked) {            
+            // setListPrinterBt(await EnableBluetooth());
+            (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
+                (s) => {
+                    setBtStatus(isChecked);
+                },
+                (e) => {
+                    //error
+                }
+            );
+            
+        }
+        else {
+            BluetoothManager.disableBluetooth();
+            setBtStatus(isChecked);
+        }
+
+        
+    };  
+
+    const _getBtPrinter = async () => {
+        // setListPrinterBt(await EnableBluetooth());
+        (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
+            (s) => {
+                setBtStatus(true);
+            },
+            (e) => {
+                //error
+            }
+        );
+    }
+
+    useEffect(        
+        () => {
+            async function status() {
+                setBtStatus(await CekBluetooth());
+            }   
+
+            status(); 
+
+            // const handlerEvent = DeviceEventEmitter.addListener(
+            //     "EVENT_DEVICE_DISCOVER_DONE", 
+            //     (rsp) => {
+            //         setBtStatus(true);
+            //     }
+            // );
+
+            // return () => {
+            //     handlerEvent.remove();
+            // };
+                     
+        }, 
+        []
+    ); 
+
+    return (
+        <View style={stylesBTForm.container}>
+            <Toggle
+                    checked={btStatus}
+                    onChange={onCheckedBTChange}
+                >
+                {
+                    `bluetooth ${btStatus? 'on':'off'}`
+                }
+            </Toggle>
+            <Button style={stylesBTForm.buttonText} onPress={_getBtPrinter}>Scan printer</Button>
+        </View>
+    );
+}
+
+const stylesBTForm = StyleSheet.create({
+    container: {
+        display: "flex",
+        gap: 8,
+    },
+    buttonText: {
+        marginHorizontal: 8,
     },
 });
 
