@@ -77,36 +77,45 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
         <MenuIcon {...props} onPress={() => navigation.openDrawer(true)} />
     );
 
-    const renderListPrinter = (): React.ReactElement => (
-        <List
-            style={styles.containerList}
-            data={items == undefined ? [] : items}
-            ItemSeparatorComponent={Divider}
-            renderItem={renderItem}
-        />     
+    const renderHeader = (): React.ReactElement => (
+        <Layout style={styles.containerTopNav}>
+            <Input
+                style={styles.inputSearch}
+                placeholder='Pencarian'
+                accessoryLeft={renderAccessoryLeft}
+                accessoryRight={renderAccessoryRight}
+            />
+        </Layout> 
     );
 
+    // const renderListPrinter = (): React.ReactElement => (
+    //     <List
+    //         style={styles.containerList}
+    //         data={items == undefined ? [] : items}
+    //         ItemSeparatorComponent={Divider}
+    //         renderItem={renderItem}
+    //     />     
+    // );
+
     return (
-        <>      
-            <Layout style={styles.containerTopNav}>
-                <Input
-                    style={styles.inputSearch}
-                    placeholder='Pencarian'
-                    accessoryLeft={renderAccessoryLeft}
-                    accessoryRight={renderAccessoryRight}
-                />
-            </Layout> 
+        <>    
             <Popover
                 visible={visibleScan}
-                anchor={renderListPrinter}
-                placement="inner"
+                anchor={renderHeader}
+                placement="inner top"
                 onBackdropPress={() => setVisibleScan(false)}
                 backdropStyle={styles.backdrop}
                 fullWidth={true}
-                style={{marginHorizontal: 8}}
+                style={{marginHorizontal: 8, marginTop: 8}}
             >
                 <FormulirScanPrinterLayout />
-            </Popover>              
+            </Popover>    
+            <List
+                style={styles.containerList}
+                data={items == undefined ? [] : items}
+                ItemSeparatorComponent={Divider}
+                renderItem={renderItem}
+            />           
         </>
     );
 };

@@ -1,11 +1,26 @@
-import { Button, IndexPath, Select, SelectItem} from "@ui-kitten/components";
-import { FC, useState} from "react";
-import { StyleSheet, View } from "react-native"; 
+import { Button, IndexPath, Select, SelectItem, Toggle} from "@ui-kitten/components";
+import { FC, useEffect, useState} from "react";
+import { StyleSheet, useWindowDimensions, View } from "react-native"; 
 import { BluetoothDevice, BluetoothManager } from "tp-react-native-bluetooth-printer";
 import { JenisKoneksiPrinter } from "../../features/entities/printer-scanner";
-import * as _ from "lodash";
 
-const enableBluetooth =  () => {
+const CekBluetooth = () => {
+    let status = 
+    (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
+        (enabled) => {
+           return enabled as boolean;
+        },
+        (err) => {
+           return false;
+        }
+    ).then((data: boolean) => {
+        return data;
+    });
+
+    return status;
+};
+
+const EnableBluetooth =  () => {
     let dataPrinter =
     (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
         (item) => {
@@ -31,25 +46,40 @@ const enableBluetooth =  () => {
     return dataPrinter;
 };
 
-const DaftarKoneksiPrinter = Object.keys(JenisKoneksiPrinter);
+const DaftarKoneksiPrinter = Object.keys(JenisKoneksiPrinter).filter((v) => isNaN(Number(v)));
 
 const FormulirScanPrinterLayout: FC = () => {
+    const {width} = useWindowDimensions();
     const [listPrinterBt, setListPrinterBt] = useState<BluetoothDevice[]>([]);
-    const [jenisKoneksiPrinter, setJenisKoneksiPrinter] = useState<string>('BLUETOOTH');
     const [selectedIndex, setSelectedIndex] = useState<IndexPath>(new IndexPath(0));
+    const [btStatus, setBtStatus] = useState<boolean>(false);
+
+    const onCheckedBTChange = (isChecked: boolean): void => {
+        setBtStatus(isChecked);
+    };
+    
 
     const _getBtPrinter = async () => {
-        setListPrinterBt(await enableBluetooth());
+        setListPrinterBt(await EnableBluetooth());
     }
 
+    useEffect(        
+        () => {
+            async function status() {
+                setBtStatus(await CekBluetooth());
+            }            
+            status();
+        }, 
+        []
+    );
+
     return (
-        <View style={[styles.container, styles.horizontal]}>
+        <View style={[styles.container, {width: width-16}]}>
             <Select
                 value={DaftarKoneksiPrinter[selectedIndex.row]}
                 selectedIndex={selectedIndex}
                 onSelect={(index: IndexPath|IndexPath[]) => setSelectedIndex(index as IndexPath)}
                 label='Jenis koneksi printer'
-                style={{flex: 1}}
             >  
             {   
                 DaftarKoneksiPrinter.map(
@@ -57,6 +87,12 @@ const FormulirScanPrinterLayout: FC = () => {
                 )
             }
             </Select>
+            <Toggle
+                checked={btStatus}
+                onChange={onCheckedBTChange}
+            >
+            {`bluetooth ${btStatus? 'on':'off'}`}
+            </Toggle>
             <Button style={styles.buttonText} onPress={_getBtPrinter}>Cek Bluetooth</Button>
         </View>
     );
@@ -64,13 +100,17 @@ const FormulirScanPrinterLayout: FC = () => {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
+        // flex: 1,
+        // flexDirection: "column",
+        // justifyContent: 'center',
+        // columnGap: 24,
+        rowGap: 8,
+        padding: 10,
     },
     horizontal: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      padding: 10,
+        // flexDirection: 'column',
+        justifyContent: 'space-around',
+        padding: 10,
     },
     buttonText: {
         marginHorizontal: 8,
