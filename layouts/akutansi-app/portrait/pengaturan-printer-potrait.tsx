@@ -1,11 +1,11 @@
-import { Divider, Icon, IconElement, Input, Layout, List, Popover} from "@ui-kitten/components";
+import { Button, Divider, Icon, IconElement, Input, Layout, List, Modal, Popover, Text} from "@ui-kitten/components";
 import { FC, useMemo, useState } from "react";
-import { IQueryParamFilters } from "../../../features/entities/query-param-filters";
-import { useGetDaftarAkunQuery } from "../../../services/akutansi-app-api-rtkquery-service";
-import { IAkun } from "../../../features/entities/akutansi-app/akun";
-import { ListRenderItemInfo, StyleSheet, Text, useWindowDimensions } from "react-native";
+import { KeyboardAvoidingView, ListRenderItemInfo, Modal as RNModal, StyleSheet, useWindowDimensions, View } from "react-native";
 import { normalizePxToDp } from "../../../features/utils/android-dp-px-converter";
 import FormulirScanPrinterLayout from "../formulir-scan-printer";
+import { useAppDispatch, useAppSelector } from "../../../app/akutansi-app-redux-hooks";
+import { IPrinterScanner } from "../../../features/entities/printer-scanner";
+import { removePrinterScanner } from "../../../services/redux-printer-slice.service";
 
 
 const MenuIcon = (props: any): IconElement => (
@@ -16,56 +16,72 @@ const FilterIcon = (props: any): IconElement => (
     <Icon name='line-scan' {...props} pack='material'/>
 );
 
+const BluetoothIcon = (props: any): IconElement => (
+    <Icon name='bluetooth' {...props} pack='material'/>
+);
+
+const DeleteIcon = (props: any): IconElement => (
+    <Icon
+      {...props}
+      name='trash-2-outline'
+    />
+);
+
+const EditIcon = (props: any): IconElement => (
+    <Icon
+      {...props}
+      name='edit-outline'
+    />
+);
+
 interface IPengaturanPrinterPortraitLayoutProps {
     navigation: any;
 };
 
 const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps> = ({navigation}) => {
     const dimensions = useWindowDimensions();
-    const [filter] = useState<IQueryParamFilters>({
-        pageNumber: 1,
-        pageSize: 25,
-        filters: [
-            {
-            fieldName: 'kelompok_akun',
-            value: '0'
-            },
-        ],
-        sortOrders: [
-            {
-                fieldName: 'kelompok_akun',
-                value: 'ASC'
-            },
-            {
-                fieldName: 'kode',
-                value: 'ASC'
-            },
-            {
-                fieldName: 'level',
-                value: 'ASC'
-            },
-        ],
-    });
+    const dispatch = useAppDispatch();
+    const printers = useAppSelector(state => state.persisted.printer.printers); 
     const [visibleScan, setVisibleScan] = useState<boolean>(false);
-    const { data: items, isLoading } = useGetDaftarAkunQuery(filter);
+    const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
 
     const styles = useMemo(
         () => createStyle(dimensions.scale),
         [dimensions.scale]
     ); 
 
-    const renderItem = ({item}: ListRenderItemInfo<IAkun>) => {
+    const removePrinter = (index: number) => {
+        dispatch(removePrinterScanner(printers[index]));
+    }
+
+    const editPrinter = (index: number) => {
+        // dispatch(removePrinterScanner(printers[index]));
+        setVisibleEdit(true);
+    }
+
+    const renderItem = ({item, index}: ListRenderItemInfo<IPrinterScanner>) => {
         return (
             <Layout style={styles.item}>
-                <Text style={[ item.header ? styles.boldKodeText : styles.normalKodeText, {marginLeft: 16 * (item.level!-1)}]}>{item.kode!}</Text>
-                <Text style={item.header ? styles.boldNamaText : styles.normalNamaText}>{item.nama!}</Text>
+                <Layout style={{alignSelf: "center"}}>
+                    <BluetoothIcon style={{height: 24, color: item.is_connect ? "#0055F5":"#A89595", marginRight: 8}} />
+                </Layout>
+                <Layout style={{flex: 1}}>
+                    <Text>{item.name}</Text>
+                    <Text category="c1">{item.address}</Text>
+                </Layout>
+                <Button 
+                    appearance='outline'
+                    size='small' 
+                    accessoryLeft={EditIcon}
+                    onPress={() => editPrinter(index)} />
+                <Button 
+                    appearance='outline'
+                    size='small' 
+                    accessoryLeft={DeleteIcon}
+                    onPress={() => removePrinter(index)} />
             </Layout>
         );
     };
-
-    // const _handleOnPress = () => {
-    //     setVisibleScan(true);
-    // };
 
     const renderAccessoryRight = (props: any): React.ReactElement => (
         <>
@@ -90,15 +106,15 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
 
     // const renderListPrinter = (): React.ReactElement => (
     //     <List
-    //         style={styles.containerList}
-    //         data={items == undefined ? [] : items}
+    //         style={styles.containerList}                
+    //         data={printers}
     //         ItemSeparatorComponent={Divider}
     //         renderItem={renderItem}
     //     />     
     // );
 
     return (
-        <>    
+        <> 
             <Popover
                 visible={visibleScan}
                 anchor={renderHeader}
@@ -109,13 +125,29 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
                 style={{marginHorizontal: 8, marginTop: 8}}
             >
                 <FormulirScanPrinterLayout />
-            </Popover>    
+            </Popover>  
             <List
-                style={styles.containerList}
-                data={items == undefined ? [] : items}
+                style={styles.containerList}                
+                data={printers}
                 ItemSeparatorComponent={Divider}
                 renderItem={renderItem}
-            />           
+            />         
+            <RNModal 
+                visible={visibleEdit}
+                animationType="slide"
+                transparent={true}
+                onRequestClose={() => {
+                    // Alert.alert('Modal has been closed.');
+                    setVisibleEdit(false);
+                }}
+                style={{flex: 1, height: 300}}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <FormulirScanPrinterLayout />
+                    </View>
+                </View>
+            </RNModal>   
         </>
     );
 };
@@ -151,6 +183,7 @@ function createStyle(skala: number) {
             flexDirection: 'row',
             paddingVertical: 12,
             paddingHorizontal: 12,
+            gap: 2,
             // marginVertical: 2,
         },
         boldKodeText: {            
@@ -181,6 +214,30 @@ function createStyle(skala: number) {
         },
         backdrop: {
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        },
+        backdropModal: {
+            backgroundColor: "#4C4C4CEB",
+        },
+        centeredView: {
+            flex: 1,
+            justifyContent: 'flex-end',
+            // alignItems: 'center',
+            // marginTop: 22,
+        },
+        modalView: {
+            margin: 8,
+            backgroundColor: 'white',
+            borderRadius: 20,
+            padding: 35,
+            alignItems: 'center',
+            shadowColor: '#000',
+            shadowOffset: {
+                width: 0,
+                height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
         },
     }
     )

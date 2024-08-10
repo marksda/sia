@@ -18,10 +18,15 @@ export const PrinterScannerSlice = createSlice({
             state.printers = _.cloneDeep(action.payload);
         },
         removePrinterScanner: (state, action: PayloadAction<IPrinterScanner>) => {
-            state.printers = _.remove(state.printers, (item) => _.isEqual(item, action.payload));
+            let tmp = _.cloneDeep(state.printers);
+            _.remove(tmp, (item) => {return item.address == action.payload.address});
+            state.printers = tmp;
         },
         addPrinterScanner: (state, action: PayloadAction<IPrinterScanner>) => {
-            state.printers = _.concat(state.printers, action.payload)
+            let i = _.findIndex(state.printers, (o) => { return o.address == action.payload.address });
+            if( i == -1){
+                state.printers = _.concat(state.printers, action.payload);
+            }            
         },
         resetPrinterScanner: (state, action: PayloadAction<null>) => {
             state.printers = [];

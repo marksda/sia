@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native';
 import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
 import { useAppDispatch } from '../../app/akutansi-app-redux-hooks';
 import { resetToken } from '../../services/redux-token-slice.service';
+import { resetPrinterScanner } from '../../services/redux-printer-slice.service';
 
 
 export const LaporanScreen = ({ navigation }: { navigation: any; }) => {
@@ -15,6 +16,7 @@ export const LaporanScreen = ({ navigation }: { navigation: any; }) => {
 
   const logOut = () => {
     dispatch(resetToken(null));
+    dispatch(resetPrinterScanner(null));
   };
 
   return (
