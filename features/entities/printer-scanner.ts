@@ -6,7 +6,9 @@ export enum JenisKoneksiPrinter {
     QRCODE_SCAN = 4,
 }
 export interface IPrinterScanner {
-    type: JenisKoneksiPrinter;
+    connection_type: JenisKoneksiPrinter;
     name: string;
     address: string;
+    alias: string;
+    is_connect: boolean;
 }

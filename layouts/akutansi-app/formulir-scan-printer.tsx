@@ -1,68 +1,27 @@
-import { Button, IndexPath, Select, SelectItem, Toggle} from "@ui-kitten/components";
+import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { FC, useEffect, useState} from "react";
-import { DeviceEventEmitter, StyleSheet, useWindowDimensions, View } from "react-native"; 
-import { BluetoothDevice, BluetoothManager } from "tp-react-native-bluetooth-printer";
-import { JenisKoneksiPrinter } from "../../features/entities/printer-scanner";
+import { ActivityIndicator, StyleSheet, useWindowDimensions, View } from "react-native"; 
+import { BluetoothDevice, BluetoothManager, ScannedBluetoothDevices } from "tp-react-native-bluetooth-printer";
+import { IPrinterScanner, JenisKoneksiPrinter } from "../../features/entities/printer-scanner";
 
-const CekBluetooth = () => {
-    let status = 
-    (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
-        (enabled) => {
-           return enabled as boolean;
-        },
-        (err) => {
-           return false;
-        }
-    ).then((data: boolean) => {
-        return data;
-    });
 
-    return status;
-};
 
-const EnableBluetooth =  () => {
-    // let dataPrinter =
-    // (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
-    //     (item) => {
-    //         let paired: BluetoothDevice[] = [];
-    //         if (item && item.length > 0) {
-    //             for (var i = 0; i < item.length; i++) {
-    //                 try {
-    //                     paired.push(JSON.parse(item[i]));
-    //                 } catch (e) {
-    //                     return [];
-    //                 }
-    //             }
-    //         }
-    //         return paired;
-    //     },
-    //     (err) => {
-    //         return [];
-    //     }
-    // ).then((data) => {
-    //     return data;
-    // });
-
-    // return dataPrinter;
-};
-
-const DaftarKoneksiPrinter = Object.keys(JenisKoneksiPrinter).filter((v) => isNaN(Number(v)));
+const DaftarJenisKoneksiPrinter = Object.keys(JenisKoneksiPrinter).filter((v) => isNaN(Number(v)));
 
 const FormulirScanPrinterLayout: FC = () => {
     const {width} = useWindowDimensions();
     const [selectedIndex, setSelectedIndex] = useState<IndexPath>(new IndexPath(0));
-
     
     return (
         <View style={[styles.container, {width: width-16}]}>
             <Select
-                value={DaftarKoneksiPrinter[selectedIndex.row]}
+                value={DaftarJenisKoneksiPrinter[selectedIndex.row]}
                 selectedIndex={selectedIndex}
                 onSelect={(index: IndexPath|IndexPath[]) => setSelectedIndex(index as IndexPath)}
                 label='Jenis koneksi printer'
             >  
             {   
-                DaftarKoneksiPrinter.map(
+                DaftarJenisKoneksiPrinter.map(
                     (item, index) => <SelectItem key={index} title={item} />
                 )
             }
@@ -99,77 +58,110 @@ const styles = StyleSheet.create({
     },
 });
 
-const FormulirScanPrinterBtLayout: FC = () => {    
-    const [btStatus, setBtStatus] = useState<boolean>(false);    
-    const [listPrinterBt, setListPrinterBt] = useState<BluetoothDevice[]>([]);
-
-    const onCheckedBTChange = async (isChecked: boolean) => {
-        if(isChecked) {            
-            // setListPrinterBt(await EnableBluetooth());
-            (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
-                (s) => {
-                    setBtStatus(isChecked);
-                },
-                (e) => {
-                    //error
-                }
-            );
-            
-        }
-        else {
-            BluetoothManager.disableBluetooth();
-            setBtStatus(isChecked);
-        }
-
-        
-    };  
-
-    const _getBtPrinter = async () => {
-        // setListPrinterBt(await EnableBluetooth());
-        (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
-            (s) => {
-                setBtStatus(true);
-            },
-            (e) => {
-                //error
-            }
-        );
-    }
+const FormulirScanPrinterBtLayout: FC = () => { 
+    const [loading, setLoading] = useState<boolean>(true);    
+    const [listPrinterBt, setListPrinterBt] = useState<IPrinterScanner[]>([]);
+    console.log(listPrinterBt);
 
     useEffect(        
         () => {
-            async function status() {
-                setBtStatus(await CekBluetooth());
-            }   
+            (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
+                (enabled) => {
+                  if(enabled == true) {
+                    (BluetoothManager.scanDevices() as PromiseLike<string>).then(
+                        (scannedDevices) => {
+                            let scannedDevicesObj: ScannedBluetoothDevices = JSON.parse(scannedDevices);
+                            let deviceBTPrinter: IPrinterScanner[] = [];
+                            let temp: BluetoothDevice;
+                            let printerItem: IPrinterScanner;
 
-            status(); 
+                            if (scannedDevicesObj.paired && scannedDevicesObj.paired.length > 0) {
+                                for (var i = 0; i < scannedDevicesObj.paired.length; i++) {
+                                    try {
+                                        temp = scannedDevicesObj.paired[i];
+                                        printerItem = {
+                                            connection_type: JenisKoneksiPrinter.BLUETOOTH,
+                                            name: temp.name,
+                                            address: temp.address,
+                                            alias: temp.name,
+                                            is_connect: true,
+                                        }
+                                        deviceBTPrinter.push(printerItem);
+                                    } catch (e) {
+                                        return [];
+                                    }
+                                }
+                            }
 
-            // const handlerEvent = DeviceEventEmitter.addListener(
-            //     "EVENT_DEVICE_DISCOVER_DONE", 
-            //     (rsp) => {
-            //         setBtStatus(true);
-            //     }
-            // );
+                            if (scannedDevicesObj.found && scannedDevicesObj.found.length > 0) {
+                                for (var i = 0; i < scannedDevicesObj.found.length; i++) {
+                                    try {
+                                        temp = scannedDevicesObj.found[i];
+                                        printerItem = {
+                                            connection_type: JenisKoneksiPrinter.BLUETOOTH,
+                                            name: temp.name,
+                                            address: temp.address,
+                                            alias: temp.name,
+                                            is_connect: false,
+                                        }
+                                        deviceBTPrinter.push(printerItem);
+                                    } catch (e) {
+                                        return [];
+                                    }
+                                }
+                            }
 
-            // return () => {
-            //     handlerEvent.remove();
-            // };
-                     
+                            setListPrinterBt(deviceBTPrinter);
+                            setLoading(false);
+                        },
+                        (er) => {
+                            setListPrinterBt([]);
+                            setLoading(false);
+                        }
+                      );
+                  }
+                  else {
+                    (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
+                        (item) => {
+                            let paired: IPrinterScanner[] = [];
+                            if (item && item.length > 0) {
+                                for (var i = 0; i < item.length; i++) {
+                                    try {
+                                        let temp: BluetoothDevice = JSON.parse(item[i]);
+                                        let printerItem: IPrinterScanner = {
+                                            connection_type: JenisKoneksiPrinter.BLUETOOTH,
+                                            name: temp.name,
+                                            address: temp.address,
+                                            alias: temp.name,
+                                            is_connect: true,
+                                        }
+                                        paired.push(printerItem);
+                                    } catch (e) {
+                                        return [];
+                                    }
+                                }
+                            }
+                            setListPrinterBt(paired);
+                            setLoading(false);
+                        },
+                        (err) => {
+                            setListPrinterBt([]);
+                            setLoading(false);
+                        }
+                    );
+                  }
+                },
+                (err) => {
+                  //error
+                }
+              );
         }, 
         []
     ); 
 
     return (
         <View style={stylesBTForm.container}>
-            <Toggle
-                    checked={btStatus}
-                    onChange={onCheckedBTChange}
-                >
-                {
-                    `bluetooth ${btStatus? 'on':'off'}`
-                }
-            </Toggle>
-            <Button style={stylesBTForm.buttonText} onPress={_getBtPrinter}>Scan printer</Button>
+            {loading &&  <ActivityIndicator size="large" color="#00ff00" />}   
         </View>
     );
 }
