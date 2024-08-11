@@ -1,11 +1,12 @@
 import { Button, Divider, Icon, IconElement, Input, Layout, List, Modal, Popover, Text} from "@ui-kitten/components";
 import { FC, useMemo, useState } from "react";
-import { KeyboardAvoidingView, ListRenderItemInfo, Modal as RNModal, StyleSheet, useWindowDimensions, View } from "react-native";
+import { ListRenderItemInfo, Modal as RNModal, StyleSheet, useWindowDimensions, View } from "react-native";
 import { normalizePxToDp } from "../../../features/utils/android-dp-px-converter";
 import FormulirScanPrinterLayout from "../formulir-scan-printer";
 import { useAppDispatch, useAppSelector } from "../../../app/akutansi-app-redux-hooks";
 import { IPrinterScanner } from "../../../features/entities/printer-scanner";
 import { removePrinterScanner } from "../../../services/redux-printer-slice.service";
+import FormulirEditPrinterLayout from "../formulir-edit-printer";
 
 
 const MenuIcon = (props: any): IconElement => (
@@ -34,6 +35,10 @@ const EditIcon = (props: any): IconElement => (
     />
 );
 
+const CloseIcon = (props: any): IconElement => (
+    <Icon name='close-circle-outline' {...props} pack='material'/>
+);
+
 interface IPengaturanPrinterPortraitLayoutProps {
     navigation: any;
 };
@@ -44,6 +49,7 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
     const printers = useAppSelector(state => state.persisted.printer.printers); 
     const [visibleScan, setVisibleScan] = useState<boolean>(false);
     const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
+    const [dataPrinter, setDataPrinter] = useState<IPrinterScanner|undefined>(undefined);
 
     const styles = useMemo(
         () => createStyle(dimensions.scale),
@@ -56,6 +62,7 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
 
     const editPrinter = (index: number) => {
         // dispatch(removePrinterScanner(printers[index]));
+        setDataPrinter(printers[index]);
         setVisibleEdit(true);
     }
 
@@ -66,7 +73,7 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
                     <BluetoothIcon style={{height: 24, color: item.is_connect ? "#0055F5":"#A89595", marginRight: 8}} />
                 </Layout>
                 <Layout style={{flex: 1}}>
-                    <Text>{item.name}</Text>
+                    <Text>{item.alias}</Text>
                     <Text category="c1">{item.address}</Text>
                 </Layout>
                 <Button 
@@ -104,15 +111,6 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
         </Layout> 
     );
 
-    // const renderListPrinter = (): React.ReactElement => (
-    //     <List
-    //         style={styles.containerList}                
-    //         data={printers}
-    //         ItemSeparatorComponent={Divider}
-    //         renderItem={renderItem}
-    //     />     
-    // );
-
     return (
         <> 
             <Popover
@@ -137,14 +135,19 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
                 animationType="slide"
                 transparent={true}
                 onRequestClose={() => {
-                    // Alert.alert('Modal has been closed.');
                     setVisibleEdit(false);
                 }}
-                style={{flex: 1, height: 300}}
+                style={{flex: 1}}
             >
                 <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <FormulirScanPrinterLayout />
+                    <View style={styles.modalView}>     
+                        <View style={{alignSelf: "flex-end"}}> 
+                            <CloseIcon 
+                                style={{height: 32, color: '#FA4E00', margin: 8} }
+                                onPress={() => setVisibleEdit(false)}
+                            /> 
+                        </View>                  
+                        {dataPrinter && <FormulirEditPrinterLayout data={dataPrinter} setVisibleEdit={setVisibleEdit}/>}
                     </View>
                 </View>
             </RNModal>   
@@ -228,7 +231,9 @@ function createStyle(skala: number) {
             margin: 8,
             backgroundColor: 'white',
             borderRadius: 20,
-            padding: 35,
+            // borderTopLeftRadius: 20,
+            // borderTopRightRadius: 20,
+            paddingBottom: 16,
             alignItems: 'center',
             shadowColor: '#000',
             shadowOffset: {

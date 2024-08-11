@@ -28,12 +28,21 @@ export const PrinterScannerSlice = createSlice({
                 state.printers = _.concat(state.printers, action.payload);
             }            
         },
+        updatePrinterScanner: (state, action: PayloadAction<{dtLama:IPrinterScanner; dtBaru:IPrinterScanner}>) => {            
+            let tmp = _.cloneDeep(state.printers);
+            let i = _.findIndex(tmp, (o) => { return o.address == action.payload.dtLama.address });
+
+            if( i >= 0){
+                tmp.splice(i, 1, action.payload.dtBaru);
+                state.printers = tmp;
+            }            
+        },
         resetPrinterScanner: (state, action: PayloadAction<null>) => {
             state.printers = [];
         },
     }
 });
 
-export const { setPrinterScanner, removePrinterScanner, addPrinterScanner, resetPrinterScanner } = PrinterScannerSlice.actions;
+export const { setPrinterScanner, removePrinterScanner, addPrinterScanner, updatePrinterScanner, resetPrinterScanner } = PrinterScannerSlice.actions;
 
 export default PrinterScannerSlice.reducer;

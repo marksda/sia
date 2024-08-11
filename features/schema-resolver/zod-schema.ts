@@ -27,3 +27,11 @@ export const TransaksiSchema = object({
     potongan: z.number().nullable(),
     ppn: z.number().nullable()
 });
+
+export const PrinterScannerSchema = object({
+    connection_type: z.number(),
+    name: z.string(),
+    address: z.string().min(2, {message: 'Must be at least 2 characters'}),
+    alias: z.string().min(2, {message: 'Must be at least 2 characters'}),
+    is_connect: z.boolean(),
+});

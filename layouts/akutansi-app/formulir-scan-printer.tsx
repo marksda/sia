@@ -1,6 +1,6 @@
-import { IndexPath, Select, SelectItem, Button, Text, IconElement, Icon, Input} from "@ui-kitten/components";
+import { IndexPath, Select, SelectItem, Button, Text, IconElement, Icon} from "@ui-kitten/components";
 import React, { FC, useEffect, useState} from "react";
-import { ActivityIndicator, FlatList, GestureResponderEvent, ListRenderItemInfo, PixelRatio, StyleSheet, useWindowDimensions, View } from "react-native"; 
+import { ActivityIndicator, FlatList, ListRenderItemInfo, PixelRatio, StyleSheet, useWindowDimensions, View } from "react-native"; 
 import { BluetoothDevice, BluetoothManager, ScannedBluetoothDevices } from "tp-react-native-bluetooth-printer";
 import { IPrinterScanner, JenisKoneksiPrinter } from "../../features/entities/printer-scanner";
 import { useAppDispatch } from "../../app/akutansi-app-redux-hooks";
@@ -37,9 +37,6 @@ const FormulirScanPrinterLayout: FC = () => {
                 )
             }
             </Select>
-            <Input
-             placeholder='Place your Text'
-            />
             {
                 (selectedIndex.row == JenisKoneksiPrinter.BLUETOOTH) && (<FormulirScanPrinterBtLayout maxHeight={PixelRatio.roundToNearestPixel(height*0.7)}/>)
             }            
