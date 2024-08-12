@@ -183,7 +183,7 @@ const FormulirScanPrinterBtLayout: FC<{maxHeight: number;}> = ({maxHeight}) => {
                 (err) => {
                     setLoading(false);
                 }
-              );
+            );
         }, 
         []
     ); 

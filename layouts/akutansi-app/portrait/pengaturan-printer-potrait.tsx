@@ -3,10 +3,12 @@ import { FC, useMemo, useState } from "react";
 import { ListRenderItemInfo, Modal as RNModal, StyleSheet, useWindowDimensions, View } from "react-native";
 import { normalizePxToDp } from "../../../features/utils/android-dp-px-converter";
 import FormulirScanPrinterLayout from "../formulir-scan-printer";
+import * as _ from "lodash";
 import { useAppDispatch, useAppSelector } from "../../../app/akutansi-app-redux-hooks";
 import { IPrinterScanner } from "../../../features/entities/printer-scanner";
-import { removePrinterScanner } from "../../../services/redux-printer-slice.service";
+import { removePrinterScanner, updatePrinterScanner } from "../../../services/redux-printer-slice.service";
 import FormulirEditPrinterLayout from "../formulir-edit-printer";
+import { BARCODETYPE, BluetoothEscposPrinter, BluetoothManager, ERROR_CORRECTION } from "tp-react-native-bluetooth-printer";
 
 
 const MenuIcon = (props: any): IconElement => (
@@ -39,6 +41,50 @@ const CloseIcon = (props: any): IconElement => (
     <Icon name='close-circle-outline' {...props} pack='material'/>
 );
 
+const cekAndConnectBt = async (printer: IPrinterScanner): Promise<IPrinterScanner | string | null> => {
+    let dataBaru: IPrinterScanner =  _.cloneDeep(printer);
+    let isBTEnabled: boolean|null = null;
+    let hasil: IPrinterScanner|string|null = null;
+
+    await (BluetoothManager.isBluetoothEnabled() as PromiseLike<boolean>).then(
+        (enabled) => {
+          if(enabled == true) {
+            isBTEnabled = true;
+          }
+          else {
+            isBTEnabled= false;
+          }
+        },
+        (err) => {
+            //err
+        }
+    );
+
+    if(isBTEnabled == false) { //nyalakan bluetooth
+        await (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
+            async (_i) => {                
+                await (BluetoothManager.connect(printer.address) as PromiseLike<void>).then(
+                    (_i) => {
+                        dataBaru.is_connect = true;
+                        hasil = dataBaru;
+                    },
+                    (_err) => {
+                        hasil = "error: bluetooth not paired"
+                    }
+                );
+            },
+            (_err) => {
+                hasil = "error: bluetooth off"
+            }
+        );
+    }
+    else {
+
+    }
+
+    return hasil;
+};
+
 interface IPengaturanPrinterPortraitLayoutProps {
     navigation: any;
 };
@@ -66,11 +112,85 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
         setVisibleEdit(true);
     }
 
+    const testPrint = async (item: IPrinterScanner) => {
+        let dataBaru: IPrinterScanner =  _.cloneDeep(item);
+        if(item.is_connect == true) {
+            await  (BluetoothEscposPrinter.printText("I am an english", {}) as PromiseLike<void>).then(
+                () => {},
+                (e) => {
+                    console.log(e);
+                    cekAndConnectBt(item).then(
+                        (r) => {
+                            console.log(r);
+                            dispatch(updatePrinterScanner({dtLama: item, dtBaru: r as IPrinterScanner}));
+                        },
+                        (er) => {
+                            console.log(er);
+                            dataBaru.is_connect = false;
+                            dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
+                            process.exit();
+                        }
+                    );
+                }
+            );
+
+
+            // await  (BluetoothEscposPrinter.printText("I am an english", {}) as PromiseLike<void>).then(
+            //     () => {},
+            //     (e) => {
+            //         dataBaru.is_connect = false;
+            //         dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
+            //         process.exit();
+            //     }
+            // );
+
+            // await  (BluetoothEscposPrinter.printText("\r\n\r\n\r\n\r\n\r\n\r\n", {}) as PromiseLike<void>).then(
+            //     () => {},
+            //     (e) => {
+            //         dataBaru.is_connect = false;
+            //         dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
+            //         process.exit();
+            //     }
+            // );
+        }
+        // else {
+        //     await (BluetoothManager.connect(item.address) as PromiseLike<void>)
+        //     .then(
+        //         async () => {
+        //             await  BluetoothEscposPrinter.printText("I am an english", {});
+        //             await  BluetoothEscposPrinter.printText("\r\n\r\n\r\n\r\n\r\n\r\n", {});
+        //             dataBaru.is_connect = true;
+        //             dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));                    
+        //         },
+        //         (e) => {
+        //             console.log(e);
+        //             if(e == "Error: BT NOT ENABLED") {
+        //                 (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
+        //                     (_i) => {
+        //                         dataBaru.is_connect = true;
+        //                         dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
+        //                     },
+        //                     (_err) => {
+        //                         dataBaru.is_connect = false;
+        //                         dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
+        //                     }
+        //                 );
+        //             }
+        //             else {
+        //                 dataBaru =  _.cloneDeep(item);
+        //                 dataBaru.is_connect = false;
+        //                 dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
+        //             }
+        //         }
+        //     );            
+        // }
+    }
+
     const renderItem = ({item, index}: ListRenderItemInfo<IPrinterScanner>) => {
         return (
             <Layout style={styles.item}>
                 <Layout style={{alignSelf: "center"}}>
-                    <BluetoothIcon style={{height: 24, color: item.is_connect ? "#0055F5":"#A89595", marginRight: 8}} />
+                    <BluetoothIcon style={{height: 24, color: item.is_connect ? "#0055F5":"#A89595", marginRight: 8}} onPress={() => {testPrint(item);}} />
                 </Layout>
                 <Layout style={{flex: 1}}>
                     <Text>{item.alias}</Text>
