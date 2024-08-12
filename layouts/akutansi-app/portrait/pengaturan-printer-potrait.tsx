@@ -1,6 +1,6 @@
 import { Button, Divider, Icon, IconElement, Input, Layout, List, Modal, Popover, Text} from "@ui-kitten/components";
 import { FC, useMemo, useState } from "react";
-import { ListRenderItemInfo, Modal as RNModal, StyleSheet, useWindowDimensions, View } from "react-native";
+import { ListRenderItemInfo, Modal as RNModal, StyleSheet, ToastAndroid, useWindowDimensions, View } from "react-native";
 import { normalizePxToDp } from "../../../features/utils/android-dp-px-converter";
 import FormulirScanPrinterLayout from "../formulir-scan-printer";
 import * as _ from "lodash";
@@ -41,7 +41,7 @@ const CloseIcon = (props: any): IconElement => (
     <Icon name='close-circle-outline' {...props} pack='material'/>
 );
 
-const cekAndConnectBt = async (printer: IPrinterScanner): Promise<IPrinterScanner | string | null> => {
+const cekAndConnectBt = async (printer: IPrinterScanner): Promise<IPrinterScanner | string> => {
     let dataBaru: IPrinterScanner =  _.cloneDeep(printer);
     let isBTEnabled: boolean|null = null;
     let hasil: IPrinterScanner|string|null = null;
@@ -79,10 +79,26 @@ const cekAndConnectBt = async (printer: IPrinterScanner): Promise<IPrinterScanne
         );
     }
     else {
-
+        await (BluetoothManager.connect(printer.address) as PromiseLike<void>).then(
+            (_i) => {
+                dataBaru.is_connect = true;
+                hasil = dataBaru;
+            },
+            (_err) => {
+                hasil = "error: bluetooth not paired"
+            }
+        );
     }
+    
+    return new Promise<IPrinterScanner|string>((resolve, reject) => {
+        if( typeof(hasil) === "object") {
+            resolve(hasil as IPrinterScanner);
+        }
+        else {
+            reject(hasil as string);
+        }
+    });
 
-    return hasil;
 };
 
 interface IPengaturanPrinterPortraitLayoutProps {
@@ -93,6 +109,7 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
     const dimensions = useWindowDimensions();
     const dispatch = useAppDispatch();
     const printers = useAppSelector(state => state.persisted.printer.printers); 
+    const [printer, setPrinter] = useState<IPrinterScanner|null>(null);
     const [visibleScan, setVisibleScan] = useState<boolean>(false);
     const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
     const [dataPrinter, setDataPrinter] = useState<IPrinterScanner|undefined>(undefined);
@@ -113,77 +130,49 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
     }
 
     const testPrint = async (item: IPrinterScanner) => {
-        let dataBaru: IPrinterScanner =  _.cloneDeep(item);
-        if(item.is_connect == true) {
-            await  (BluetoothEscposPrinter.printText("I am an english", {}) as PromiseLike<void>).then(
+        if(_.isEqual(printer, item) == true) {
+            await  (BluetoothEscposPrinter.printText("I am an english\r\n", {}) as PromiseLike<void>).then(
                 () => {},
                 (e) => {
-                    console.log(e);
+                    let dataBaru: IPrinterScanner =  _.cloneDeep(item);
                     cekAndConnectBt(item).then(
                         (r) => {
-                            console.log(r);
+                            testPrint(item);
                             dispatch(updatePrinterScanner({dtLama: item, dtBaru: r as IPrinterScanner}));
                         },
                         (er) => {
-                            console.log(er);
+                            ToastAndroid.showWithGravity(
+                                er,
+                                ToastAndroid.LONG,
+                                ToastAndroid.BOTTOM,
+                            );
                             dataBaru.is_connect = false;
                             dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
-                            process.exit();
+                            // process.exit();
                         }
                     );
                 }
             );
-
-
-            // await  (BluetoothEscposPrinter.printText("I am an english", {}) as PromiseLike<void>).then(
-            //     () => {},
-            //     (e) => {
-            //         dataBaru.is_connect = false;
-            //         dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
-            //         process.exit();
-            //     }
-            // );
-
-            // await  (BluetoothEscposPrinter.printText("\r\n\r\n\r\n\r\n\r\n\r\n", {}) as PromiseLike<void>).then(
-            //     () => {},
-            //     (e) => {
-            //         dataBaru.is_connect = false;
-            //         dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
-            //         process.exit();
-            //     }
-            // );
         }
-        // else {
-        //     await (BluetoothManager.connect(item.address) as PromiseLike<void>)
-        //     .then(
-        //         async () => {
-        //             await  BluetoothEscposPrinter.printText("I am an english", {});
-        //             await  BluetoothEscposPrinter.printText("\r\n\r\n\r\n\r\n\r\n\r\n", {});
-        //             dataBaru.is_connect = true;
-        //             dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));                    
-        //         },
-        //         (e) => {
-        //             console.log(e);
-        //             if(e == "Error: BT NOT ENABLED") {
-        //                 (BluetoothManager.enableBluetooth() as PromiseLike<string[]>).then(
-        //                     (_i) => {
-        //                         dataBaru.is_connect = true;
-        //                         dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
-        //                     },
-        //                     (_err) => {
-        //                         dataBaru.is_connect = false;
-        //                         dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
-        //                     }
-        //                 );
-        //             }
-        //             else {
-        //                 dataBaru =  _.cloneDeep(item);
-        //                 dataBaru.is_connect = false;
-        //                 dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
-        //             }
-        //         }
-        //     );            
-        // }
+        else {
+            let dataBaru: IPrinterScanner =  _.cloneDeep(item);
+            cekAndConnectBt(item).then(
+                (r) => {
+                    setPrinter(r as IPrinterScanner);
+                    dispatch(updatePrinterScanner({dtLama: item, dtBaru: r as IPrinterScanner}));                    
+                    // testPrint(item);
+                },
+                (er) => {
+                    ToastAndroid.showWithGravity(
+                        er,
+                        ToastAndroid.LONG,
+                        ToastAndroid.BOTTOM,
+                    );
+                    dataBaru.is_connect = false;
+                    dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
+                }
+            );
+        }
     }
 
     const renderItem = ({item, index}: ListRenderItemInfo<IPrinterScanner>) => {
