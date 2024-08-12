@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/akutansi-app-redux-
 import { IPrinterScanner } from "../../../features/entities/printer-scanner";
 import { removePrinterScanner, updatePrinterScanner } from "../../../services/redux-printer-slice.service";
 import FormulirEditPrinterLayout from "../formulir-edit-printer";
-import { BARCODETYPE, BluetoothEscposPrinter, BluetoothManager, ERROR_CORRECTION } from "tp-react-native-bluetooth-printer";
+import { BluetoothEscposPrinter, BluetoothManager } from "tp-react-native-bluetooth-printer";
 
 
 const MenuIcon = (props: any): IconElement => (
@@ -148,7 +148,6 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
                             );
                             dataBaru.is_connect = false;
                             dispatch(updatePrinterScanner({dtLama: item, dtBaru: dataBaru}));
-                            // process.exit();
                         }
                     );
                 }
@@ -158,9 +157,9 @@ const PengaturanPrinterPortraitLayout: FC<IPengaturanPrinterPortraitLayoutProps>
             let dataBaru: IPrinterScanner =  _.cloneDeep(item);
             cekAndConnectBt(item).then(
                 (r) => {
+                    BluetoothEscposPrinter.printText("I am an english\r\n", {});
                     setPrinter(r as IPrinterScanner);
-                    dispatch(updatePrinterScanner({dtLama: item, dtBaru: r as IPrinterScanner}));                    
-                    // testPrint(item);
+                    dispatch(updatePrinterScanner({dtLama: item, dtBaru: r as IPrinterScanner}));     
                 },
                 (er) => {
                     ToastAndroid.showWithGravity(
